@@ -1,0 +1,91 @@
+TO BE REMOVED LATER (just a little cheatsheet while working)
+
+<stdio.h>
+
+    printf: Prints formatted output to the standard output (e.g., the console).
+
+<stdlib.h>
+
+    malloc: Allocates memory dynamically.
+    free: Deallocates previously allocated memory.
+    exit: Terminates the program.
+    getenv: Retrieves the value of an environment variable.
+
+<unistd.h>
+
+    read: Reads data from a file descriptor.
+    write: Writes data to a file descriptor.
+    access: Checks a file's accessibility.
+    open: Opens a file and returns a file descriptor.
+    close: Closes an open file descriptor.
+    fork: Creates a new process by duplicating the calling process.
+    getcwd: Gets the current working directory.
+    chdir: Changes the current working directory.
+    unlink: Deletes a name from the filesystem.
+    execve: Executes a program.
+    dup: Duplicates a file descriptor.
+    dup2: Duplicates a file descriptor to a specific value.
+    pipe: Creates a pair of connected file descriptors.
+    isatty: Checks if a file descriptor refers to a terminal.
+    ttyname: Returns the terminal name associated with a file descriptor.
+    ttyslot: Returns the slot number of the terminal.
+
+<sys/wait.h>
+
+    wait: Waits for a child process to change state.
+    waitpid: Waits for a specific child process to change state.
+    wait3: Waits for a child process to change state with resource usage information.
+    wait4: Waits for a specific child process with resource usage information.
+
+<sys/types.h>
+
+    fork: Creates a new process by duplicating the calling process.
+    stat: Retrieves information about a file.
+    lstat: Similar to stat, but does not follow symbolic links.
+    fstat: Retrieves information about an open file.
+    opendir: Opens a directory stream.
+    readdir: Reads a directory entry from a directory stream.
+    closedir: Closes a directory stream.
+
+<signal.h>
+
+    signal: Sets a signal handler for a specific signal.
+    sigaction: Examines or changes the action for a specific signal.
+    sigemptyset: Initializes a signal set to exclude all signals.
+    sigaddset: Adds a signal to a signal set.
+    kill: Sends a signal to a process or group of processes.
+
+<readline/readline.h>
+
+    readline: Reads a line of input from the user with editing capabilities.
+
+<readline/history.h>
+
+    rl_clear_history: Clears the history list.
+    rl_on_new_line: Informs the Readline library that a new line of input is starting.
+    rl_replace_line: Replaces the contents of the current line.
+    rl_redisplay: Redisplays the current input line.
+    add_history: Adds a line to the history list.
+
+<termios.h>
+
+    tcsetattr: Sets the parameters associated with the terminal.
+    tcgetattr: Gets the parameters associated with the terminal.
+
+<term.h>
+
+    tgetent: Loads the terminal entry for the current terminal type.
+    tgetflag: Gets the boolean value of a terminal capability.
+    tgetnum: Gets the numeric value of a terminal capability.
+    tgetstr: Gets the string value of a terminal capability.
+    tgoto: Generates a cursor-movement string.
+    tputs: Outputs a terminal string with padding.
+
+<errno.h>
+
+    strerror: Returns a string describing an error number.
+    perror: Prints a description for the last error that occurred.
+
+<sys/ioctl.h>
+
+    ioctl: Manipulates the underlying device parameters of special files.
