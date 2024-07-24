@@ -1,14 +1,14 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: clinggad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/05 17:32:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/07/08 14:45:50 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/07/18 18:15:27 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 
 //NOTE: probably will split this header file into multiple ones for tidyness
@@ -33,9 +33,12 @@
 						// rl_redisplay, add_history
 #include <termios.h> // tcstattr, tcgetattr
 #include <term.h> // tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
-#include <erno.h> // sterror, perror
+#include <errno.h> // sterror, perror
 #include <sys/ioctl.h> // ioctl
 
+#include "lexer_parser.h"
 
+/* MACROS */
+#define RL_MSG "minitest"
 
 #endif
