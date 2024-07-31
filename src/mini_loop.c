@@ -1,29 +1,38 @@
 /******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clinggad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 17:31:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/07/31 15:24:20 by clinggad         ###   ########.fr       */
+/*   Created: 2024/07/18 16:57:37 by clinggad          #+#    #+#             */
+/*   Updated: 2024/07/31 14:56:26 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /******************************************************************************/
 
-// Main loop + history and signal handling.
-
 #include "minishell.h"
 
-/*
-rl_catch_signals:
-	if not disabled Readline internal sig handling messes up our sig handler
-*/
-int	main(void)
-{
-	t_tools tools;
+int	mini_loop(t_tools *tools);
 
-	rl_catch_signals = 0;
-	init_signals();
-	mini_loop(&tools);
-	return (0);
+int	reset_loop(t_tools *tools)
+{
+	if(tools->args != NULL)
+		free(tools->args);
+	mini_loop(tools);
+	return (1);
+}
+
+int	mini_loop(t_tools *tools)
+{ 
+	tools->args = readline("minishell$ ");
+	if (tools->args == NULL)
+	{
+		ft_putendl_fd("Exit", STDOUT_FILENO);
+		exit(EXIT_SUCCESS);
+	}
+	if (tools->args[0] == '\0')
+		return (reset_tools(tools));
+	add_history(tools->args);
+	reset_tools(tools);
+	return (1);
 }
