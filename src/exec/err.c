@@ -1,32 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   err.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 17:01:01 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:01:01 by dmusulas         ###   ########.fr       */
+/*   Created: 2024/08/15 17:34:07 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/08/15 17:34:07 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// Main loop + history and signal handling.
+#include "exec.h"
 
-#include "minishell.h"
-
-/*
-rl_catch_signals:
-	if not disabled Readline internal sig handling messes up our sig handler
-*/
-int	main(int argc, char *argv[], char *envp[])
+/**
+ * Displays an error message and terminates the program with a failure status.
+ *
+ * @param err The error message to be displayed.
+ */
+void	msg_error(char *err, t_exec *exec)
 {
-	t_tools	tools;
-
-	(void)argc;
-	rl_catch_signals = 0;
-	tools.argv = argv;
-	tools.envp = envp;
-	init_signals();
-	mini_loop(&tools);
-	return (0);
+	perror(err);
+	if (exec)
+		free_exec(exec);
+	exit(EXIT_FAILURE);
 }

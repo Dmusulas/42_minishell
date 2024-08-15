@@ -1,38 +1,71 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/18 16:57:37 by clinggad          #+#    #+#             */
-/*   Updated: 2024/07/31 14:56:26 by clinggad         ###   ########.fr       */
+/*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/08/15 17:19:47 by dmusulas         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
+#include "exec.h"
 #include "minishell.h"
 
-int	mini_loop(t_tools *tools);
+void	mini_loop(t_tools *tools);
+int		executor(t_tools *tools, int argc, char *argv[]);
 
-int	reset_loop(t_tools *tools)
+void	reset_tools(t_tools *tools)
 {
-	if(tools->args != NULL)
+	if (tools->args != NULL)
 		free(tools->args);
 	mini_loop(tools);
-	return (1);
 }
 
-int	mini_loop(t_tools *tools)
-{ 
+void	mini_loop(t_tools *tools)
+{
+	char	**argv;
+	int		argc;
+
+	argc = 0;
+	tools->debug_mode = true;
 	tools->args = readline("minishell$ ");
+	if (tools->debug_mode)
+		printf("[INFO]: received arguments %s\n", tools->args);
 	if (tools->args == NULL)
 	{
-		ft_putendl_fd("Exit", STDOUT_FILENO);
+		ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
-	if (tools->args[0] == '\0')
-		return (reset_tools(tools));
-	add_history(tools->args);
+	if (tools->args[0] != '\0')
+	{
+		add_history(tools->args);
+		argv = ft_split(tools->args, ' ');
+		while (argv[argc] != NULL)
+			argc++;
+		executor(tools, argc, argv);
+	}
 	reset_tools(tools);
+}
+
+int	executor(t_tools *tools, int argc, char *argv[])
+{
+	t_exec	*exec;
+
+	if (argc >= 0)
+	{
+		exec = init_exec(argc);
+		set_infile(argv, exec);
+		set_outfile(argv[argc - 1], exec);
+		exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
+		exec->cmd_args = parse_args(exec, argv);
+		ft_exec(exec, tools->envp);
+		close(exec->in_fd);
+		close(exec->out_fd);
+		free_exec(exec);
+	}
+	else
+		return (0);
 	return (1);
 }

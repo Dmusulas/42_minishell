@@ -1,15 +1,14 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/07/05 17:32:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/07/31 15:44:36 by clinggad         ###   ########.fr       */
+/*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/08/15 19:33:01 by dmusulas         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
-
+/* ************************************************************************** */
 
 //NOTE: probably will split this header file into multiple ones for tidyness
 //later
@@ -18,18 +17,20 @@
 # define MINISHELL_H
 
 /* HEADERS */
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <sys/wait.h>
-#include <sys/types.h>
-#include <signal.h>
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <termios.h>
-#include <term.h>
-#include <errno.h>
-#include <sys/ioctl.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <sys/wait.h>
+# include <sys/types.h>
+# include <signal.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <termios.h>
+# include <term.h>
+# include <errno.h>
+# include <sys/ioctl.h>
+# include "exec.h"
+# include "libft.h"
 
 // #include "lexer_parser.h"
 
@@ -39,11 +40,14 @@ implement variables as we continue so we don't have unused vars when running mak
 typedef struct s_tools
 {
 	char			*args;
+	char			**envp;
+	char			**argv;
+	t_bool			debug_mode;
 }	t_tools;
 
 /* MINI LOOP */
-int		reset_loop(t_tools *tools);
-int		mini_loop(t_tools *tools);
+void	reset_tools(t_tools *tools);
+void	mini_loop(t_tools *tools);
 
 /* SIGNALS */
 int		event(void);

@@ -1,20 +1,20 @@
-#******************************************************************************#
+# **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: clinggad <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/07/05 17:18:14 by dmusulas          #+#    #+#              #
-#    Updated: 2024/07/31 15:29:18 by clinggad         ###   ########.fr        #
+#    Created: 2024/08/15 17:22:18 by dmusulas          #+#    #+#              #
+#    Updated: 2024/08/15 19:43:04 by dmusulas         ###   ########.fr        #
 #                                                                              #
-#******************************************************************************#
+# **************************************************************************** #
 
 # Variables
 CC				= cc
 CFLAGS			= -Wall -Wextra -Werror -g -Iinclude -Isrc
-# RL_CFLAGS		= -I/usr/local/Cellar/readline/8.2.10/include
-# LDFLAGS			= -L/usr/local/Cellar/readline/8.2.10/lib -lreadline
+RL_CFLAGS		= -I/opt/homebrew/opt/readline/include
+LDFLAGS			= -L/opt/homebrew/opt/readline/lib -lreadline
 NAME			= minishell
 MAKE_LIB		= make -C
 RM				= rm -rf
@@ -33,25 +33,27 @@ INCLUDES		= minishell.h \
 MINISHELL_SRCS	= main.c \
 					signals.c \
 					mini_loop.c \
+					exec/err.c \
+					exec/executor.c \
+					exec/io.c \
+					exec/parser.c \
+					exec/utils.c
 
 MINISHELL_OBJS  = $(MINISHELL_SRCS:%.c=obj/%.o)
 
 all: $(NAME)
 
 # readline includes and flags for mac
-# $(NAME): $(MINISHELL_OBJS) $(LIBFT)
-# 		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
-
-# obj/%.o: src/%.c
-# 		@mkdir -p obj
-# 		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
-
 $(NAME): $(MINISHELL_OBJS) $(LIBFT)
-		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) -o $@
+		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
 
 obj/%.o: src/%.c
-		@mkdir -p obj
-		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) -c $< -o $@
+		@mkdir -p $(dir $@)
+		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
+
+# $(NAME): $(MINISHELL_OBJS) $(LIBFT)
+# 		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) -o $@
+
 
 $(LIBFT):
 		$(MAKE_LIB) $(LIBFT_DIR)
