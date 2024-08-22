@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "lexer_parser.h": "c",
-        "stdlib.h": "c",
-        "cstdlib": "c"
-    }
-}
