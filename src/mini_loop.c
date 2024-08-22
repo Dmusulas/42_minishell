@@ -3,69 +3,112 @@
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:19:47 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/08/22 18:04:52 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "exec.h"
+// #include "exec.h"
+#include "lexer_parser.h"
 #include "minishell.h"
 
-void	mini_loop(t_tools *tools);
-int		executor(t_tools *tools, int argc, char *argv[]);
+int	mini_loop(t_tools *tools);
+// int		executor(t_tools *tools, int argc, char *argv[]);
 
-void	reset_tools(t_tools *tools)
+void	clean_tools(t_tools *tools)
 {
 	if (tools->args != NULL)
 		free(tools->args);
-	mini_loop(tools);
+	if (tools->lexer_lst != NULL)
+		clear_tokens(&tools->lexer_lst);
+	if (tools->redir != NULL)
+		clear_tokens(&tools->redir);
 }
 
-void	mini_loop(t_tools *tools)
+void	init_tools(t_tools *tools)
 {
-	char	**argv;
-	int		argc;
+	tools->args = NULL;
+	tools->lexer_lst = NULL;
+	tools->redir = NULL;
+	tools->redir_num = 0;
+	tools->pipes = 0;
+	init_signals();
+}
 
-	argc = 0;
-	tools->debug_mode = true;
+int	reset_tools(t_tools *tools)
+{
+	clean_tools(tools);
+	init_tools(tools);
+	mini_loop(tools);
+	return(1);
+}
+
+/*
+save lines if return value is int
+*/
+int	mini_loop(t_tools *tools)
+{
+	char *tmp;
+
 	tools->args = readline("minishell$ ");
-	if (tools->debug_mode)
-		printf("[INFO]: received arguments %s\n", tools->args);
 	if (tools->args == NULL)
 	{
 		ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
-	if (tools->args[0] != '\0')
-	{
-		add_history(tools->args);
-		argv = ft_split(tools->args, ' ');
-		while (argv[argc] != NULL)
-			argc++;
-		executor(tools, argc, argv);
-	}
+	tmp = ft_strtrim(tools->args, " ");
+	free(tools->args);
+	tools->args = tmp;
+	if (tools->args == NULL || tools->args[0] == '\0') // Handle empty input
+		return (reset_tools(tools));
+	add_history(tools->args);
+	if (!check_quotes(tools->args))
+		return (ft_error(ERR_QUO, tools));
+	if (!tokenize_input(tools))
+		return (ft_error(ERR_LEX, tools));
+	if(tools->lexer_lst)
+		print_tokens(tools->lexer_lst);
+	//prep_exec
 	reset_tools(tools);
-}
-
-int	executor(t_tools *tools, int argc, char *argv[])
-{
-	t_exec	*exec;
-
-	if (argc >= 0)
-	{
-		exec = init_exec(argc);
-		set_infile(argv, exec);
-		set_outfile(argv[argc - 1], exec);
-		exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
-		exec->cmd_args = parse_args(exec, argv);
-		ft_exec(exec, tools->envp);
-		close(exec->in_fd);
-		close(exec->out_fd);
-		free_exec(exec);
-	}
-	else
-		return (0);
 	return (1);
 }
+
+// int prep_exec(t_tools *tools)
+// {
+// 	signal(SIGQUIT, sigquit_handler);          // Set up handler for SIGQUIT signal
+// 	// in command/exec flag on
+// 	if (tools->pipes == 0)                     // Check if there are no pipes
+// 		single_cmd(tools->simple_cmds, tools); // Execute a single command
+// 	else
+// 	{
+// 		// handle pid alloc space for pipe count
+// 		// error handle if alloc fail
+// 		executor(tools);                     // Execute commands with pipes
+// 	}
+// 	//reset flag
+// 	return (EXIT_SUCCESS);                   // Return success
+// }
+
+
+// int	executor(t_tools *tools, int argc, char *argv[])
+// {
+// 	t_exec	*exec;
+
+// 	if (argc >= 0)
+// 	{
+// 		exec = init_exec(argc);
+// 		set_infile(argv, exec);
+// 		set_outfile(argv[argc - 1], exec);
+// 		exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
+// 		exec->cmd_args = parse_args(exec, argv);
+// 		ft_exec(exec, tools->envp);
+// 		close(exec->in_fd);
+// 		close(exec->out_fd);
+// 		free_exec(exec);
+// 	}
+// 	else
+// 		return (0);
+// 	return (1);
+// }

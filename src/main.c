@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:01:01 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:01:01 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/08/22 13:08:01 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,26 @@
 /*
 rl_catch_signals:
 	if not disabled Readline internal sig handling messes up our sig handler
+	BUT leaves memory blocks still accessable....
 */
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_tools	tools;
 
 	(void)argc;
+	(void)argv;
+	(void)envp;
 	rl_catch_signals = 0;
-	tools.argv = argv;
-	tools.envp = envp;
-	init_signals();
-	mini_loop(&tools);
-	return (0);
+	// tools.argv = argv;
+	// tools.envp = ft_arr_dup(envp);
+	// if (tools.envp == NULL)
+	// {
+	// 	ft_putendl_fd("Failed to duplicate environment variables",
+			STDERR_FILENO);
+			// 	return (EXIT_FAILURE); 
+					// Exit if environment duplication fails.
+			// }
+			init_tools(&tools);
+			mini_loop(&tools);
+			return (0);
 }

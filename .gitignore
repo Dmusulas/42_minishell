@@ -3,3 +3,6 @@ minishell
 .cache/
 *.o
 *.a
+.vscode/
+._*.c
+.*DS_Store
