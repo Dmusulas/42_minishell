@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/22 14:16:11 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:47:13 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ void	init_tools(t_tools *tools);
 // void	mini_loop(t_tools *tools);
 int		reset_tools(t_tools *tools);
 int		mini_loop(t_tools *tools);
+void	clean_tools(t_tools *tools);
 
 int		ft_error(int err_type, t_tools *tools);
 

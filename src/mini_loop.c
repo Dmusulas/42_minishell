@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/22 15:56:28 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:47:29 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,19 @@
 int	mini_loop(t_tools *tools);
 // int		executor(t_tools *tools, int argc, char *argv[]);
 
+void	clean_tools(t_tools *tools)
+{
+	if (tools->args != NULL)
+		free(tools->args);
+	if (tools->lexer_lst != NULL)
+		clear_tokens(&tools->lexer_lst);
+	if (tools->redir != NULL)
+		clear_tokens(&tools->redir);
+}
+
 void	init_tools(t_tools *tools)
 {
+	tools->args = NULL;
 	tools->lexer_lst = NULL;
 	tools->redir = NULL;
 	tools->redir_num = 0;
@@ -28,13 +39,7 @@ void	init_tools(t_tools *tools)
 
 int	reset_tools(t_tools *tools)
 {
-	if (tools->args != NULL)
-	{
-		free(tools->args);
-		tools->args = NULL;
-	}
-	if (tools->lexer_lst != NULL)
-		clear_tokens(&tools->lexer_lst);
+	clean_tools(tools);
 	init_tools(tools);
 	mini_loop(tools);
 	return(1);

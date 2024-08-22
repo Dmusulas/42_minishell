@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/22 15:58:14 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/22 17:29:37 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,8 @@
 	T_REDIR_OUT >
 	T_APPEND >>
 	T_HEREDOC <<
-	T_EOF
 */
+
 typedef enum s_tokens
 {
 	T_PIPE = 1,
@@ -59,12 +59,17 @@ implement variables as we continue so we don't have unused vars when running mak
 */
 typedef struct s_tools
 {
-	char			*args;
-	char			**argv;
-	t_lexer			*lexer_lst;
-	t_lexer			*redir;
-	int				redir_num;
-	int				pipes;
+	char	*args;
+	char	**envp;
+	char	**paths;
+	t_lexer	*lexer_lst;
+	t_lexer	*redir;
+	int		redir_num;
+	int		pipes;
+	int		in_fd;
+	int		out_fd;
+	//heredoc flag
+
 }	t_tools;
 
 t_lexer	*make_tk(char *str, t_tokens token);

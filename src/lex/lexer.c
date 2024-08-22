@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:32 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/22 15:54:44 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/22 16:57:59 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ static int	check_tk(char tk)
 
 /*
 0: no quote, 34: double quote, 39: single quote
-
 */
 static int handle_arg(char *s, int start, t_tools *tools)
 {
