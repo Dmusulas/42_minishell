@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:35 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/22 16:08:43 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:05:16 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,22 +47,11 @@ void	add_tk(t_lexer **lexer_list, t_lexer *new_token)
 int	ft_one_tk(char c, t_tools *tools)
 {
 	if (c == '|')
-	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("|"), T_PIPE));
-		tools->pipes += 1;
-	}
 	else if (c == '<')
-	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("<"), T_REDIR_IN));
-		add_tk(&(tools->redir), make_tk(ft_strdup("<"), T_REDIR_IN));
-		tools->redir_num += 1;
-	}
 	else if (c == '>')
-	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup(">"), T_REDIR_OUT));
-		add_tk(&(tools->redir), make_tk(ft_strdup(">"), T_REDIR_OUT));
-		tools->redir_num += 1;
-	}
 	return (1);
 }
 
@@ -71,15 +60,11 @@ int	ft_two_tk(char c1, char c2, t_tools *tools)
 	if (c1 == '<' && c2 == '<')
 	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("<<"), T_HEREDOC));
-		add_tk(&(tools->redir), make_tk(ft_strdup("<<"), T_HEREDOC));
-		tools->redir_num += 1;
 		return (2);
 	}
 	else if (c1 == '>' && c2 == '>')
 	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup(">>"), T_APPEND));
-		add_tk(&(tools->redir), make_tk(ft_strdup(">>"), T_APPEND));
-		tools->redir_num += 1;
 		return (2);
 	}
 	return (0);

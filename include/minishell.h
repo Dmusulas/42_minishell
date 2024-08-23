@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/22 16:47:13 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/23 13:40:01 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@
 # include <term.h>
 # include <errno.h>
 # include <sys/ioctl.h>
+# include <stdbool.h>
 // # include "exec.h"
 # include "libft.h"
 # include "lexer_parser.h"
@@ -38,8 +39,6 @@
 
 /* MINI LOOP */
 void	init_tools(t_tools *tools);
-// void	reset_tools(t_tools *tools);
-// void	mini_loop(t_tools *tools);
 int		reset_tools(t_tools *tools);
 int		mini_loop(t_tools *tools);
 void	clean_tools(t_tools *tools);

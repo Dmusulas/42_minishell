@@ -6,7 +6,7 @@
 #    By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 17:18:14 by dmusulas          #+#    #+#              #
-#    Updated: 2024/08/22 12:51:15 by clinggad         ###   ########.fr        #
+#    Updated: 2024/08/23 14:15:18 by clinggad         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,10 +33,11 @@ INCLUDES		= minishell.h \
 MINISHELL_SRCS	= main.c \
 					signals.c \
 					mini_loop.c \
-					debug_utils.c\
+					clean_up.c\
 					err_msg.c\
 					lex/lexer.c \
-					lex/lex_utils.c
+					lex/lex_utils.c \
+					lex/parse_utils.c
 
 MINISHELL_OBJS	= $(MINISHELL_SRCS:%.c=obj/%.o)
 OBJ_DIRS		= $(sort $(dir $(MINISHELL_OBJS)))

@@ -6,9 +6,12 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/22 16:47:29 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:10:00 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+
+// valgrind --leak-check=full --show-leak-kinds=all ./minishell
 
 // #include "exec.h"
 #include "lexer_parser.h"
@@ -17,60 +20,63 @@
 int	mini_loop(t_tools *tools);
 // int		executor(t_tools *tools, int argc, char *argv[]);
 
-void	clean_tools(t_tools *tools)
-{
-	if (tools->args != NULL)
-		free(tools->args);
-	if (tools->lexer_lst != NULL)
-		clear_tokens(&tools->lexer_lst);
-	if (tools->redir != NULL)
-		clear_tokens(&tools->redir);
-}
-
 void	init_tools(t_tools *tools)
 {
 	tools->args = NULL;
 	tools->lexer_lst = NULL;
-	tools->redir = NULL;
+	tools->p_redir = NULL;
 	tools->redir_num = 0;
 	tools->pipes = 0;
+	tools->heredoc = false;
+	tools->in_fd = 0;
+	tools->out_fd = 0;;
+	// tools->loop_reset = false;
 	init_signals();
 }
 
 int	reset_tools(t_tools *tools)
 {
-	clean_tools(tools);
+	if (tools != NULL)
+		clean_tools(tools);
 	init_tools(tools);
+	// tools->loop_reset = true;
 	mini_loop(tools);
 	return(1);
 }
 
+static void	exit_signal(void)
+{
+	ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
+	exit(EXIT_SUCCESS);
+}
+
 /*
-save lines if return value is int
+	mini loop + reset need to be optimized.
+	when testing it causes an error with the first call with token but then not anymore...
+	need to test with more debug statements to see whats happening.
 */
 int	mini_loop(t_tools *tools)
 {
-	char *tmp;
+	char	*tmp;
 
 	tools->args = readline("minishell$ ");
 	if (tools->args == NULL)
-	{
-		ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
-		exit(EXIT_SUCCESS);
-	}
+		exit_signal();
 	tmp = ft_strtrim(tools->args, " ");
 	free(tools->args);
 	tools->args = tmp;
-	if (tools->args == NULL || tools->args[0] == '\0') // Handle empty input
+	if (!tools->args || tools->args[0] == '\0')
 		return (reset_tools(tools));
 	add_history(tools->args);
 	if (!check_quotes(tools->args))
 		return (ft_error(ERR_QUO, tools));
 	if (!tokenize_input(tools))
 		return (ft_error(ERR_LEX, tools));
-	if(tools->lexer_lst)
+	label_cmds(tools);
+	process_tokens(tools);
+	if (tools->lexer_lst)
 		print_tokens(tools->lexer_lst);
-	//prep_exec
+	// return (reset_tools(tools));
 	reset_tools(tools);
 	return (1);
 }
@@ -79,8 +85,8 @@ int	mini_loop(t_tools *tools)
 // {
 // 	signal(SIGQUIT, sigquit_handler);          // Set up handler for SIGQUIT signal
 // 	// in command/exec flag on
-// 	if (tools->pipes == 0)                     // Check if there are no pipes
-// 		single_cmd(tools->simple_cmds, tools); // Execute a single command
+// 	if no pipes
+//	check for redir cmd or buildtin
 // 	else
 // 	{
 // 		// handle pid alloc space for pipe count

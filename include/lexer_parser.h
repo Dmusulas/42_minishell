@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/22 17:29:37 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/23 16:07:42 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <stdbool.h>
 
 /*
 	T_REDIR_IN <
@@ -34,7 +35,6 @@ typedef enum s_tokens
 	T_ARG,
 	T_CMD
 }	t_tokens;
-
 
 typedef struct s_lexer
 {
@@ -63,20 +63,27 @@ typedef struct s_tools
 	char	**envp;
 	char	**paths;
 	t_lexer	*lexer_lst;
-	t_lexer	*redir;
+	t_lexer	*p_redir;
 	int		redir_num;
 	int		pipes;
 	int		in_fd;
 	int		out_fd;
-	//heredoc flag
-
+	bool	heredoc;
+	// bool	loop_reset;
 }	t_tools;
 
 t_lexer	*make_tk(char *str, t_tokens token);
 void	add_tk(t_lexer **lexer_list, t_lexer *new_token);
 int		ft_one_tk(char c, t_tools *tools);
 int		ft_two_tk(char c1, char c2, t_tools *tools);
-int		tokenize_input(t_tools *tools);
 int		check_quotes(char *s);
+
+int		tokenize_input(t_tools *tools);
+
+void	add_tk_cmd_check(char *str, t_tools *tools);
+void	label_cmds(t_tools *tools);
+void	process_tokens(t_tools *tools);
+// void	handle_input(t_tools *tools);
+
 
 #endif
