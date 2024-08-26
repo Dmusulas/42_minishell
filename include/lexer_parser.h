@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 17:32:54 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 18:06:06 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,9 @@ typedef struct s_lexer
 	t_tokens			token;
 	struct s_lexer	*next;
 }	t_lexer;
+
+
+
 
 /*
 *args: str of argument for curr cmd

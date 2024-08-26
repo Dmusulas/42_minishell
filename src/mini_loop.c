@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/26 17:31:30 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 17:50:27 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	mini_loop(t_tools *tools)
 	add_history(tools->args);
 	handle_input(tools);
 	//prep_exec(tools);
-
+	//TODO: delete later
 	if (tools->lexer_lst)
 		print_tokens(tools->lexer_lst);
 
