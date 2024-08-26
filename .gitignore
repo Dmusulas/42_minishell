@@ -5,4 +5,12 @@ minishell
 *.a
 .vscode/
 ._*.c
+._*.h
 .*DS_Store
+._src
+._README.md
+._libft
+._include
+._.gitignore
+._.git
+._.DS_Store
