@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 16:51:51 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 17:32:54 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,16 @@ typedef enum s_tokens
 	T_CMD
 }	t_tokens;
 
-typedef enum s_builtin
-{
-	T_ECHO = 1,
-	T_EXIT,
-	T_PWD,
-	T_CD,
-	T_UNSET,
-	T_ENV,
-	T_EXP
-}	t_builtin;
+// typedef enum s_builtin
+// {
+// 	T_ECHO = 1,
+// 	T_EXIT,
+// 	T_PWD,
+// 	T_CD,
+// 	T_UNSET,
+// 	T_ENV,
+// 	T_EXP
+// }	t_builtin;
 
 typedef struct s_lexer
 {
@@ -59,7 +59,8 @@ typedef struct s_lexer
 **paths: arr of paths where exec may be found (PATH env variable)
 **envp: arr of environment varriables
 *lexer_lst: ptr to head of lexer list
-*redir: list of redir tokens
+*p_redir: ptr to curr redir token in lexer_lst
+
 pipes" pipe count
 
 *pwd: curr working directory (env PATH=PWD)

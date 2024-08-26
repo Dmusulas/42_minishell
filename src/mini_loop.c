@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/26 16:48:34 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 17:31:30 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,11 +73,12 @@ int	mini_loop(t_tools *tools)
 	if (!tools->args || tools->args[0] == '\0')
 		return (reset_tools(tools));
 	add_history(tools->args);
-	// if (!check_quotes(tools->args))
-	// 	return (ft_error(ERR_QUO, tools));
 	handle_input(tools);
+	//prep_exec(tools);
+
 	if (tools->lexer_lst)
 		print_tokens(tools->lexer_lst);
+
 	reset_tools(tools);
 	return (1);
 }

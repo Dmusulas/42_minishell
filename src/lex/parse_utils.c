@@ -6,17 +6,14 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 13:29:25 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 16:55:35 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 17:37:24 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
 
-static t_tokens	cmd_id
-
-
-static t_tokens	cmd_(char *token)
+static t_tokens	arg_check(char *token)
 {
 	if (ft_strcmp(token, "echo") == 0
 		|| ft_strcmp(token, "exit") == 0
@@ -35,25 +32,14 @@ void	add_tk_cmd_check(char *str, t_tools *tools)
 {
 	t_tokens	token_type;
 
-	token_type = cmd_id(str);
+	token_type = arg_check(str);
 	add_tk(&(tools->lexer_lst), make_tk(str, token_type));
 }
 
-void	label_cmds(t_tools *tools)
-{
-	t_lexer	*curr;
-
-	if (tools->lexer_lst == NULL)
-		return ;
-	curr = tools->lexer_lst;
-	while (curr)
-	{
-		if (curr->token == T_ARG)
-			curr->token = cmd_id(curr->str);
-		curr = curr->next;
-	}
-}
-
+/*
+	set p_redir as whole command, not sure how to handle this if there is a pipe.
+	parser splits commands to exec
+*/
 void	process_tokens(t_tools *tools)
 {
 	t_lexer	*curr;
@@ -66,7 +52,7 @@ void	process_tokens(t_tools *tools)
 		if (curr->token == T_REDIR_IN || curr->token == T_REDIR_OUT || 
 			curr->token == T_APPEND || curr->token == T_HEREDOC)
 		{
-			tools->p_redir = curr;
+			// tools->p_redir = curr; //not sure if redir ptr should be assigned here
 			tools->redir_num++;
 			if (curr->token == T_HEREDOC)
 				tools->heredoc = true;
@@ -84,8 +70,5 @@ void	handle_input(t_tools *tools)
 	if (!tokenize_input(tools))
 		ft_error(ERR_LEX, tools);
 	if (tools->lexer_lst != NULL)
-	{
-		label_cmds(tools);
 		process_tokens(tools);
-	}
 }
