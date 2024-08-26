@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 // #include "exec.h"
+#include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
 
-int	mini_loop(t_tools *tools);
-// int		executor(t_tools *tools, int argc, char *argv[]);
+int		mini_loop(t_tools *tools);
 
 void	clean_tools(t_tools *tools)
 {
@@ -42,7 +42,15 @@ int	reset_tools(t_tools *tools)
 	clean_tools(tools);
 	init_tools(tools);
 	mini_loop(tools);
-	return(1);
+	return (1);
+}
+
+int	prep_exec(t_tools *tools)
+{
+	(void)tools;
+	signal(SIGQUIT, sigquit_handler);
+	executor(tools);
+	return (EXIT_SUCCESS);
 }
 
 /*
@@ -50,7 +58,7 @@ save lines if return value is int
 */
 int	mini_loop(t_tools *tools)
 {
-	char *tmp;
+	char	*tmp;
 
 	tools->args = readline("minishell$ ");
 	if (tools->args == NULL)
@@ -68,47 +76,30 @@ int	mini_loop(t_tools *tools)
 		return (ft_error(ERR_QUO, tools));
 	if (!tokenize_input(tools))
 		return (ft_error(ERR_LEX, tools));
-	if(tools->lexer_lst)
+	if (tools->lexer_lst)
 		print_tokens(tools->lexer_lst);
-	//prep_exec
+	prep_exec(tools);
 	reset_tools(tools);
 	return (1);
 }
 
-// int prep_exec(t_tools *tools)
-// {
-// 	signal(SIGQUIT, sigquit_handler);          // Set up handler for SIGQUIT signal
-// 	// in command/exec flag on
-// 	if (tools->pipes == 0)                     // Check if there are no pipes
-// 		single_cmd(tools->simple_cmds, tools); // Execute a single command
-// 	else
-// 	{
-// 		// handle pid alloc space for pipe count
-// 		// error handle if alloc fail
-// 		executor(tools);                     // Execute commands with pipes
-// 	}
-// 	//reset flag
-// 	return (EXIT_SUCCESS);                   // Return success
-// }
+int	executor(t_tools *tools)
+{
+	t_exec	*exec;
 
-
-// int	executor(t_tools *tools, int argc, char *argv[])
-// {
-// 	t_exec	*exec;
-
-// 	if (argc >= 0)
-// 	{
-// 		exec = init_exec(argc);
-// 		set_infile(argv, exec);
-// 		set_outfile(argv[argc - 1], exec);
-// 		exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
-// 		exec->cmd_args = parse_args(exec, argv);
-// 		ft_exec(exec, tools->envp);
-// 		close(exec->in_fd);
-// 		close(exec->out_fd);
-// 		free_exec(exec);
-// 	}
-// 	else
-// 		return (0);
-// 	return (1);
-// }
+	if (argc >= 0)
+	{
+		exec = init_exec(argc);
+		set_infile(argv, exec);
+		set_outfile(argv[argc - 1], exec);
+		exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
+		exec->cmd_args = parse_args(exec, argv);
+		ft_exec(exec, tools->envp);
+		close(exec->in_fd);
+		close(exec->out_fd);
+		free_exec(exec);
+	}
+	else
+		return (0);
+	return (1);
+}

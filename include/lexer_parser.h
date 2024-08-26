@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/22 17:29:37 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/22 18:12:10 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,10 @@ typedef enum s_tokens
 	T_CMD
 }	t_tokens;
 
-
 typedef struct s_lexer
 {
 	char			*str;
-	t_tokens			token;
+	t_tokens		token;
 	struct s_lexer	*next;
 }	t_lexer;
 
@@ -69,7 +68,6 @@ typedef struct s_tools
 	int		in_fd;
 	int		out_fd;
 	//heredoc flag
-
 }	t_tools;
 
 t_lexer	*make_tk(char *str, t_tokens token);

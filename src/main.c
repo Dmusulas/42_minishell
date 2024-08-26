@@ -25,18 +25,17 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
-	(void)envp;
+	tools.envp = envp;
 	rl_catch_signals = 0;
 	// tools.argv = argv;
-	// tools.envp = ft_arr_dup(envp);
 	// if (tools.envp == NULL)
 	// {
 	// 	ft_putendl_fd("Failed to duplicate environment variables",
-			STDERR_FILENO);
-			// 	return (EXIT_FAILURE); 
-					// Exit if environment duplication fails.
-			// }
-			init_tools(&tools);
-			mini_loop(&tools);
-			return (0);
+	// STDERR_FILENO);
+	// 	return (EXIT_FAILURE);
+	// Exit if environment duplication fails.
+	// }
+	init_tools(&tools);
+	mini_loop(&tools);
+	return (0);
 }

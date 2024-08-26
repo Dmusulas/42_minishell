@@ -6,12 +6,9 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/22 18:06:12 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/08/22 18:11:53 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//NOTE: probably will split this header file into multiple ones for tidyness
-//later
 
 #ifndef MINISHELL_H 
 # define MINISHELL_H
@@ -29,17 +26,14 @@
 # include <term.h>
 # include <errno.h>
 # include <sys/ioctl.h>
-// # include "exec.h"
 # include "libft.h"
 # include "lexer_parser.h"
 
-#define ERR_LEX 1
-#define ERR_QUO 2
+# define ERR_LEX 1
+# define ERR_QUO 2
 
 /* MINI LOOP */
 void	init_tools(t_tools *tools);
-// void	reset_tools(t_tools *tools);
-// void	mini_loop(t_tools *tools);
 int		reset_tools(t_tools *tools);
 int		mini_loop(t_tools *tools);
 void	clean_tools(t_tools *tools);

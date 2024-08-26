@@ -6,7 +6,7 @@
 #    By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 17:18:14 by dmusulas          #+#    #+#              #
-#    Updated: 2024/08/22 18:05:13 by dmusulas         ###   ########.fr        #
+#    Updated: 2024/08/26 17:29:55 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,14 +29,21 @@ LIBFT_CFLAGS	= -I$(LIBFT_DIR)/include
 # Sources
 VPATH			= src:include
 INCLUDES		= minishell.h \
+				  lexer_parser.h\
+				  exec.h
 
 MINISHELL_SRCS	= main.c \
-					signals.c \
-					mini_loop.c \
-					debug_utils.c\
-					err_msg.c\
-					lex/lexer.c \
-					lex/lex_utils.c
+				  signals.c \
+				  mini_loop.c \
+				  debug_utils.c\
+				  err_msg.c\
+				  lex/lexer.c \
+				  lex/lex_utils.c\
+				  exec/err.c\
+				  exec/executor.c\
+				  exec/io.c\
+				  exec/parser.c\
+				  exec/utils.c
 
 MINISHELL_OBJS	= $(MINISHELL_SRCS:%.c=obj/%.o)
 OBJ_DIRS		= $(sort $(dir $(MINISHELL_OBJS)))
