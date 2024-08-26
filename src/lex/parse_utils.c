@@ -6,14 +6,17 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 13:29:25 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 13:34:11 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 16:55:35 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
 
-static t_tokens	cmd_id(char *token)
+static t_tokens	cmd_id
+
+
+static t_tokens	cmd_(char *token)
 {
 	if (ft_strcmp(token, "echo") == 0
 		|| ft_strcmp(token, "exit") == 0
@@ -76,6 +79,8 @@ void	process_tokens(t_tools *tools)
 
 void	handle_input(t_tools *tools)
 {
+	if (!check_quotes(tools->args))
+		ft_error(ERR_QUO, tools);
 	if (!tokenize_input(tools))
 		ft_error(ERR_LEX, tools);
 	if (tools->lexer_lst != NULL)

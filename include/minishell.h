@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/26 12:18:36 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:54:11 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ int		mini_loop(t_tools *tools);
 void	clean_tools(t_tools *tools);
 
 int		ft_error(int err_type, t_tools *tools);
+void	clear_tokens(t_lexer **lexer_list);
 
 /* SIGNALS */
 int		event(void);
@@ -51,7 +52,8 @@ void	sigint_handler(int signal);
 void	sigquit_handler(int signal);
 void	init_signals(void);
 
+
+/* TO BE REMOVED */
 void	print_tokens(t_lexer *lexer_list);
-void	clear_tokens(t_lexer **lexer_list);
 
 #endif

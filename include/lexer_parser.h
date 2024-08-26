@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 12:18:44 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 16:51:51 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,17 @@ typedef enum s_tokens
 	T_ARG,
 	T_CMD
 }	t_tokens;
+
+typedef enum s_builtin
+{
+	T_ECHO = 1,
+	T_EXIT,
+	T_PWD,
+	T_CD,
+	T_UNSET,
+	T_ENV,
+	T_EXP
+}	t_builtin;
 
 typedef struct s_lexer
 {
