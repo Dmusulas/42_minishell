@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:35 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/23 16:05:16 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:33:11 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,11 +79,11 @@ int	check_quotes(char *s)
 	q_q = 0;
 	q = 0;
 	i = 0;
-	while(s[i])
+	while (s[i])
 	{
-		if(s[i] == 34)
+		if (s[i] == 34)
 			q_q += 1;
-		if(s[i] == 39)
+		if (s[i] == 39)
 			q += 1;
 		i++;
 	}

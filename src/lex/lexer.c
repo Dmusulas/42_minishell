@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:32 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/23 15:59:43 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:32:38 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,13 @@ static int	check_tk(char tk)
 		return (0);
 }
 
-static int handle_q_arg(char *s, int start, t_tools *tools)
+/*
+arg = ft_substr(s, start + 1, i - start - 1)
+	Extract the argument, excluding the quotes
+return (i - start + 1);
+	Include the closing quote when updating index position
+*/
+static int	handle_q_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	q_type;
@@ -28,10 +34,8 @@ static int handle_q_arg(char *s, int start, t_tools *tools)
 
 	i = start;
 	q_type = s[i++];
-	
 	while (s[i] && s[i] != q_type)
 		i++;
-	// Extract the argument, excluding the quotes
 	arg = ft_substr(s, start + 1, i - start - 1);
 	if (arg == NULL)
 	{
@@ -39,10 +43,10 @@ static int handle_q_arg(char *s, int start, t_tools *tools)
 		return (0);
 	}
 	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
-	return (i - start + 1);  // Include the closing quote
+	return (i - start + 1);
 }
 
-static int handle_arg(char *s, int start, t_tools *tools)
+static int	handle_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	*arg;
@@ -69,7 +73,7 @@ static int	skip_space(char *s, int i)
 	return (i);
 }
 
-int tokenize_input(t_tools *tools)
+int	tokenize_input(t_tools *tools)
 {
 	int	i;
 	int	offset;
@@ -89,6 +93,5 @@ int tokenize_input(t_tools *tools)
 		else
 			i += handle_arg(tools->args, i, tools);
 	}
-	// label_cmds(tools);
 	return (1);
 }

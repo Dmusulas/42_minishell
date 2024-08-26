@@ -1,15 +1,27 @@
-# include "lexer_parser.h"
-# include "minishell.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/08/26 13:29:25 by clinggad          #+#    #+#             */
+/*   Updated: 2024/08/26 13:34:11 by clinggad         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "lexer_parser.h"
+#include "minishell.h"
 
 static t_tokens	cmd_id(char *token)
 {
-	if (ft_strcmp(token, "echo") == 0 ||
-		ft_strcmp(token, "exit") == 0 ||
-		ft_strcmp(token, "pwd") == 0 ||
-		ft_strcmp(token, "cd") == 0 ||
-		ft_strcmp(token, "unset") == 0 ||
-		ft_strcmp(token, "env") == 0 ||
-		ft_strcmp(token, "export") == 0)
+	if (ft_strcmp(token, "echo") == 0
+		|| ft_strcmp(token, "exit") == 0
+		|| ft_strcmp(token, "pwd") == 0
+		|| ft_strcmp(token, "cd") == 0
+		|| ft_strcmp(token, "unset") == 0
+		|| ft_strcmp(token, "env") == 0
+		|| ft_strcmp(token, "export") == 0)
 	{
 		return (T_CMD);
 	}

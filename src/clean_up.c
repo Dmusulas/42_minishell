@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:53 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 12:49:10 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 13:35:17 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 */
 void	print_tokens(t_lexer *lexer_list)
 {
-	t_lexer *curr;
+	t_lexer	*curr;
 
 	curr = lexer_list;
 	while (curr)
@@ -33,8 +33,8 @@ void	print_tokens(t_lexer *lexer_list)
 
 void	clear_tokens(t_lexer **lexer_list)
 {
-	t_lexer *curr;
-	t_lexer *next_node;
+	t_lexer	*curr;
+	t_lexer	*next_node;
 
 	if (lexer_list == NULL || *lexer_list == NULL)
 		return ;
@@ -53,7 +53,7 @@ void	clear_tokens(t_lexer **lexer_list)
 	*lexer_list = NULL;
 }
 
-void clean_tools(t_tools *tools)
+void	clean_tools(t_tools *tools)
 {
 	if (tools->args != NULL)
 	{
