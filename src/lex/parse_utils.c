@@ -28,6 +28,8 @@ void	label_cmds(t_tools *tools)
 {
 	t_lexer	*curr;
 
+	if (tools->lexer_lst == NULL)
+		return ;
 	curr = tools->lexer_lst;
 	while (curr)
 	{
@@ -41,8 +43,10 @@ void	process_tokens(t_tools *tools)
 {
 	t_lexer	*curr;
 
+	if (tools->lexer_lst == NULL)
+		return ;
 	curr = tools->lexer_lst;
-	while (curr)
+	while (curr != NULL)
 	{
 		if (curr->token == T_REDIR_IN || curr->token == T_REDIR_OUT || 
 			curr->token == T_APPEND || curr->token == T_HEREDOC)
@@ -58,9 +62,13 @@ void	process_tokens(t_tools *tools)
 	}
 }
 
-// void	handle_input(t_tools *tools)
-// {
-// 	if (!tokenize_input(tools))
-// 		ft_error(ERR_LEX, tools);
-// 	process_tokens(tools);
-// }
+void	handle_input(t_tools *tools)
+{
+	if (!tokenize_input(tools))
+		ft_error(ERR_LEX, tools);
+	if (tools->lexer_lst != NULL)
+	{
+		label_cmds(tools);
+		process_tokens(tools);
+	}
+}

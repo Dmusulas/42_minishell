@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/23 16:10:00 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:50:33 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	mini_loop(t_tools *tools);
 
 void	init_tools(t_tools *tools)
 {
+	printf("enter init tools\n");
 	tools->args = NULL;
 	tools->lexer_lst = NULL;
 	tools->p_redir = NULL;
@@ -36,6 +37,7 @@ void	init_tools(t_tools *tools)
 
 int	reset_tools(t_tools *tools)
 {
+	printf("enter reset tools\n");
 	if (tools != NULL)
 		clean_tools(tools);
 	init_tools(tools);
@@ -70,13 +72,9 @@ int	mini_loop(t_tools *tools)
 	add_history(tools->args);
 	if (!check_quotes(tools->args))
 		return (ft_error(ERR_QUO, tools));
-	if (!tokenize_input(tools))
-		return (ft_error(ERR_LEX, tools));
-	label_cmds(tools);
-	process_tokens(tools);
+	handle_input(tools);
 	if (tools->lexer_lst)
 		print_tokens(tools->lexer_lst);
-	// return (reset_tools(tools));
 	reset_tools(tools);
 	return (1);
 }

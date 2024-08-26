@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/23 16:07:42 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 12:18:44 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int		tokenize_input(t_tools *tools);
 void	add_tk_cmd_check(char *str, t_tools *tools);
 void	label_cmds(t_tools *tools);
 void	process_tokens(t_tools *tools);
-// void	handle_input(t_tools *tools);
+void	handle_input(t_tools *tools);
 
 
 #endif
