@@ -6,7 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/27 13:09:59 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:22:00 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lexer_parser.h"
+#include "minishell.h"
