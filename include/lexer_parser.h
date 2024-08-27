@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 18:06:06 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:31:56 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,9 @@ typedef enum s_tokens
 	T_APPEND,
 	T_HEREDOC,
 	T_ARG,
-	T_CMD
+	T_CMD,
+	
 }	t_tokens;
-
-// typedef enum s_builtin
-// {
-// 	T_ECHO = 1,
-// 	T_EXIT,
-// 	T_PWD,
-// 	T_CD,
-// 	T_UNSET,
-// 	T_ENV,
-// 	T_EXP
-// }	t_builtin;
 
 typedef struct s_lexer
 {
@@ -54,7 +44,13 @@ typedef struct s_lexer
 	struct s_lexer	*next;
 }	t_lexer;
 
-
+// typedef struct s_ast
+// {
+// 	t_lexer			*lexer;
+// 	struct s_ast	*left;
+// 	struct s_ast	*right;
+// 	char			*file;
+// }	t_ast;
 
 
 /*

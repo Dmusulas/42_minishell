@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:32 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 13:32:38 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/27 14:36:12 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	handle_q_arg(char *s, int start, t_tools *tools)
 	q_type = s[i++];
 	while (s[i] && s[i] != q_type)
 		i++;
-	arg = ft_substr(s, start + 1, i - start - 1);
+	arg = ft_substr(s, start, i - start + 1);
 	if (arg == NULL)
 	{
 		perror("ft_substr");
