@@ -17,10 +17,10 @@
  *
  * @param err The error message to be displayed.
  */
-void	msg_error(char *err, t_exec *exec)
+int	msg_error(char *err, t_exec *exec)
 {
 	perror(err);
 	if (exec)
 		free_exec(exec);
-	exit(EXIT_FAILURE);
+	return (EXIT_FAILURE);
 }

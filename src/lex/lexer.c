@@ -23,7 +23,7 @@ static int	check_tk(char tk)
 /*
 0: no quote, 34: double quote, 39: single quote
 */
-static int handle_arg(char *s, int start, t_tools *tools)
+static int	handle_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	int		q_type;
@@ -52,7 +52,6 @@ static int handle_arg(char *s, int start, t_tools *tools)
 	return (i - start);
 }
 
-
 static int	skip_space(char *s, int i)
 {
 	while (s[i] == ' ')
@@ -62,8 +61,8 @@ static int	skip_space(char *s, int i)
 
 int	tokenize_input(t_tools *tools)
 {
-	int		i;
-	int		offset;
+	int	i;
+	int	offset;
 
 	i = 0;
 	while (tools->args[i])

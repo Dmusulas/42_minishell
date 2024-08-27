@@ -47,7 +47,6 @@ int	reset_tools(t_tools *tools)
 
 int	prep_exec(t_tools *tools)
 {
-	(void)tools;
 	signal(SIGQUIT, sigquit_handler);
 	executor(tools);
 	return (EXIT_SUCCESS);

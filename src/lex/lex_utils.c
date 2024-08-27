@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "lexer_parser.h"
+#include "libft.h"
 
 t_lexer	*make_tk(char *str, t_tokens token)
 {
@@ -94,11 +94,11 @@ int	check_quotes(char *s)
 	q_q = 0;
 	q = 0;
 	i = 0;
-	while(s[i])
+	while (s[i])
 	{
-		if(s[i] == 34)
+		if (s[i] == 34)
 			q_q += 1;
-		if(s[i] == 39)
+		if (s[i] == 39)
 			q += 1;
 		i++;
 	}

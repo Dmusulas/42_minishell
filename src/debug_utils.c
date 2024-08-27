@@ -15,7 +15,7 @@
 
 void	print_tokens(t_lexer *lexer_list)
 {
-	t_lexer *current;
+	t_lexer	*current;
 
 	current = lexer_list;
 	while (current)
@@ -33,8 +33,8 @@ empty token list
 */
 void	clear_tokens(t_lexer **lexer_list)
 {
-	t_lexer *current;
-	t_lexer *next_node;
+	t_lexer	*current;
+	t_lexer	*next_node;
 
 	current = *lexer_list;
 	while (current)

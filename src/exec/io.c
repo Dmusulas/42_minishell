@@ -12,7 +12,6 @@
 
 #include "exec.h"
 #include "libft.h"
-#include <stdlib.h>
 
 /**
  * Sets up a pipe and forks a process to handle reading input for
@@ -47,6 +46,7 @@ void	here_doc(char *limiter, t_exec *exec)
 	unlink(TEMP_FILE);
 }
 
+// TODO: Change so it handles multiple here_docs
 /**
  * Sets the input file for the pipeline, handling here_doc
  *

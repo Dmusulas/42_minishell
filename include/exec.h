@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:32:22 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/08/27 17:13:34 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ typedef struct s_exec
 	int		cmd_start_position;
 }	t_exec;
 
-void	msg_error(char *err, t_exec *exec);
+int		msg_error(char *err, t_exec *exec);
 t_exec	*init_exec(int argc);
 void	free_exec(t_exec *exec);
 void	set_outfile(char *argv, t_exec *exec);

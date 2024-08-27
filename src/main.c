@@ -27,14 +27,13 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argv;
 	tools.envp = envp;
 	rl_catch_signals = 0;
-	// tools.argv = argv;
-	// if (tools.envp == NULL)
-	// {
-	// 	ft_putendl_fd("Failed to duplicate environment variables",
-	// STDERR_FILENO);
-	// 	return (EXIT_FAILURE);
-	// Exit if environment duplication fails.
-	// }
+	if (tools.envp == NULL)
+	{
+		ft_putendl_fd("Failed to duplicate environment variables",
+			STDERR_FILENO);
+		return (EXIT_FAILURE);
+		// Exit if environment duplication fails.
+	}
 	init_tools(&tools);
 	mini_loop(&tools);
 	return (0);
