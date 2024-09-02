@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/27 15:34:06 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/02 13:14:48 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 	char			*file;
+	bool			b_cmd;
 }	t_ast;
 
 

@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 13:38:33 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 14:37:53 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/02 14:38:37 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 #include "lexer_parser.h"
 
 /*
-parse envp -> array dup
-	tools->paths
-	clear in reset
-to find paths
-path=
+copy envp array to tools->envp
+store in list? so we can modify and add content in between?
+sort input
+'export' built in -> prints list as
+	'declare -x [..]'
 
 */
 

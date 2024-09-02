@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 13:29:25 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/26 17:37:24 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/02 14:46:03 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,5 @@ void	handle_input(t_tools *tools)
 		ft_error(ERR_LEX, tools);
 	if (tools->lexer_lst != NULL)
 		process_tokens(tools);
+	
 }

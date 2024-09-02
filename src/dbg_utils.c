@@ -1,48 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   clean_up.c                                         :+:      :+:    :+:   */
+/*   dbg_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 13:15:53 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 12:23:45 by clinggad         ###   ########.fr       */
+/*   Created: 2024/09/02 12:23:26 by clinggad          #+#    #+#             */
+/*   Updated: 2024/09/02 12:29:49 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
 
-void	clear_tokens(t_lexer **lexer_list)
+void	print_tokens(t_lexer *lexer_list)
 {
 	t_lexer	*curr;
-	t_lexer	*next_node;
 
-	if (lexer_list == NULL || *lexer_list == NULL)
-		return ;
-	curr = *lexer_list;
+	curr = lexer_list;
 	while (curr)
 	{
-		next_node = curr->next;
-		if (curr->str != NULL)
-		{
-			free(curr->str);
-			curr->str = NULL;
-		}
-		free(curr);
-		curr = next_node;
+		if (curr->str == NULL)
+			printf("Token: NULL, Type: %d\n", curr->token);
+		else
+			printf("Token: %s, Type: %d\n", curr->str, curr->token);
+		curr = curr->next;
 	}
-	*lexer_list = NULL;
 }
 
-void	clean_tools(t_tools *tools)
-{
-	if (tools->args != NULL)
-	{
-		free(tools->args);
-		tools->args = NULL;
-	}
-	if (tools->lexer_lst != NULL)
-		clear_tokens(&tools->lexer_lst);
-	tools->p_redir = NULL;
-}
