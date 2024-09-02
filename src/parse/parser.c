@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
@@ -6,30 +6,12 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 14:43:46 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/02 20:59:02 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "lexer_parser.h"
 #include "minishell.h"
-
-static t_ast	*ast_new(void)
-{
-	t_ast	*new_nd;
-
-	new_nd = malloc(sizeof(t_ast));
-	if (!new_nd)
-	{
-		perror("malloc ast");
-		return (NULL);
-	}
-	new_nd->lexer = NULL;
-	new_nd->left = NULL;
-	new_nd->right = NULL;
-	new_nd->file = NULL;
-	new_nd->b_cmd = false;
-	return (new_nd);
-}
 
 /*
 	if single quote -> return trimmed str
@@ -64,13 +46,25 @@ char	*parse_arg(const char *s)
 	return (ft_strdup(s));
 }
 
+/*
+parse_cmd
+	Parses a command or argument from the lexer tokens
+	and constructs an AST (Abstract Syntax Tree) node.
 
+assignes current lexer token to the node
+checks if token is a builtin (set flag 'b_cmd = true')
+
+If the token is an argument,
+	processes the argument string, handling any necessary expansions 
+	or quote removals, updates the node's lexer string accordingly.
+returns the created AST node or NULL if memory allocation fails.
+ */
 t_ast	*parse_cmd(t_lexer **tokens)
 {
 	t_ast	*cmd_node;
 	char	*new_str;
 
-	cmd_node = new_ast();
+	cmd_node = ast_new();
 	if (!cmd_node)
 		return (NULL);
 	cmd_node->lexer = *tokens;
@@ -92,12 +86,138 @@ t_ast	*parse_cmd(t_lexer **tokens)
 	return (cmd_node);
 }
 
+/**
+ * parse_pipe - Parses a pipeline of commands from the lexer tokens and constructs
+ *              an AST (Abstract Syntax Tree) representing the pipeline.
+ * @tokens: A pointer to the lexer tokens linked list.
+ * 
+ * This function starts by parsing the leftmost command and checks if the next 
+ * token is a pipe (`|`). If a pipe is found, it creates a new AST node to represent 
+ * the pipe, with the left child being the previously parsed command and the right 
+ * child being the next command in the pipeline. The process continues for subsequent
+ * pipes, linking commands together into a single AST structure. The function returns 
+ * the root of the pipeline AST, or NULL if memory allocation fails.
+ */
+
 t_ast	*parse_pipe(t_lexer **tokens)
 {
-	
+	t_ast	*left_node;
+	t_ast	*right_node;
+	t_ast	*pipe_node;
+
+	left_node = parse_cmd(tokens);
+	while (*tokens && (*tokens)->token == T_PIPE)
+	{
+		pipe_node = ast_new();
+		if (!pipe_node)
+			return (NULL);
+		pipe_node->lexer = *tokens;
+		*tokens = (*tokens)->next;
+		right_node = parse_cmd(tokens);
+		pipe_node->left = left_node;
+		pipe_node-> right = right_node;
+		left_node = pipe_node;
+	}
+	return (left_node);
 }
 
-t_ast	*parse_redir(t_lexer **token)
+/**
+ * make_redir - Creates a new AST node for a redirection.
+ * @cmd_node: The command node to which the redirection applies.
+ * @token: The current lexer token representing the redirection operator.
+ * @file_str: The string representing the file for redirection.
+ * 
+ * Returns a pointer to the new redirection node, or NULL on failure.
+ */
+static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
 {
-	
+	t_ast	*redir_node;
+
+	redir_node = ast_new();
+	if (!redir_node)
+	{
+		free_ast(cmd_node);
+		return (NULL);
+	}
+	redir_node->lexer = token;
+	redir_node->left = cmd_node;
+	redir_node->file = ft_strdup(file_str);
+	if (!redir_node->file)
+	{
+		free_ast(redir_node);
+		return (NULL);
+	}
+	return (redir_node);
 }
+
+/**
+ * parse_redir - Parses command redirections from lexer tokens and builds an AST.
+ * @tokens: A pointer to the lexer tokens linked list.
+ * 
+ * Returns the root of the redirection AST, or NULL on failure.
+ */
+t_ast *parse_redir(t_lexer **tokens)
+{
+	t_ast	*cmd_node;
+
+	cmd_node = parse_cmd(tokens);
+	while (*tokens && ((*tokens)->token == T_REDIR_IN
+		|| (*tokens)->token == T_REDIR_OUT
+		|| (*tokens)->token == T_APPEND
+		|| (*tokens)->token == T_HEREDOC))
+	{
+		cmd_node = make_redir(cmd_node, *tokens, (*tokens)->next->str);
+		if (!cmd_node)
+			return (NULL);
+		*tokens = (*tokens)->next->next;
+	}
+	return (cmd_node);
+}
+
+
+// TODO: refactor ft has too many lines
+/*
+ * parse_redir - Parses command redirections from the lexer tokens and constructs 
+ *               an AST (Abstract Syntax Tree) representing the command with 
+ *               associated redirections.
+ * @tokens: A pointer to the lexer tokens linked list.
+ * 
+ * This function starts by parsing a command and then checks if the next token 
+ * represents a redirection (`<`, `>`, `>>`, or `<<`). For each redirection found, 
+ * it creates a new AST node to represent the redirection, with the left child 
+ * pointing to the command or previous redirection node, and the `file` field 
+ * storing the redirection target (e.g., a file name). The function returns the 
+ * root of the redirection AST or NULL if memory allocation fails. If any step 
+ * fails, it frees the previously allocated nodes to avoid memory leaks.
+ */
+
+// t_ast	*parse_redir(t_lexer **tokens)
+// {
+// 	t_ast	*cmd_node;
+// 	t_ast	*redir_node;
+
+// 	cmd_node = parse_cmd(tokens);
+// 	while (*tokens && ((*tokens)->token == T_REDIR_IN || (*tokens)->token == T_REDIR_OUT
+// 		|| (*tokens)->token == T_APPEND || (*tokens)->token == T_HEREDOC))
+// 	{
+// 		redir_node = ast_new();
+// 		if (!redir_node)
+// 		{
+// 			free_ast(cmd_node);
+// 			return (NULL);
+// 		}
+// 		redir_node->lexer = *tokens;
+// 		*tokens = (*tokens)->next;
+// 		redir_node->left = cmd_node;
+// 		redir_node->file = ft_strdup((*tokens)->str);
+// 		if (!redir_node->file)
+// 		{
+// 			free_ast(redir_node);
+// 			free_ast(cmd_node);
+// 			return (NULL);
+// 		}
+// 		*tokens = (*tokens)->next;
+// 		cmd_node = redir_node;
+// 	}
+// 	return (cmd_node);
+// }

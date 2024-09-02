@@ -1,4 +1,4 @@
-# **************************************************************************** #
+#******************************************************************************#
 #                                                                              #
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
@@ -6,9 +6,9 @@
 #    By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 17:18:14 by dmusulas          #+#    #+#              #
-#    Updated: 2024/09/02 14:41:01 by clinggad         ###   ########.fr        #
+#    Updated: 2024/09/02 16:42:02 by clinggad         ###   ########.fr        #
 #                                                                              #
-# **************************************************************************** #
+#******************************************************************************#
 
 # Variables
 CC				= cc
@@ -38,8 +38,9 @@ MINISHELL_SRCS	= main.c \
 					dbg_utils.c\
 					lex/lexer.c \
 					lex/lex_utils.c \
-					lex/parse_utils.c \
+					lex/parse_prep_utils.c \
 					parse/expand.c \
+					parse/parse_utils.c \
 					parse/parser.c
 
 MINISHELL_OBJS	= $(MINISHELL_SRCS:%.c=obj/%.o)

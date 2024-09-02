@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/26 13:54:11 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/02 17:43:49 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 //NOTE: probably will split this header file into multiple ones for tidyness
 //later
@@ -36,6 +36,7 @@
 
 #define ERR_LEX 1
 #define ERR_QUO 2
+#define ERR_PAR 3
 
 /* MINI LOOP */
 void	init_tools(t_tools *tools);
@@ -55,5 +56,7 @@ void	init_signals(void);
 
 /* TO BE REMOVED */
 void	print_tokens(t_lexer *lexer_list);
+void	print_ast_node(t_ast *node);
+void	print_ast(t_ast *tree, int depth);
 
 #endif

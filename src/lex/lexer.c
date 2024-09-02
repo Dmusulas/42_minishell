@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
@@ -6,11 +6,13 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:32 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/27 14:36:12 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/02 21:18:01 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "minishell.h"
+
+//TODO: add checks for syntax errors near tokens
 
 static int	check_tk(char tk)
 {
@@ -73,6 +75,18 @@ static int	skip_space(char *s, int i)
 	return (i);
 }
 
+/**
+ * tokenize_input - Tokenizes the input string and populates the lexer list in the tools struct.
+ * @tools: Pointer to the tools struct containing the input string and lexer list.
+ * 
+ * This function processes the input string from the tools struct, breaking it down
+ * into tokens that represent commands, arguments, operators, etc. It iterates through
+ * the input string, skipping spaces, identifying tokens, and adding them to the lexer list.
+ * Depending on the character or sequence of characters encountered, it either processes
+ * a two-character token, a single-character token, or a general argument.
+ * 
+ * Returns 1 on success.
+ */
 int	tokenize_input(t_tools *tools)
 {
 	int	i;

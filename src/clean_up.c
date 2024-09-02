@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:53 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 12:23:45 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/02 16:30:25 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -35,6 +35,30 @@ void	clear_tokens(t_lexer **lexer_list)
 	*lexer_list = NULL;
 }
 
+// Function to free the AST nodes
+/*
+FREE AST TREE
+	free child nodes (left / right subtrees) before parent nodes
+*/
+void	free_ast(t_ast *tree)
+{
+	while (tree != NULL)
+	{
+		if (tree->left != NULL)
+			free_ast(tree->left);
+		if (tree->right != NULL)
+			free_ast(tree->right);
+		if (tree->file != NULL)
+			free(tree->file);
+		if (tree->lexer != NULL && tree->lexer->str != NULL)
+			free(tree->lexer->str);
+		if (tree->lexer != NULL)
+			free(tree->lexer);
+		free(tree);
+		// break ;
+	}
+}
+
 void	clean_tools(t_tools *tools)
 {
 	if (tools->args != NULL)
@@ -42,6 +66,8 @@ void	clean_tools(t_tools *tools)
 		free(tools->args);
 		tools->args = NULL;
 	}
+	if (tools->tree != NULL)
+		free_ast(tools->tree);
 	if (tools->lexer_lst != NULL)
 		clear_tokens(&tools->lexer_lst);
 	tools->p_redir = NULL;
