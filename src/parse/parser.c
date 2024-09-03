@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 20:59:02 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:45:30 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -25,7 +25,7 @@ char	*parse_arg(const char *s)
 {
 	size_t	len;
 	char	*trim;
-	char	*expd;
+//	char	*expd;
 
 	len = ft_strlen(s);
 	if(s[0] == '\'' && s[len - 1] == '\'')
@@ -33,16 +33,16 @@ char	*parse_arg(const char *s)
 	if (s[0] == '"' && s[len - 1] == '"')
 	{
 		trim = ft_strndup(s + 1, len - 2);
-		if (ft_strchr(trim , '$'))
-		{
-			expd = expand_var(trim);
-			free(trim);
-			return (expd);
-		}
+		// if (ft_strchr(trim , '$'))
+		// {
+		// 	expd = expand_var(trim);
+		// 	free(trim);
+		// 	return (expd);
+		// }
 		return (trim);
 	}
-	if (ft_str(s, '$'))
-		return (expand_var(s));
+	// if (ft_str(s, '$'))
+	// 	return (expand_var(s));
 	return (ft_strdup(s));
 }
 

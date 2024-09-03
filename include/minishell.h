@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/09/02 17:43:49 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:46:23 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 //NOTE: probably will split this header file into multiple ones for tidyness
 //later
@@ -46,6 +46,7 @@ void	clean_tools(t_tools *tools);
 
 int		ft_error(int err_type, t_tools *tools);
 void	clear_tokens(t_lexer **lexer_list);
+void	free_ast(t_ast *tree);
 
 /* SIGNALS */
 int		event(void);

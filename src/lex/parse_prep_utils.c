@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse_prep_utils.c                                 :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 13:29:25 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 20:37:28 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:45:04 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -63,6 +63,6 @@ void	handle_input(t_tools *tools)
 		ft_error(ERR_LEX, tools);
 	if (tools->lexer_lst != NULL)
 		process_tokens(tools);
-	if (!parse_input(tools));
+	if (!parse_input(tools))
 		ft_error(ERR_PAR, tools);
 }

@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.h                                     :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 21:15:08 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/03 15:43:39 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef LEXER_PARSER_H
 # define LEXER_PARSER_H
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>
+# include "libft.h"
 
 /*
 	T_REDIR_IN <
@@ -24,7 +25,6 @@
 	T_APPEND >>
 	T_HEREDOC <<
 */
-
 typedef enum s_tokens
 {
 	T_PIPE = 1,
@@ -34,7 +34,6 @@ typedef enum s_tokens
 	T_HEREDOC,
 	T_ARG,
 	T_CMD,
-	
 }	t_tokens;
 
 typedef struct s_lexer
@@ -72,8 +71,8 @@ implement variables as we continue so we don't have unused vars when running mak
 typedef struct s_tools
 {
 	char	*args;
-	char	**envp;
-	char	**paths;
+	// char	**envp;
+	// char	**paths;
 	t_lexer	*lexer_lst;
 	t_lexer	*p_redir;
 	int		redir_num;
@@ -112,5 +111,4 @@ t_ast	*parse_cmd(t_lexer **tokens);
 t_ast	*parse_pipe(t_lexer **tokens);
 t_ast	*parse_redir(t_lexer **tokens);
 
-/* EXPAND */
 #endif
