@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/09/03 15:40:46 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/04 12:54:49 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ void	init_tools(t_tools *tools)
 	tools->pipes = 0;
 	tools->heredoc = false;
 	tools->in_fd = 0;
-	tools->out_fd = 0;;
+	tools->out_fd = 0;
+	tools->tree = NULL;
 	// tools->loop_reset = false;
 	init_signals();
 }
@@ -77,9 +78,15 @@ int	mini_loop(t_tools *tools)
 	//prep_exec(tools);
 	//TODO: delete later
 	if (tools->lexer_lst)
+	{
+		printf("lexer list after parsing:\n");
 		print_tokens(tools->lexer_lst);
+	}
 	if (tools->tree)
+	{
+		printf("printing ast tree:\n");
 		print_ast(tools->tree, 0);
+	}
 
 	reset_tools(tools);
 	return (1);

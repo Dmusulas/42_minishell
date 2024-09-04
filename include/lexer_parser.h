@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/03 15:43:39 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/04 15:02:03 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,8 @@ typedef struct s_lexer
 
 typedef struct s_ast
 {
-	t_lexer			*lexer;
+	char			*str;
+	t_tokens		token;
 	struct s_ast	*left;
 	struct s_ast	*right;
 	char			*file;
@@ -106,7 +107,7 @@ t_ast	*ast_new(void);
 int		parse_input(t_tools *tools);
 
 /* PARSER */
-char	*parse_arg(const char *s);
+char	*trim_expd_arg(const char *s);
 t_ast	*parse_cmd(t_lexer **tokens);
 t_ast	*parse_pipe(t_lexer **tokens);
 t_ast	*parse_redir(t_lexer **tokens);

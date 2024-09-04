@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/03 15:45:30 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/04 14:48:04 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 		return expanded str
 	otherwise just return duplicate of src str
 */
-char	*parse_arg(const char *s)
+char	*trim_expd_arg(const char *s)
 {
 	size_t	len;
 	char	*trim;
@@ -33,6 +33,8 @@ char	*parse_arg(const char *s)
 	if (s[0] == '"' && s[len - 1] == '"')
 	{
 		trim = ft_strndup(s + 1, len - 2);
+		if (!trim)
+			return (NULL);
 		// if (ft_strchr(trim , '$'))
 		// {
 		// 	expd = expand_var(trim);
@@ -44,6 +46,48 @@ char	*parse_arg(const char *s)
 	// if (ft_str(s, '$'))
 	// 	return (expand_var(s));
 	return (ft_strdup(s));
+}
+
+static void	parse_arg(t_ast *cmd_node, t_lexer **tokens)
+{
+	t_lexer	*curr;
+	char	*new_str;
+
+	curr = *tokens;
+	while (curr && (curr->token == T_CMD || curr->token == T_ARG))
+	{
+		if (curr->token == T_ARG)
+		{
+			new_str = trim_expd_arg(curr->str);
+			if (new_str != curr->str)
+			{
+				free(curr->str);
+				curr->str = new_str;
+			}
+			else
+				free(new_str);
+		}
+		curr = curr->next;
+	}
+	// Update the token pointer to the next unprocessed token
+	*tokens = curr;
+}
+
+t_ast	*parse_cmd(t_lexer **tokens)
+{
+	t_ast	*cmd_node;
+
+	if (!tokens || !*tokens)
+		return (NULL);
+	cmd_node = ast_new();
+	if (!cmd_node)
+		return (NULL);
+	cmd_node->lexer = *tokens;
+	// if (cmd_node->lexer->token == T_CMD
+	// 	&& (is_builtin(cmd_node->lexer->str)))
+	// 		cmd_node->b_cmd = true;
+	parse_arg(cmd_node, tokens);
+	return (cmd_node);
 }
 
 /*
@@ -59,32 +103,32 @@ If the token is an argument,
 	or quote removals, updates the node's lexer string accordingly.
 returns the created AST node or NULL if memory allocation fails.
  */
-t_ast	*parse_cmd(t_lexer **tokens)
-{
-	t_ast	*cmd_node;
-	char	*new_str;
+// t_ast	*parse_cmd(t_lexer **tokens)
+// {
+// 	t_ast	*cmd_node;
+// 	char	*new_str;
 
-	cmd_node = ast_new();
-	if (!cmd_node)
-		return (NULL);
-	cmd_node->lexer = *tokens;
-	*tokens = (*tokens)->next;
-	if (cmd_node->lexer->token == T_CMD
-		&& (is_builtin(cmd_node->lexer->str)))
-			cmd_node->b_cmd = true;
-	if (cmd_node->lexer->token == T_ARG)
-	{
-		new_str = parse_arg(cmd_node->lexer->str);
-		if (new_str != cmd_node->lexer->str)
-		{
-			free(cmd_node->lexer->str);
-			cmd_node->lexer->str = new_str;
-		}
-		else
-			free(new_str);
-	}
-	return (cmd_node);
-}
+// 	cmd_node = ast_new();
+// 	if (!cmd_node)
+// 		return (NULL);
+// 	cmd_node->lexer = *tokens;
+// 	*tokens = (*tokens)->next;
+// 	if (cmd_node->lexer->token == T_CMD
+// 		&& (is_builtin(cmd_node->lexer->str)))
+// 			cmd_node->b_cmd = true;
+// 	if (cmd_node->lexer->token == T_ARG)
+// 	{
+// 		new_str = trim_expd_arg(cmd_node->lexer->str);
+// 		if (new_str != cmd_node->lexer->str)
+// 		{
+// 			free(cmd_node->lexer->str);
+// 			cmd_node->lexer->str = new_str;
+// 		}
+// 		else
+// 			free(new_str);
+// 	}
+// 	return (cmd_node);
+// }
 
 /**
  * parse_pipe - Parses a pipeline of commands from the lexer tokens and constructs
@@ -141,7 +185,8 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
 	}
 	redir_node->lexer = token;
 	redir_node->left = cmd_node;
-	redir_node->file = ft_strdup(file_str);
+	if (file_str != NULL)
+		redir_node->file = ft_strdup(file_str);
 	if (!redir_node->file)
 	{
 		free_ast(redir_node);

@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:53 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 16:30:25 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/04 13:24:51 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -42,6 +42,8 @@ FREE AST TREE
 */
 void	free_ast(t_ast *tree)
 {
+	if (tree == NULL)
+		return ;
 	while (tree != NULL)
 	{
 		if (tree->left != NULL)
@@ -49,13 +51,22 @@ void	free_ast(t_ast *tree)
 		if (tree->right != NULL)
 			free_ast(tree->right);
 		if (tree->file != NULL)
+		{
 			free(tree->file);
+			tree->file = NULL;
+		}
 		if (tree->lexer != NULL && tree->lexer->str != NULL)
+		{
 			free(tree->lexer->str);
+			tree->lexer->str = NULL;
+		}
 		if (tree->lexer != NULL)
+		{
 			free(tree->lexer);
+			tree->lexer = NULL;
+		}
 		free(tree);
-		// break ;
+		tree = NULL;
 	}
 }
 
