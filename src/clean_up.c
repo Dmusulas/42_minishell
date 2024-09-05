@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:53 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/04 13:24:51 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:57:17 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -44,31 +44,42 @@ void	free_ast(t_ast *tree)
 {
 	if (tree == NULL)
 		return ;
-	while (tree != NULL)
+	free_ast(tree->left);
+	free_ast(tree->right);
+	if (tree->file != NULL)
 	{
-		if (tree->left != NULL)
-			free_ast(tree->left);
-		if (tree->right != NULL)
-			free_ast(tree->right);
-		if (tree->file != NULL)
-		{
-			free(tree->file);
-			tree->file = NULL;
-		}
-		if (tree->lexer != NULL && tree->lexer->str != NULL)
-		{
-			free(tree->lexer->str);
-			tree->lexer->str = NULL;
-		}
-		if (tree->lexer != NULL)
-		{
-			free(tree->lexer);
-			tree->lexer = NULL;
-		}
-		free(tree);
-		tree = NULL;
+		free(tree->file);
+		tree->file = NULL;
 	}
+	if (tree->str != NULL)
+	{
+		free(tree->str);
+		tree->str = NULL;
+	}
+	free(tree);
 }
+
+// void	free_ast(t_ast *tree)
+// {
+// 	if (tree == NULL)
+// 		return ;
+// 	if (tree->left != NULL)
+// 		free_ast(tree->left);
+// 	if (tree->right != NULL)
+// 		free_ast(tree->right);
+// 	if (tree->file != NULL)
+// 	{
+// 		free(tree->file);
+// 		tree->file = NULL;
+// 	}
+// 	if (tree->str != NULL)
+// 	{
+// 		free(tree->str);
+// 		tree->str = NULL;
+// 	}
+// 	free(tree);
+// 	tree = NULL;
+// }
 
 void	clean_tools(t_tools *tools)
 {

@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.h                                     :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/04 15:02:03 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/05 14:36:07 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #ifndef LEXER_PARSER_H
 # define LEXER_PARSER_H
@@ -27,7 +27,8 @@
 */
 typedef enum s_tokens
 {
-	T_PIPE = 1,
+	T_INVALID = 0,
+	T_PIPE,
 	T_REDIR_IN,
 	T_REDIR_OUT,
 	T_APPEND,
@@ -107,9 +108,10 @@ t_ast	*ast_new(void);
 int		parse_input(t_tools *tools);
 
 /* PARSER */
-char	*trim_expd_arg(const char *s);
-t_ast	*parse_cmd(t_lexer **tokens);
-t_ast	*parse_pipe(t_lexer **tokens);
-t_ast	*parse_redir(t_lexer **tokens);
+// char	*trim_expd_arg(const char *s);
+t_ast	*parse_cmd(t_tools *tools);
+t_ast	*parse_pipe(t_tools *tools);
+t_ast	*parse_redir(t_tools *tools);
+
 
 #endif

@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/04 14:48:04 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/05 22:04:56 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -21,7 +21,7 @@
 		return expanded str
 	otherwise just return duplicate of src str
 */
-char	*trim_expd_arg(const char *s)
+static char	*trim_expd_arg(const char *s)
 {
 	size_t	len;
 	char	*trim;
@@ -48,45 +48,82 @@ char	*trim_expd_arg(const char *s)
 	return (ft_strdup(s));
 }
 
-static void	parse_arg(t_ast *cmd_node, t_lexer **tokens)
+/**
+* 
+*
+**/
+static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 {
 	t_lexer	*curr;
 	char	*new_str;
 
-	curr = *tokens;
+	curr = tools->lexer_lst;
 	while (curr && (curr->token == T_CMD || curr->token == T_ARG))
 	{
 		if (curr->token == T_ARG)
 		{
 			new_str = trim_expd_arg(curr->str);
+			// Update the AST node's string without modifying the lexer
 			if (new_str != curr->str)
 			{
-				free(curr->str);
-				curr->str = new_str;
+				if (cmd_node->str)
+					free(cmd_node->str);
+				cmd_node->str = new_str;
 			}
 			else
+			{
+				// If no expansion or trimming is needed, still copy it to the AST
+				cmd_node->str = ft_strdup(curr->str);
 				free(new_str);
+			}
 		}
+		// Move to the next lexer token
 		curr = curr->next;
 	}
-	// Update the token pointer to the next unprocessed token
-	*tokens = curr;
+	// Update the lexer list pointer in tools
+	tools->lexer_lst = curr;
 }
 
-t_ast	*parse_cmd(t_lexer **tokens)
+
+// static void	parse_arg(t_ast *cmd_node, t_lexer **tokens)
+// {
+// 	t_lexer	*curr;
+// 	char	*new_str;
+
+// 	curr = *tokens;
+// 	while (curr && (curr->token == T_CMD || curr->token == T_ARG))
+// 	{
+// 		if (curr->token == T_ARG)
+// 		{
+// 			new_str = trim_expd_arg(curr->str);
+// 			if (new_str != curr->str)
+// 			{
+// 				free(curr->str);
+// 				curr->str = new_str;
+// 			}
+// 			else
+// 				free(new_str);
+// 		}
+// 		curr = curr->next;
+// 	}
+// 	// Update the token pointer to the next unprocessed token
+// 	*tokens = curr;
+// }
+
+t_ast	*parse_cmd(t_tools *tools)
 {
 	t_ast	*cmd_node;
 
-	if (!tokens || !*tokens)
+	if (!tools->lexer_lst)
 		return (NULL);
 	cmd_node = ast_new();
 	if (!cmd_node)
 		return (NULL);
-	cmd_node->lexer = *tokens;
-	// if (cmd_node->lexer->token == T_CMD
-	// 	&& (is_builtin(cmd_node->lexer->str)))
-	// 		cmd_node->b_cmd = true;
-	parse_arg(cmd_node, tokens);
+	cmd_node->token = tools->lexer_lst->token;
+	cmd_node->str =ft_strdup(tools->lexer_lst->str);
+	if (cmd_node->token == T_CMD && is_builtin(cmd_node->str))
+		cmd_node->b_cmd = true;
+	parse_arg(cmd_node, tools);
 	return (cmd_node);
 }
 
@@ -130,41 +167,45 @@ returns the created AST node or NULL if memory allocation fails.
 // 	return (cmd_node);
 // }
 
-/**
- * parse_pipe - Parses a pipeline of commands from the lexer tokens and constructs
- *              an AST (Abstract Syntax Tree) representing the pipeline.
- * @tokens: A pointer to the lexer tokens linked list.
- * 
- * This function starts by parsing the leftmost command and checks if the next 
- * token is a pipe (`|`). If a pipe is found, it creates a new AST node to represent 
- * the pipe, with the left child being the previously parsed command and the right 
- * child being the next command in the pipeline. The process continues for subsequent
- * pipes, linking commands together into a single AST structure. The function returns 
- * the root of the pipeline AST, or NULL if memory allocation fails.
- */
-
-t_ast	*parse_pipe(t_lexer **tokens)
+t_ast	*parse_pipe(t_tools *tools)
 {
 	t_ast	*left_node;
 	t_ast	*right_node;
 	t_ast	*pipe_node;
 
-	left_node = parse_cmd(tokens);
-	while (*tokens && (*tokens)->token == T_PIPE)
+	left_node = parse_cmd(tools);
+	if (!left_node)
+		return (NULL);
+
+	while (tools->lexer_lst && tools->lexer_lst->token == T_PIPE)
 	{
+		tools->pipes--;
 		pipe_node = ast_new();
 		if (!pipe_node)
 			return (NULL);
-		pipe_node->lexer = *tokens;
-		*tokens = (*tokens)->next;
-		right_node = parse_cmd(tokens);
+		pipe_node->token = T_PIPE;
+		pipe_node->str = ft_strdup("|");
+		// Move to the next token (after the pipe)
+		tools->lexer_lst = tools->lexer_lst->next;
+		right_node = parse_cmd(tools);
+		if (!right_node)
+		{
+			free_ast(pipe_node);
+			return (NULL);
+		}
+		// set up childern
 		pipe_node->left = left_node;
 		pipe_node-> right = right_node;
+		// curr pipe node becomes left node for next iter
 		left_node = pipe_node;
 	}
+	// return to root node
 	return (left_node);
 }
 
+/*
+TODO: adjust parse_redir and helper functions to take t_tools *tools
+*/
 /**
  * make_redir - Creates a new AST node for a redirection.
  * @cmd_node: The command node to which the redirection applies.
@@ -183,7 +224,7 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
 		free_ast(cmd_node);
 		return (NULL);
 	}
-	redir_node->lexer = token;
+	redir_node->token = token;
 	redir_node->left = cmd_node;
 	if (file_str != NULL)
 		redir_node->file = ft_strdup(file_str);
@@ -201,7 +242,7 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
  * 
  * Returns the root of the redirection AST, or NULL on failure.
  */
-t_ast *parse_redir(t_lexer **tokens)
+t_ast	*parse_redir(t_tools *tools)
 {
 	t_ast	*cmd_node;
 

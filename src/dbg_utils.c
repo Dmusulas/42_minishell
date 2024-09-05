@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   dbg_utils.c                                        :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 12:23:26 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/03 15:40:25 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/05 13:58:22 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -31,8 +31,8 @@ void	print_tokens(t_lexer *lexer_list)
 // Function to print a single AST node
 void	print_ast_node(t_ast *node)
 {
-	if (node->lexer)
-		printf("Node: %s, Token: %d\n", node->lexer->str, node->lexer->token);
+	if (node->str)
+		printf("Node: %s, Token: %d\n", node->str, node->token);
 
 	if (node->file)
 		printf("Redirection file: %s\n", node->file);
