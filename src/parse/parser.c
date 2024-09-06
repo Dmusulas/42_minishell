@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/05 22:04:56 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/06 15:58:46 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -55,29 +55,23 @@ static char	*trim_expd_arg(const char *s)
 static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 {
 	t_lexer	*curr;
-	char	*new_str;
+	t_ast	*arg_nd;
+	t_ast	*prev_nd;
 
 	curr = tools->lexer_lst;
+	arg_nd = NULL;
+	prev_nd = cmd_node;
 	while (curr && (curr->token == T_CMD || curr->token == T_ARG))
 	{
-		if (curr->token == T_ARG)
-		{
-			new_str = trim_expd_arg(curr->str);
-			// Update the AST node's string without modifying the lexer
-			if (new_str != curr->str)
-			{
-				if (cmd_node->str)
-					free(cmd_node->str);
-				cmd_node->str = new_str;
-			}
-			else
-			{
-				// If no expansion or trimming is needed, still copy it to the AST
-				cmd_node->str = ft_strdup(curr->str);
-				free(new_str);
-			}
-		}
-		// Move to the next lexer token
+		arg_nd = ast_new();
+		if (!arg_nd)
+			return ;
+		arg_nd->token = curr->token;
+		arg_nd->str = trim_expd_arg(curr->str);
+		// Attach the argument node to the right of the last node (cmd or previous arg)
+		prev_nd->right = arg_nd;
+		prev_nd = arg_nd;
+	// Move to the next lexer token
 		curr = curr->next;
 	}
 	// Update the lexer list pointer in tools
@@ -120,9 +114,16 @@ t_ast	*parse_cmd(t_tools *tools)
 	if (!cmd_node)
 		return (NULL);
 	cmd_node->token = tools->lexer_lst->token;
-	cmd_node->str =ft_strdup(tools->lexer_lst->str);
-	if (cmd_node->token == T_CMD && is_builtin(cmd_node->str))
+	cmd_node->str = ft_strdup(tools->lexer_lst->str);
+	if (is_builtin(tools->lexer_lst->str))
+	{
+		cmd_node->token = T_CMD;
 		cmd_node->b_cmd = true;
+		printf("Debug: %s b_cmd = true.\n", cmd_node->str);
+	}
+	// cmd_node->token = tools->lexer_lst->token;
+	// cmd_node->str =ft_strdup(tools->lexer_lst->str);
+	tools->lexer_lst = tools->lexer_lst->next;
 	parse_arg(cmd_node, tools);
 	return (cmd_node);
 }
@@ -224,7 +225,7 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
 		free_ast(cmd_node);
 		return (NULL);
 	}
-	redir_node->token = token;
+	redir_node->token = token->token;
 	redir_node->left = cmd_node;
 	if (file_str != NULL)
 		redir_node->file = ft_strdup(file_str);
@@ -245,18 +246,25 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
 t_ast	*parse_redir(t_tools *tools)
 {
 	t_ast	*cmd_node;
+	t_lexer	*curr;
 
-	cmd_node = parse_cmd(tokens);
-	while (*tokens && ((*tokens)->token == T_REDIR_IN
-		|| (*tokens)->token == T_REDIR_OUT
-		|| (*tokens)->token == T_APPEND
-		|| (*tokens)->token == T_HEREDOC))
+	curr = tools->lexer_lst;
+	cmd_node = parse_cmd(tools);
+	if (!cmd_node)
+		return (NULL);
+	while (curr && (token_check(curr->token)))
 	{
-		cmd_node = make_redir(cmd_node, *tokens, (*tokens)->next->str);
+		if(curr->next == NULL)
+		{
+			free_ast(cmd_node);
+			return (NULL);
+		}
+		cmd_node = make_redir(cmd_node, curr, curr->next->str);
 		if (!cmd_node)
 			return (NULL);
-		*tokens = (*tokens)->next->next;
+		curr = curr->next->next;
 	}
+	tools->lexer_lst = curr;
 	return (cmd_node);
 }
 
@@ -306,4 +314,17 @@ t_ast	*parse_redir(t_tools *tools)
 // 		cmd_node = redir_node;
 // 	}
 // 	return (cmd_node);
+// }
+
+// t_tokens	token_check(t_tokens tk)
+// {
+// 	if (tk == T_REDIR_IN)
+// 		return (T_REDIR_IN);
+// 	if (tk == T_REDIR_OUT)
+// 		return (T_REDIR_OUT);
+// 	if (tk == T_APPEND)
+// 		return (T_APPEND);
+// 	if (tk == T_HEREDOC)
+// 		return (T_HEREDOC);
+// 	return (T_INVALID);
 // }

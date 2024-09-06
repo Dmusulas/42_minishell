@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:32 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/02 21:18:01 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/06 15:55:20 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "minishell.h"
 
@@ -28,11 +28,12 @@ arg = ft_substr(s, start + 1, i - start - 1)
 return (i - start + 1);
 	Include the closing quote when updating index position
 */
-static int	handle_q_arg(char *s, int start, t_tools *tools)
+int	handle_q_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	q_type;
 	char	*arg;
+	t_lexer	*new_token;
 
 	i = start;
 	q_type = s[i++];
@@ -44,17 +45,24 @@ static int	handle_q_arg(char *s, int start, t_tools *tools)
 		perror("ft_substr");
 		return (0);
 	}
-	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
+	new_token = make_tk(arg, T_ARG);
+	if (new_token == NULL)
+	{
+		free(arg);
+		return (0);
+	}
+	add_tk(&(tools->lexer_lst), new_token);
 	return (i - start + 1);
 }
 
-static int	handle_arg(char *s, int start, t_tools *tools)
+int	handle_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	*arg;
+	t_lexer	*new_token;
 
 	i = start;
-	if (s[i] == 34 || s[i] == 39)
+	if (s[i] == '"' || s[i] == '\'')
 		return (handle_q_arg(s, i, tools));
 	while (s[i] && s[i] != ' ' && !check_tk(s[i]))
 		i++;
@@ -64,7 +72,14 @@ static int	handle_arg(char *s, int start, t_tools *tools)
 		perror("ft_substr");
 		return (0);
 	}
-	add_tk_cmd_check(arg, tools);
+	new_token = make_tk(arg, T_ARG);
+	if (new_token == NULL)
+	{
+		free(arg);
+		return (0);
+	}
+	add_tk(&(tools->lexer_lst), new_token);
+	// add_tk_cmd_check(arg, tools);
 	return (i - start);
 }
 

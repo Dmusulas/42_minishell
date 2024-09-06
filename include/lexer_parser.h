@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.h                                     :+:      :+:    :+:   */
@@ -6,9 +6,9 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/05 14:36:07 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/06 15:38:14 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #ifndef LEXER_PARSER_H
 # define LEXER_PARSER_H
@@ -94,15 +94,18 @@ int		ft_two_tk(char c1, char c2, t_tools *tools);
 int		check_quotes(char *s);
 
 /* LEXER */
+int		handle_q_arg(char *s, int start, t_tools *tools);
+int		handle_arg(char *s, int start, t_tools *tools);
 int		tokenize_input(t_tools *tools);
 
 /* PARSE_PREP */
-void	add_tk_cmd_check(char *str, t_tools *tools);
+// void	add_tk_cmd_check(char *str, t_tools *tools);
 // void	label_cmds(t_tools *tools);
 void	process_tokens(t_tools *tools);
 void	handle_input(t_tools *tools);
 
 /* PARSE_UTILS */
+bool	token_check(t_tokens tk);
 int		is_builtin(const char *cmd);
 t_ast	*ast_new(void);
 int		parse_input(t_tools *tools);

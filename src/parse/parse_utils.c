@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
@@ -6,12 +6,18 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:43:22 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/05 14:55:56 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/06 14:05:55 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
+
+bool	token_check(t_tokens tk)
+{
+	return (tk == T_REDIR_IN || tk == T_REDIR_OUT
+			|| tk == T_APPEND || tk == T_HEREDOC);
+}
 
 int	is_builtin(const char *cmd)
 {
@@ -51,10 +57,6 @@ int	parse_input(t_tools *tools)
 	t_ast	*tree;
 
 	tree = NULL;
-	
-	// printf("LL inside parse start:\n");
-	// print_tokens(tools->lexer_lst);
-	
 	if (tools->pipes > 0)
 		tree = parse_pipe(tools);
 	else if (tools->redir_num > 0)
@@ -64,9 +66,6 @@ int	parse_input(t_tools *tools)
 	if (!tree)
 		return (0);
 	tools->tree = tree;
-
-	// printf("LL inside parse end:\n");
-	// print_tokens(tools->lexer_lst);
 
 	return (1);
 }
