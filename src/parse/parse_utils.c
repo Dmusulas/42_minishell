@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/02 16:43:22 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/06 14:05:55 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:54:05 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,8 @@ t_ast	*ast_new(void)
 	new_nd->b_cmd = false;
 	return (new_nd);
 }
+
+
 
 int	parse_input(t_tools *tools)
 {

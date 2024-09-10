@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/06 15:58:46 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:37:49 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,13 @@ t_ast	*parse_cmd(t_tools *tools)
 		return (NULL);
 	cmd_node->token = tools->lexer_lst->token;
 	cmd_node->str = ft_strdup(tools->lexer_lst->str);
+	if (!cmd_node->str)
+		return (NULL);
 	if (is_builtin(tools->lexer_lst->str))
 	{
 		cmd_node->token = T_CMD;
 		cmd_node->b_cmd = true;
-		printf("Debug: %s b_cmd = true.\n", cmd_node->str);
+		printf(" [ Debug: %s b_cmd = true ]\n", cmd_node->str);
 	}
 	// cmd_node->token = tools->lexer_lst->token;
 	// cmd_node->str =ft_strdup(tools->lexer_lst->str);

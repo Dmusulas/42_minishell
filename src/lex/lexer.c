@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:32 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/06 15:55:20 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:11:59 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	handle_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	*arg;
-	t_lexer	*new_token;
+	// t_lexer	*new_token;
 
 	i = start;
 	if (s[i] == '"' || s[i] == '\'')
@@ -72,13 +72,14 @@ int	handle_arg(char *s, int start, t_tools *tools)
 		perror("ft_substr");
 		return (0);
 	}
-	new_token = make_tk(arg, T_ARG);
-	if (new_token == NULL)
-	{
-		free(arg);
-		return (0);
-	}
-	add_tk(&(tools->lexer_lst), new_token);
+	// new_token = make_tk(arg, T_ARG);
+	// if (new_token == NULL)
+	// {
+	// 	free(arg);
+	// 	return (0);
+	// }
+	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
+	// add_tk(&(tools->lexer_lst), new_token);
 	// add_tk_cmd_check(arg, tools);
 	return (i - start);
 }

@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/26 13:29:25 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/06 16:13:19 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/10 13:32:18 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ void	handle_input(t_tools *tools)
 	{
 		process_tokens(tools);
 		
-		printf("lexer list after process_tokens:\n");
+		printf("   lexer list after process_tokens:\n");
 		
 		print_tokens(tools->lexer_lst);
 		t_lexer *orig_lexer_lst = tools->lexer_lst;
@@ -72,10 +72,10 @@ void	handle_input(t_tools *tools)
 			ft_error(ERR_PAR, tools);
 		if (tools->tree)
 		{
-			printf("lexer list after parsing:\n");
+			printf("   lexer list after parsing:\n");
 			print_tokens(orig_lexer_lst);
 
-			printf("printing ast tree:\n");
+			printf("   printing ast tree:\n");
 			print_ast(tools->tree, 0);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:35 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/06 16:14:54 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/10 12:50:32 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_lexer	*make_tk(char *str, t_tokens token)
 {
 	t_lexer	*new_token;
 
-	new_token = malloc(sizeof(t_lexer));
+	new_token = (t_lexer *)malloc(sizeof(t_lexer));
 	if (!new_token)
 	{
 		perror("malloc");
@@ -33,13 +33,13 @@ void	add_tk(t_lexer **lexer_list, t_lexer *new_token)
 {
 	t_lexer	*curr;
 
+	curr = *lexer_list;
 	if (!*lexer_list)
 	{
 		*lexer_list = new_token;
 		return ;
 	}
-	curr = *lexer_list;
-	while (curr->next)
+	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new_token;
 }
