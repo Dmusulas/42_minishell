@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/11/16 17:04:28 by dmusulas          #+#    #+#             */
-/*   Updated: 2023/11/16 19:08:29 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/09/06 16:02:48 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

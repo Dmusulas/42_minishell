@@ -33,7 +33,22 @@ For development it is advised to use [compiledb](https://github.com/nickdiego/co
 - [ ] env
 - [ ] exit
 
-## lexer/parser
-- [ ] set up struct to build parser tree
-- [ ] tokenizer / tree
-- [ ] check if pipe token
+## lexer
+- [x] tokenize in lexer struct (linked list)
+- [x] pre parse info processing/labeling
+
+## lexer/parsing syntax error handling
+- [x] check for quotes and find match
+- [ ] redir token used without specifying target file
+- [ ] invalid use of pipe (no command, pipe at end)
+- [ ] ambiguous redirs (attempt to redir input and output at same time)
+- [ ] redir without command
+- [ ] incorrect builtin use (incorrect syntax/unsupporeted context)
+- [ ] heredoc '<<' without specifying delimeter str
+- [ ] undefined env_vars (bash expands into empty string)
+- [ ] empty command/argument
+- [ ] special characters without escape.
+
+## parser
+- [ ] parse lexer list into tree
+
