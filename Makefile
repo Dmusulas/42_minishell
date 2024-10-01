@@ -5,8 +5,8 @@
 #                                                     +:+ +:+         +:+      #
 #    By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/07/05 17:18:14 by dmusulas          #+#    #+#              #
-#    Updated: 2024/08/26 17:29:55 by dmusulas         ###   ########.fr        #
+#    Created: 2024/07/05 17:14 by dmusulas          #+#    #+#              #
+#    Updated: 2024/10/01 20:35:21 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -29,21 +29,19 @@ LIBFT_CFLAGS	= -I$(LIBFT_DIR)/include
 # Sources
 VPATH			= src:include
 INCLUDES		= minishell.h \
-				  lexer_parser.h\
-				  exec.h
 
 MINISHELL_SRCS	= main.c \
-				  signals.c \
-				  mini_loop.c \
-				  debug_utils.c\
-				  err_msg.c\
-				  lex/lexer.c \
-				  lex/lex_utils.c\
-				  exec/err.c\
-				  exec/executor.c\
-				  exec/io.c\
-				  exec/parser.c\
-				  exec/utils.c
+					signals.c \
+					mini_loop.c \
+					clean_up.c \
+					err_msg.c \
+					dbg_utils.c\
+					lex/lexer.c \
+					lex/lex_utils.c \
+					lex/parse_prep_utils.c \
+					parse/expand.c \
+					parse/parse_utils.c \
+					parse/parser.c
 
 MINISHELL_OBJS	= $(MINISHELL_SRCS:%.c=obj/%.o)
 OBJ_DIRS		= $(sort $(dir $(MINISHELL_OBJS)))
@@ -54,9 +52,6 @@ all: $(NAME)
 # $(NAME): $(MINISHELL_OBJS) $(LIBFT)
 # 		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
 
-# obj/%.o: src/%.c
-# 		@mkdir -p $(dir $@)
-# 		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
 
 $(OBJ_DIRS):
 		@mkdir -p $@
@@ -65,7 +60,12 @@ $(NAME): $(OBJ_DIRS) $(MINISHELL_OBJS) $(LIBFT)
 		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
 
 obj/%.o: src/%.c | $(OBJ_DIRS)
-		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) -c $< -o $@
+# 		@mkdir -p obj
+# 		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
+
+$(NAME): $(MINISHELL_OBJS) $(LIBFT)
+		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) -o $@
+
 
 $(LIBFT):
 		$(MAKE_LIB) $(LIBFT_DIR)

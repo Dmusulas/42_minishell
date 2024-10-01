@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:15:35 by clinggad          #+#    #+#             */
-/*   Updated: 2024/08/22 16:08:43 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/09/10 12:50:32 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ t_lexer	*make_tk(char *str, t_tokens token)
 {
 	t_lexer	*new_token;
 
-	new_token = malloc(sizeof(t_lexer));
+	new_token = (t_lexer *)malloc(sizeof(t_lexer));
 	if (!new_token)
 	{
 		perror("malloc");
@@ -33,13 +33,13 @@ void	add_tk(t_lexer **lexer_list, t_lexer *new_token)
 {
 	t_lexer	*curr;
 
+	curr = *lexer_list;
 	if (!*lexer_list)
 	{
 		*lexer_list = new_token;
 		return ;
 	}
-	curr = *lexer_list;
-	while (curr->next)
+	while (curr->next != NULL)
 		curr = curr->next;
 	curr->next = new_token;
 }
@@ -47,22 +47,11 @@ void	add_tk(t_lexer **lexer_list, t_lexer *new_token)
 int	ft_one_tk(char c, t_tools *tools)
 {
 	if (c == '|')
-	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("|"), T_PIPE));
-		tools->pipes += 1;
-	}
 	else if (c == '<')
-	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("<"), T_REDIR_IN));
-		add_tk(&(tools->redir), make_tk(ft_strdup("<"), T_REDIR_IN));
-		tools->redir_num += 1;
-	}
 	else if (c == '>')
-	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup(">"), T_REDIR_OUT));
-		add_tk(&(tools->redir), make_tk(ft_strdup(">"), T_REDIR_OUT));
-		tools->redir_num += 1;
-	}
 	return (1);
 }
 
@@ -71,15 +60,11 @@ int	ft_two_tk(char c1, char c2, t_tools *tools)
 	if (c1 == '<' && c2 == '<')
 	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("<<"), T_HEREDOC));
-		add_tk(&(tools->redir), make_tk(ft_strdup("<<"), T_HEREDOC));
-		tools->redir_num += 1;
 		return (2);
 	}
 	else if (c1 == '>' && c2 == '>')
 	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup(">>"), T_APPEND));
-		add_tk(&(tools->redir), make_tk(ft_strdup(">>"), T_APPEND));
-		tools->redir_num += 1;
 		return (2);
 	}
 	return (0);

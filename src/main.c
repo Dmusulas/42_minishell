@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:01:01 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/22 13:08:01 by clinggad         ###   ########.fr       */
+/*   Updated: 2024/08/26 14:47:42 by clinggad         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 rl_catch_signals:
 	if not disabled Readline internal sig handling messes up our sig handler
 	BUT leaves memory blocks still accessable....
+
 */
 int	main(int argc, char *argv[], char *envp[])
 {
