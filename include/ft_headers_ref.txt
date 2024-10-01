@@ -1,4 +1,4 @@
-TO BE REMOVED LATER (just a little cheatsheet while working)
+## TODO: TO BE REMOVED LATER (just a little cheatsheet while working)
 
 <stdio.h>
 

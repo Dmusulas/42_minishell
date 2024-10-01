@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-//TODO: add checks for syntax errors near tokens
+// TODO: add checks for syntax errors near tokens
 
 static int	check_tk(char tk)
 {
@@ -28,7 +28,8 @@ arg = ft_substr(s, start + 1, i - start - 1)
 return (i - start + 1);
 	Include the closing quote when updating index position
 */
-int	handle_q_arg(char *s, int start, t_tools *tools)
+< < < < < < HEAD static int handle_arg(char *s, int start,
+	t_tools *tools) int handle_q_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	q_type;
@@ -59,8 +60,8 @@ int	handle_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	*arg;
-	// t_lexer	*new_token;
 
+	// t_lexer	*new_token;
 	i = start;
 	if (s[i] == '"' || s[i] == '\'')
 		return (handle_q_arg(s, i, tools));
@@ -92,15 +93,21 @@ static int	skip_space(char *s, int i)
 }
 
 /**
- * tokenize_input - Tokenizes the input string and populates the lexer list in the tools struct.
- * @tools: Pointer to the tools struct containing the input string and lexer list.
- * 
- * This function processes the input string from the tools struct, breaking it down
- * into tokens that represent commands, arguments, operators, etc. It iterates through
- * the input string, skipping spaces, identifying tokens, and adding them to the lexer list.
- * Depending on the character or sequence of characters encountered, it either processes
+ * tokenize_input
+	- Tokenizes the input string and populates the lexer list in the tools struct.
+
+	* @tools: Pointer to the tools struct containing the input string and lexer list.
+ *
+ * This function processes the input string from the tools struct,
+	breaking it down
+ * into tokens that represent commands, arguments, operators,
+	etc. It iterates through
+ * the input string, skipping spaces, identifying tokens,
+	and adding them to the lexer list.
+ * Depending on the character or sequence of characters encountered,
+	it either processes
  * a two-character token, a single-character token, or a general argument.
- * 
+ *
  * Returns 1 on success.
  */
 int	tokenize_input(t_tools *tools)

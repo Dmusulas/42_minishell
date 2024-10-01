@@ -26,14 +26,14 @@ t_exec	*init_exec(int argc)
 	exec = malloc(1 * sizeof(t_exec));
 	if (!exec)
 		msg_error(ERR_MALLOC, exec);
-	exec->cmd_count = argc - 3;
-	exec->cmd_start_position = 2;
+	exec->cmd_count = argc;
+	exec->cmd_start_position = 0;
 	exec->here_doc = false;
 	exec->is_invalid_infile = false;
 	exec->cmd_paths = NULL;
 	exec->cmd_args = NULL;
-	exec->in_fd = -1;
-	exec->out_fd = -1;
+	exec->in_fd = STDIN_FILENO;
+	exec->out_fd = STDOUT_FILENO;
 	return (exec);
 }
 

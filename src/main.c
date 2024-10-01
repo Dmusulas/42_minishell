@@ -1,4 +1,4 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
@@ -8,7 +8,7 @@
 /*   Created: 2024/08/15 17:01:01 by dmusulas          #+#    #+#             */
 /*   Updated: 2024/08/26 14:47:42 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/******************************************************************************/
+/* ************************************************************************** */
 
 // Main loop + history and signal handling.
 
@@ -20,22 +20,22 @@ rl_catch_signals:
 	BUT leaves memory blocks still accessable....
 
 */
-int main(int argc, char *argv[], char *envp[])
+int	main(int argc, char *argv[], char *envp[])
 {
-	t_tools tools;
+	t_tools	tools;
 
-	(void)envp;
+	(void)argc;
+	(void)argv;
+	tools.envp = envp;
 	rl_catch_signals = 0;
-	if (argc != 1 || argv[1])
+	if (tools.envp == NULL)
 	{
-		printf("Minishell does not take arguments.\n");
-		return (0);
+		ft_putendl_fd("Failed to duplicate environment variables",
+			STDERR_FILENO);
+		return (EXIT_FAILURE);
+		// Exit if environment duplication fails.
 	}
-	//tools.envp = ft_arrdup(envp);
-	// if (tools.envp == NULL)
-	// {
-	// 	ft_putendl_fd("Failed to duplicate environment variables", STDERR_FILENO);
-	// 	return (EXIT_FAILURE);
-	// }
 	init_tools(&tools);
-
+	mini_loop(&tools);
+	return (0);
+}

@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
 #include "lexer_parser.h"
+#include "libft.h"
 
 t_lexer	*make_tk(char *str, t_tokens token)
 {
