@@ -5,7 +5,7 @@
 #                                                     +:+ +:+         +:+      #
 #    By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/07/05 17:18:14 by dmusulas          #+#    #+#              #
+#    Created: 2024/07/05 17:14 by dmusulas          #+#    #+#              #
 #    Updated: 2024/09/02 16:42:02 by clinggad         ###   ########.fr        #
 #                                                                              #
 #******************************************************************************#
@@ -52,9 +52,6 @@ all: $(NAME)
 # $(NAME): $(MINISHELL_OBJS) $(LIBFT)
 # 		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
 
-# obj/%.o: src/%.c
-# 		@mkdir -p $(dir $@)
-# 		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
 
 $(OBJ_DIRS):
 		@mkdir -p $@
@@ -63,7 +60,12 @@ $(NAME): $(OBJ_DIRS) $(MINISHELL_OBJS) $(LIBFT)
 		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
 
 obj/%.o: src/%.c | $(OBJ_DIRS)
-		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) -c $< -o $@
+# 		@mkdir -p obj
+# 		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
+
+$(NAME): $(MINISHELL_OBJS) $(LIBFT)
+		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) -o $@
+
 
 $(LIBFT):
 		$(MAKE_LIB) $(LIBFT_DIR)

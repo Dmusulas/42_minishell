@@ -1,14 +1,13 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: clinggad <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/09/03 15:46:23 by clinggad         ###   ########.fr       */
 /*                                                                            */
-/* ************************************************************************** */
+/******************************************************************************/
 
 //NOTE: probably will split this header file into multiple ones for tidyness
 //later
@@ -55,9 +54,28 @@ void	sigquit_handler(int signal);
 void	init_signals(void);
 
 
+// #include "lexer_parser.h"
+
 /* TO BE REMOVED */
 void	print_tokens(t_lexer *lexer_list);
 void	print_ast_node(t_ast *node);
 void	print_ast(t_ast *tree, int depth);
+/*
+implement variables as we continue so we don't have unused vars when running make
+*/
+typedef struct s_tools
+{
+	char			*args;
+}	t_tools;
+
+/* MINI LOOP */
+int		reset_loop(t_tools *tools);
+int		mini_loop(t_tools *tools);
+
+/* SIGNALS */
+int		event(void);
+void	sigint_handler(int signal);
+void	sigquit_handler(int signal);
+void	init_signals(void);
 
 #endif

@@ -51,3 +51,4 @@ For development it is advised to use [compiledb](https://github.com/nickdiego/co
 
 ## parser
 - [ ] parse lexer list into tree
+

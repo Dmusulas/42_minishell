@@ -1,4 +1,4 @@
-/* ************************************************************************** */
+/******************************************************************************/
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
@@ -41,6 +41,15 @@ int	reset_tools(t_tools *tools)
 		clean_tools(tools);
 	init_tools(tools);
 	// tools->loop_reset = true;
+
+#include "minishell.h"
+
+int	mini_loop(t_tools *tools);
+
+int	reset_loop(t_tools *tools)
+{
+	if(tools->args != NULL)
+		free(tools->args);
 	mini_loop(tools);
 	return (1);
 }
@@ -130,3 +139,17 @@ int	mini_loop(t_tools *tools)
 // 		return (0);
 // 	return (1);
 // }
+int	mini_loop(t_tools *tools)
+{ 
+	tools->args = readline("minishell$ ");
+	if (tools->args == NULL)
+	{
+		ft_putendl_fd("Exit", STDOUT_FILENO);
+		exit(EXIT_SUCCESS);
+	}
+	if (tools->args[0] == '\0')
+		return (reset_tools(tools));
+	add_history(tools->args);
+	reset_tools(tools);
+	return (1);
+}
