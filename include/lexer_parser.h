@@ -6,7 +6,7 @@
 /*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/10/01 20:32:28 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/01 20:44:12 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,6 @@ typedef struct s_ast
 	bool			b_cmd;
 }	t_ast;
 
-
 /*
 *args: str of argument for curr cmd
 **paths: arr of paths where exec may be found (PATH env variable)
@@ -73,7 +72,7 @@ implement variables as we continue so we don't have unused vars when running mak
 typedef struct s_tools
 {
 	char	*args;
-	// char	**envp;
+	char	**envp;
 	// char	**paths;
 	t_lexer	*lexer_lst;
 	t_lexer	*p_redir;
@@ -82,6 +81,7 @@ typedef struct s_tools
 	int		in_fd;
 	int		out_fd;
 	bool	heredoc;
+	bool	debug_mode;
 	// bool	loop_reset;
 	t_ast	*tree;
 }	t_tools;
@@ -115,6 +115,5 @@ int		parse_input(t_tools *tools);
 t_ast	*parse_cmd(t_tools *tools);
 t_ast	*parse_pipe(t_tools *tools);
 t_ast	*parse_redir(t_tools *tools);
-
 
 #endif

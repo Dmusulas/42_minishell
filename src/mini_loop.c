@@ -1,12 +1,12 @@
-/******************************************************************************/
+/* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 17:19:47 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/09/06 15:48:29 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/01 22:22:53 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	init_tools(t_tools *tools)
 	tools->in_fd = 0;
 	tools->out_fd = 0;
 	tools->tree = NULL;
-	// tools->loop_reset = false;
 	init_signals();
 }
 
@@ -39,87 +38,65 @@ int	reset_tools(t_tools *tools)
 	if (tools != NULL)
 		clean_tools(tools);
 	init_tools(tools);
-	// tools->loop_reset = true;
-#include "minishell.h"
+	return (0);
+}
 
-	int mini_loop(t_tools * tools);
-	int reset_loop(t_tools * tools)
+/*
+	handle_input
+		quotes/match check, sends error msg if not correct + restart
+		tokenize_input (+ chceck if NULL, error msg + restart)
+		labels T_ARG / T_CMD
+		process token -> assigns values vars related to redir tokens
+*/
+int	mini_loop(t_tools *tools)
+{
+	char	*tmp;
+
+	tools->args = readline("minishell$ ");
+	if (tools->debug_mode)
+		printf("[DEBUG]: received arguments %s\n", tools->args);
+	if (tools->args == NULL)
 	{
-		if (tools->args != NULL)
-			free(tools->args);
-		mini_loop(tools);
-		return (1);
+		ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
+		exit(EXIT_SUCCESS);
 	}
+	tmp = ft_strtrim(tools->args, " ");
+	free(tools->args);
+	tools->args = tmp;
+	if (!tools->args || tools->args[0] == '\0')
+		return (reset_tools(tools));
+	add_history(tools->args);
+	if (!check_quotes(tools->args))
+		return (ft_error(ERR_QUO, tools));
+	if (!tokenize_input(tools))
+		return (ft_error(ERR_LEX, tools));
+	if (tools->lexer_lst)
+		print_tokens(tools->lexer_lst);
+	reset_tools(tools);
+	return (1);
+}
 
-	int prep_exec(t_tools * tools)
-	{
-		signal(SIGQUIT, sigquit_handler);
-		executor(tools);
-		return (EXIT_SUCCESS);
-	}
-	// static void	exit_signal(void)
-	// {
-	// 	ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
-	// 	exit (EXIT_SUCCESS);
-	// }
-
-	/*
-		handle_input
-			quotes/match check, sends error msg if not correct + restart
-			tokenize_input (+ chceck if NULL, error msg + restart)
-			labels T_ARG / T_CMD
-			process token -> assigns values vars related to redir tokens
-	*/
-	int mini_loop(t_tools * tools)
-	{
-		char *tmp;
-
-		tools->args = readline("minishell$ ");
-		if (tools->debug_mode)
-			printf("[DEBUG]: received arguments %s\n", tools->args);
-		if (tools->args == NULL)
-		{
-			ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
-			exit(EXIT_SUCCESS);
-		}
-		tmp = ft_strtrim(tools->args, " ");
-		free(tools->args);
-		tools->args = tmp;
-		if (!tools->args || tools->args[0] == '\0')
-			return (reset_tools(tools));
-		add_history(tools->args);
-		if (!check_quotes(tools->args))
-			return (ft_error(ERR_QUO, tools));
-		if (!tokenize_input(tools))
-			return (ft_error(ERR_LEX, tools));
-		if (tools->lexer_lst)
-			print_tokens(tools->lexer_lst);
-		prep_exec(tools);
-		reset_tools(tools);
-		return (1);
-	}
-
-	int executor(t_tools * tools)
-	{
-		t_exec *exec;
-
-		if (tools->debug_mode)
-			printf("[DEBUG]: argc=%i argv[0]='%s'\n", argc, argv[0]);
-		if (argc >= 1)
-		{
-			exec = init_exec(argc);
-			// set_infile(argv, exec);
-			// set_outfile(argv[argc - 1], exec);
-			// exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
-			// exec->cmd_args = parse_args(exec, argv);
-			if (tools->debug_mode)
-				printf("[DEBUG]: cmd_args[0]=%s \n", exec->cmd_args[0]);
-			// ft_exec(exec, tools->envp);
-			// close(exec->in_fd);
-			// close(exec->out_fd);
-			free_exec(exec);
-		}
-		else
-			return (0);
-		return (1);
-	}
+// int	executor(t_tools *tools)
+// {
+// 	t_exec	*exec;
+//
+// 	if (tools->debug_mode)
+// 		printf("[DEBUG]: argc=%i argv[0]='%s'\n", argc, argv[0]);
+// 	if (argc >= 1)
+// 	{
+// 		exec = init_exec(argc);
+// 		// set_infile(argv, exec);
+// 		// set_outfile(argv[argc - 1], exec);
+// 		// exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
+// 		// exec->cmd_args = parse_args(exec, argv);
+// 		if (tools->debug_mode)
+// 			printf("[DEBUG]: cmd_args[0]=%s \n", exec->cmd_args[0]);
+// 		// ft_exec(exec, tools->envp);
+// 		// close(exec->in_fd);
+// 		// close(exec->out_fd);
+// 		free_exec(exec);
+// 	}
+// 	else
+// 		return (0);
+// 	return (1);
+// }

@@ -5,7 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 17:18:12 by dmusulas          #+#    #+#             */
+/*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/01 22:21:25 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +31,9 @@
 # include "libft.h"
 # include "lexer_parser.h"
 
-#define ERR_LEX 1
-#define ERR_QUO 2
-#define ERR_PAR 3
+# define ERR_LEX 1
+# define ERR_QUO 2
+# define ERR_PAR 3
 
 /* MINI LOOP */
 void	init_tools(t_tools *tools);
@@ -50,9 +51,6 @@ void	sigint_handler(int signal);
 void	sigquit_handler(int signal);
 void	init_signals(void);
 
-
-// #include "lexer_parser.h"
-
 /* TO BE REMOVED */
 void	print_tokens(t_lexer *lexer_list);
 void	print_ast_node(t_ast *node);
@@ -60,10 +58,6 @@ void	print_ast(t_ast *tree, int depth);
 /*
 implement variables as we continue so we don't have unused vars when running make
 */
-typedef struct s_tools
-{
-	char			*args;
-}	t_tools;
 
 /* MINI LOOP */
 int		reset_loop(t_tools *tools);

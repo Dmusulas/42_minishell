@@ -33,7 +33,6 @@ int	main(int argc, char *argv[], char *envp[])
 		ft_putendl_fd("Failed to duplicate environment variables",
 			STDERR_FILENO);
 		return (EXIT_FAILURE);
-		// Exit if environment duplication fails.
 	}
 	init_tools(&tools);
 	mini_loop(&tools);

@@ -33,7 +33,6 @@ void	print_ast_node(t_ast *node)
 {
 	if (node->str)
 		printf("Node: %s, Token: %d\n", node->str, node->token);
-
 	if (node->file)
 		printf("Redirection file: %s\n", node->file);
 }
@@ -44,18 +43,17 @@ void	print_ast_node(t_ast *node)
 */
 void	print_ast(t_ast *tree, int depth)
 {
+	int	i;
+
 	while (tree != NULL)
 	{
-		// Print indentation based on depth
-		int i = 0;
+		i = 0;
 		while (i < depth)
 		{
 			printf("  ");
 			i++;
 		}
-		// Print the current node
 		print_ast_node(tree);
-		// Print the left subtree if it exists
 		if (tree->left != NULL)
 		{
 			i = 0;
@@ -67,7 +65,6 @@ void	print_ast(t_ast *tree, int depth)
 			printf("Left:\n");
 			print_ast(tree->left, depth + 1);
 		}
-		// Print the right subtree if it exists
 		if (tree->right != NULL)
 		{
 			i = 0;
@@ -79,7 +76,6 @@ void	print_ast(t_ast *tree, int depth)
 			printf("Right:\n");
 			print_ast(tree->right, depth + 1);
 		}
-		// Break the loop as we're done processing the tree
 		break ;
 	}
 }

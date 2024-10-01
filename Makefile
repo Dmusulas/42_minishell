@@ -6,19 +6,27 @@
 #    By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/05 17:14 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/01 20:35:21 by dmusulas         ###   ########.fr        #
+#    Updated: 2024/10/01 22:27:42 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 # Variables
-CC				= cc
+CC				= clang
 CFLAGS			= -Wall -Wextra -Werror -g -Iinclude -Isrc
-# RL_CFLAGS		= -I/usr/local/Cellar/readline/8.2.10/include
-# LDFLAGS			= -L/usr/local/Cellar/readline/8.2.10/lib -lreadline
-LDFLAGS			= -lreadline
 NAME			= minishell
 MAKE_LIB		= make -C
 RM				= rm -rf
+
+# OS-specific flags
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S), Linux)
+    RL_CFLAGS	= -I/usr/include/readline
+    LDFLAGS		= -lreadline -lncurses
+else ifeq ($(UNAME_S), Darwin) # macOS
+    RL_CFLAGS	= -I/opt/homebrew/Cellar/readline/8.2.13/include
+    LDFLAGS		= -L/opt/homebrew/Cellar/readline/8.2.13/lib -lreadline -lncurses
+endif
 
 # Libraries
 LIBFT_DIR		= libft
@@ -48,24 +56,15 @@ OBJ_DIRS		= $(sort $(dir $(MINISHELL_OBJS)))
 
 all: $(NAME)
 
-# readline includes and flags for mac
-# $(NAME): $(MINISHELL_OBJS) $(LIBFT)
-# 		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
-
-
 $(OBJ_DIRS):
 		@mkdir -p $@
 
 $(NAME): $(OBJ_DIRS) $(MINISHELL_OBJS) $(LIBFT)
-		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
+		$(CC) $(CFLAGS) $(RL_CFLAGS) $(MINISHELL_OBJS) $(LIBFT) $(LDFLAGS) -o $@
 
 obj/%.o: src/%.c | $(OBJ_DIRS)
-# 		@mkdir -p obj
-# 		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
-
-$(NAME): $(MINISHELL_OBJS) $(LIBFT)
-		$(CC) $(CFLAGS) $(MINISHELL_OBJS) $(LIBFT) -o $@
-
+		@mkdir -p obj
+		$(CC) $(CFLAGS) $(LIBFT_CFLAGS) $(RL_CFLAGS) -c $< -o $@
 
 $(LIBFT):
 		$(MAKE_LIB) $(LIBFT_DIR)

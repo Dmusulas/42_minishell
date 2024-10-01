@@ -14,6 +14,26 @@
 
 // TODO: add checks for syntax errors near tokens
 
+int	handle_q_arg(char *s, int start, t_tools *tools)
+{
+	int		i;
+	char	q_type;
+	char	*arg;
+
+	i = start;
+	q_type = s[i++];
+	while (s[i] && s[i] != q_type)
+		i++;
+	arg = ft_substr(s, start + 1, i - start - 1);
+	if (arg == NULL)
+	{
+		perror("ft_substr");
+		return (0);
+	}
+	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
+	return (i - start + 1);
+}
+
 static int	check_tk(char tk)
 {
 	if (tk == '|' || tk == '<' || tk == '>')
@@ -21,40 +41,12 @@ static int	check_tk(char tk)
 	else
 		return (0);
 }
-
 /*
 arg = ft_substr(s, start + 1, i - start - 1)
 	Extract the argument, excluding the quotes
 return (i - start + 1);
 	Include the closing quote when updating index position
 */
-< < < < < < HEAD static int handle_arg(char *s, int start,
-	t_tools *tools) int handle_q_arg(char *s, int start, t_tools *tools)
-{
-	int		i;
-	char	q_type;
-	char	*arg;
-	t_lexer	*new_token;
-
-	i = start;
-	q_type = s[i++];
-	while (s[i] && s[i] != q_type)
-		i++;
-	arg = ft_substr(s, start, i - start + 1);
-	if (arg == NULL)
-	{
-		perror("ft_substr");
-		return (0);
-	}
-	new_token = make_tk(arg, T_ARG);
-	if (new_token == NULL)
-	{
-		free(arg);
-		return (0);
-	}
-	add_tk(&(tools->lexer_lst), new_token);
-	return (i - start + 1);
-}
 
 int	handle_arg(char *s, int start, t_tools *tools)
 {
