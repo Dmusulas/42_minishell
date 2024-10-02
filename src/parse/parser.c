@@ -3,15 +3,88 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:46 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:01:46 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 19:40:09 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
+
+void ft_pwd(void)
+{
+    char *pwd = getcwd(NULL, 0);
+    if (pwd)
+    {
+        write(STDOUT_FILENO, pwd, ft_strlen(pwd));
+		write(STDOUT_FILENO, "\n", 1);
+        free(pwd);
+    }
+    else
+    {
+        perror("pwd");
+    }
+}
+
+void ft_cd(char *path)
+{
+    if (path)
+    {
+        if (chdir(path) == -1)
+        {
+            perror("cd");
+        }
+    }
+    else
+    {
+        printf("cd: expected argument\n");
+    }
+}
+
+void ft_echo(char **args)
+{
+    int i;
+	int n_line;
+
+	i = 1;
+	n_line = 1; // echo adds by default a new line
+    // Check for -n option
+	if (args[i] && strcmp(args[i], "-n") == 0)
+	{
+		newline = 0; // Do not print newline
+		i++;
+	}
+	// add $? functionality
+
+	// Print the arguments
+	while (args[i])
+	{
+    	write(STDOUT_FILENO, args[i], strlen(args[i]));
+    	if (args[i + 1])
+        	write(STDOUT_FILENO, " ", 1);
+    	i++;
+	}
+
+	if (n_line)
+    	write(STDOUT_FILENO, "\n", 1);
+}
+
+void execute_builtins(t_tools *tools)
+{
+	t_ast *cmd_node = tools->tree;
+	if (cmd_node->token == T_CMD && cmd_node->b_cmd)
+	{
+		if (ft_strcmp(cmd_node->str, "echo") == 0)
+			ft_echo(&tools->args);
+		else if (ft_strcmp(cmd_node->str, "cd") == 0)
+			ft_cd(&tools->args[1]);
+		else if (ft_strcmp(cmd_node->str, "pwd") == 0)
+			ft_pwd();
+		// add remaining builtins
+	}
+}
 
 /*
 	if single quote -> return trimmed str
@@ -121,6 +194,7 @@ t_ast	*parse_cmd(t_tools *tools)
 		cmd_node->token = T_CMD;
 		cmd_node->b_cmd = true;
 		printf(" [ Debug: %s b_cmd = true ]\n", cmd_node->str);
+		execute_builtins(tools);
 	}
 	// cmd_node->token = tools->lexer_lst->token;
 	// cmd_node->str =ft_strdup(tools->lexer_lst->str);
