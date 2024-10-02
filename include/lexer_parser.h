@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:04:08 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:18:27 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ implement variables as we continue so we don't have unused vars when running mak
 typedef struct s_tools
 {
 	char	*args;
-	char	**envp;
+	char	**envp_org;
+	t_list	*envp;
 	t_lexer	*lexer_lst;
 	t_lexer	*p_redir;
 	int		redir_num;

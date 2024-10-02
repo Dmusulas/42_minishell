@@ -58,7 +58,8 @@ int	mini_loop(t_tools *tools)
 		printf("[DEBUG]: received arguments %s\n", tools->args);
 	if (tools->args == NULL)
 	{
-		ft_putendl_fd("minishell$: exit", STDOUT_FILENO);
+		ft_putendl_fd("minishell$", STDOUT_FILENO);
+		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
 	tmp = ft_strtrim(tools->args, " ");
@@ -71,33 +72,10 @@ int	mini_loop(t_tools *tools)
 		return (ft_error(ERR_QUO, tools));
 	if (!tokenize_input(tools))
 		return (ft_error(ERR_LEX, tools));
+	// if (!parse_input(tools))
+	// 	return (ft_error(ERR_PAR, tools));
 	if (tools->lexer_lst && tools->debug_mode)
 		print_tokens(tools->lexer_lst);
 	reset_tools(tools);
 	return (1);
 }
-
-// int	executor(t_tools *tools)
-// {
-// 	t_exec	*exec;
-//
-// 	if (tools->debug_mode)
-// 		printf("[DEBUG]: argc=%i argv[0]='%s'\n", argc, argv[0]);
-// 	if (argc >= 1)
-// 	{
-// 		exec = init_exec(argc);
-// 		// set_infile(argv, exec);
-// 		// set_outfile(argv[argc - 1], exec);
-// 		// exec->cmd_paths = parse_cmds(exec, argv, tools->envp);
-// 		// exec->cmd_args = parse_args(exec, argv);
-// 		if (tools->debug_mode)
-// 			printf("[DEBUG]: cmd_args[0]=%s \n", exec->cmd_args[0]);
-// 		// ft_exec(exec, tools->envp);
-// 		// close(exec->in_fd);
-// 		// close(exec->out_fd);
-// 		free_exec(exec);
-// 	}
-// 	else
-// 		return (0);
-// 	return (1);
-// }

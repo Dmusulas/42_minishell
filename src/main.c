@@ -23,15 +23,17 @@ int	main(int argc, char *argv[], char *envp[])
 
 	(void)argc;
 	(void)argv;
-	tools.envp = envp;
+	tools.envp_org = envp;
 	tools.debug_mode = true;
 	rl_catch_signals = 0;
-	if (tools.envp == NULL)
+	if (!duplicate_env(&tools))
 	{
 		ft_putendl_fd("Failed to duplicate environment variables",
 			STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
+	if (tools.debug_mode)
+		print_linkedlist(tools.envp);
 	init_tools(&tools);
 	mini_loop(&tools);
 	return (0);

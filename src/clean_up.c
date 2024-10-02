@@ -68,5 +68,7 @@ void	clean_tools(t_tools *tools)
 		free_ast(tools->tree);
 	if (tools->lexer_lst != NULL)
 		clear_tokens(&tools->lexer_lst);
+	if (tools->envp != NULL)
+		delete_duplicated_envp(tools);
 	tools->p_redir = NULL;
 }

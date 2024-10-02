@@ -6,7 +6,7 @@
 #    By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/02 16:07:00 by dmusulas         ###   ########.fr        #
+#    Updated: 2024/10/02 17:40:08 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,6 +43,8 @@ MINISHELL_SRCS	= main.c \
 				  mini_loop.c \
 				  clean_up.c \
 				  err_msg.c \
+				  env/dup_env.c\
+				  env/clean.c\
 				  lex/lexer.c \
 				  lex/lex_utils.c \
 				  lex/parse_prep_utils.c \

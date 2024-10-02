@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:04:01 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 17:39:00 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,12 +52,10 @@ void	sigquit_handler(int signal);
 void	init_signals(void);
 
 /* TO BE REMOVED */
-void	print_tokens(t_lexer *lexer_list);
-void	print_ast_node(t_ast *node);
-void	print_ast(t_ast *tree, int depth);
-/*
-implement variables as we continue so we don't have unused vars when running make
-*/
+
+/* ENVP */
+void	delete_duplicated_envp(t_tools *tools);
+int		duplicate_env(t_tools *tools);
 
 /* MINI LOOP */
 int		reset_loop(t_tools *tools);
@@ -71,5 +69,10 @@ void	init_signals(void);
 
 /* UTILS */
 void	free_2darray(char **array);
+/* DEBUG */
 
+void	print_tokens(t_lexer *lexer_list);
+void	print_ast_node(t_ast *node);
+void	print_ast(t_ast *tree, int depth);
+void	print_linkedlist(t_list *lst);
 #endif

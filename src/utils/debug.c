@@ -13,6 +13,7 @@
 // TODO: REMOVE BEFORE SUBMISSION
 
 #include "lexer_parser.h"
+#include "libft.h"
 #include "minishell.h"
 
 void	print_tokens(t_lexer *lexer_list)
@@ -81,4 +82,14 @@ void	print_ast(t_ast *tree, int depth)
 		}
 		break ;
 	}
+}
+
+void	print_content(void *content)
+{
+	printf("%s\n", (char *)content);
+}
+
+void	print_linkedlist(t_list *lst)
+{
+	ft_lstiter(lst, print_content);
 }
