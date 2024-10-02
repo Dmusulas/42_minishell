@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 13:17:02 by clinggad          #+#    #+#             */
-/*   Updated: 2024/10/01 20:44:12 by dmusulas         ###   ########.fr       */
+/*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:04:08 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,6 @@ typedef struct s_tools
 {
 	char	*args;
 	char	**envp;
-	// char	**paths;
 	t_lexer	*lexer_lst;
 	t_lexer	*p_redir;
 	int		redir_num;
@@ -82,7 +81,6 @@ typedef struct s_tools
 	int		out_fd;
 	bool	heredoc;
 	bool	debug_mode;
-	// bool	loop_reset;
 	t_ast	*tree;
 }	t_tools;
 

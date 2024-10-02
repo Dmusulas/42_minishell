@@ -6,13 +6,14 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/27 17:13:34 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 14:56:41 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef EXEC_H
 # define EXEC_H
 
+# include <stdbool.h>
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
@@ -28,18 +29,12 @@
 # define ERR_EXEC "Child execution error"
 # define TEMP_FILE "/tmp/here_doc_12342"
 
-typedef enum e_bool
-{
-	false,
-	true
-}	t_bool;
-
 typedef struct s_exec
 {
 	int		in_fd;
 	int		out_fd;
-	t_bool	here_doc;
-	t_bool	is_invalid_infile;
+	bool	here_doc;
+	bool	is_invalid_infile;
 	char	**cmd_paths;
 	char	***cmd_args;
 	int		cmd_count;

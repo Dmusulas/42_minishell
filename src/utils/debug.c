@@ -1,30 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   dbg_utils.c                                        :+:      :+:    :+:   */
+/*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 12:23:26 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/06 13:46:20 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/02 16:00:20 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:00:20 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// TODO: REMOVE BEFORE SUBMISSION
 
 #include "lexer_parser.h"
 #include "minishell.h"
 
 void	print_tokens(t_lexer *lexer_list)
 {
-	t_lexer	*curr;
+	t_lexer	*current;
 
-	curr = lexer_list;
-	while (curr)
+	current = lexer_list;
+	while (current)
 	{
-		if (curr->str == NULL)
-			printf("Token: NULL, Type: %d\n", curr->token);
+		if (current->str == NULL)
+			printf("[DEBUG]: Token: NULL, Type: %d\n", current->token);
 		else
-			printf("Token: %s, Type: %d\n", curr->str, curr->token);
-		curr = curr->next;
+			printf("[DEBUG]: Token: %s, Type: %d\n", current->str,
+				current->token);
+		current = current->next;
 	}
 }
 
@@ -32,9 +35,9 @@ void	print_tokens(t_lexer *lexer_list)
 void	print_ast_node(t_ast *node)
 {
 	if (node->str)
-		printf("Node: %s, Token: %d\n", node->str, node->token);
+		printf("[DEBUG]: Node: %s, Token: %d\n", node->str, node->token);
 	if (node->file)
-		printf("Redirection file: %s\n", node->file);
+		printf("[DEBUG]: Redirection file: %s\n", node->file);
 }
 
 // Function to print the AST recursively

@@ -3,14 +3,12 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/15 17:01:01 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/26 14:47:42 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/02 16:00:49 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:17:00 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// Main loop + history and signal handling.
 
 #include "minishell.h"
 
@@ -18,7 +16,6 @@
 rl_catch_signals:
 	if not disabled Readline internal sig handling messes up our sig handler
 	BUT leaves memory blocks still accessable....
-
 */
 int	main(int argc, char *argv[], char *envp[])
 {
@@ -27,6 +24,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	tools.envp = envp;
+	tools.debug_mode = true;
 	rl_catch_signals = 0;
 	if (tools.envp == NULL)
 	{

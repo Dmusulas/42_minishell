@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 13:15:32 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/10 13:11:59 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:01:05 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

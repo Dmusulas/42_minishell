@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 13:15:53 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/10 13:48:11 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/02 16:00:56 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:00:56 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,30 +34,6 @@ void	clear_tokens(t_lexer **lexer_list)
 	}
 	*lexer_list = NULL;
 }
-
-// Function to free the AST nodes
-/*
-FREE AST TREE
-	free child nodes (left / right subtrees) before parent nodes
-*/
-// void	free_ast(t_ast *tree)
-// {
-// 	if (tree == NULL)
-// 		return ;
-// 	free_ast(tree->left);
-// 	free_ast(tree->right);
-// 	if (tree->file != NULL)
-// 	{
-// 		free(tree->file);
-// 		tree->file = NULL;
-// 	}
-// 	if (tree->str != NULL)
-// 	{
-// 		free(tree->str);
-// 		tree->str = NULL;
-// 	}
-// 	free(tree);
-// }
 
 void	free_ast(t_ast *tree)
 {

@@ -15,9 +15,9 @@
 // #include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
+#include <stdlib.h>
 
 int		mini_loop(t_tools *tools);
-// int		executor(t_tools *tools, int argc, char *argv[]);
 
 void	init_tools(t_tools *tools)
 {
@@ -38,6 +38,7 @@ int	reset_tools(t_tools *tools)
 	if (tools != NULL)
 		clean_tools(tools);
 	init_tools(tools);
+	mini_loop(tools);
 	return (0);
 }
 
@@ -70,7 +71,7 @@ int	mini_loop(t_tools *tools)
 		return (ft_error(ERR_QUO, tools));
 	if (!tokenize_input(tools))
 		return (ft_error(ERR_LEX, tools));
-	if (tools->lexer_lst)
+	if (tools->lexer_lst && tools->debug_mode)
 		print_tokens(tools->lexer_lst);
 	reset_tools(tools);
 	return (1);

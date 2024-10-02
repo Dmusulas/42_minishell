@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/27 13:09:58 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/10 13:37:49 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/02 16:01:46 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:01:46 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,10 @@ static char	*trim_expd_arg(const char *s)
 {
 	size_t	len;
 	char	*trim;
-//	char	*expd;
 
+	//	char	*expd;
 	len = ft_strlen(s);
-	if(s[0] == '\'' && s[len - 1] == '\'')
+	if (s[0] == '\'' && s[len - 1] == '\'')
 		return (ft_strndup(s + 1, len - 2));
 	if (s[0] == '"' && s[len - 1] == '"')
 	{
@@ -49,9 +49,9 @@ static char	*trim_expd_arg(const char *s)
 }
 
 /**
-* 
-*
-**/
+ *
+ *
+ **/
 static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 {
 	t_lexer	*curr;
@@ -71,13 +71,12 @@ static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 		// Attach the argument node to the right of the last node (cmd or previous arg)
 		prev_nd->right = arg_nd;
 		prev_nd = arg_nd;
-	// Move to the next lexer token
+		// Move to the next lexer token
 		curr = curr->next;
 	}
 	// Update the lexer list pointer in tools
 	tools->lexer_lst = curr;
 }
-
 
 // static void	parse_arg(t_ast *cmd_node, t_lexer **tokens)
 // {
@@ -139,7 +138,7 @@ assignes current lexer token to the node
 checks if token is a builtin (set flag 'b_cmd = true')
 
 If the token is an argument,
-	processes the argument string, handling any necessary expansions 
+	processes the argument string, handling any necessary expansions
 	or quote removals, updates the node's lexer string accordingly.
 returns the created AST node or NULL if memory allocation fails.
  */
@@ -179,7 +178,6 @@ t_ast	*parse_pipe(t_tools *tools)
 	left_node = parse_cmd(tools);
 	if (!left_node)
 		return (NULL);
-
 	while (tools->lexer_lst && tools->lexer_lst->token == T_PIPE)
 	{
 		tools->pipes--;
@@ -198,7 +196,7 @@ t_ast	*parse_pipe(t_tools *tools)
 		}
 		// set up childern
 		pipe_node->left = left_node;
-		pipe_node-> right = right_node;
+		pipe_node->right = right_node;
 		// curr pipe node becomes left node for next iter
 		left_node = pipe_node;
 	}
@@ -214,7 +212,7 @@ TODO: adjust parse_redir and helper functions to take t_tools *tools
  * @cmd_node: The command node to which the redirection applies.
  * @token: The current lexer token representing the redirection operator.
  * @file_str: The string representing the file for redirection.
- * 
+ *
  * Returns a pointer to the new redirection node, or NULL on failure.
  */
 static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
@@ -240,9 +238,10 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
 }
 
 /**
- * parse_redir - Parses command redirections from lexer tokens and builds an AST.
+ * parse_redir
+	- Parses command redirections from lexer tokens and builds an AST.
  * @tokens: A pointer to the lexer tokens linked list.
- * 
+ *
  * Returns the root of the redirection AST, or NULL on failure.
  */
 t_ast	*parse_redir(t_tools *tools)
@@ -256,7 +255,7 @@ t_ast	*parse_redir(t_tools *tools)
 		return (NULL);
 	while (curr && (token_check(curr->token)))
 	{
-		if(curr->next == NULL)
+		if (curr->next == NULL)
 		{
 			free_ast(cmd_node);
 			return (NULL);
@@ -270,20 +269,21 @@ t_ast	*parse_redir(t_tools *tools)
 	return (cmd_node);
 }
 
-
 // TODO: refactor ft has too many lines
 /*
- * parse_redir - Parses command redirections from the lexer tokens and constructs 
- *               an AST (Abstract Syntax Tree) representing the command with 
+ * parse_redir
+	- Parses command redirections from the lexer tokens and constructs
+ *               an AST (Abstract Syntax Tree) representing the command with
  *               associated redirections.
  * @tokens: A pointer to the lexer tokens linked list.
- * 
- * This function starts by parsing a command and then checks if the next token 
- * represents a redirection (`<`, `>`, `>>`, or `<<`). For each redirection found, 
- * it creates a new AST node to represent the redirection, with the left child 
- * pointing to the command or previous redirection node, and the `file` field 
- * storing the redirection target (e.g., a file name). The function returns the 
- * root of the redirection AST or NULL if memory allocation fails. If any step 
+ *
+ * This function starts by parsing a command and then checks if the next token
+ * represents a redirection (`<`, `>`, `>>`,
+	or `<<`). For each redirection found,
+ * it creates a new AST node to represent the redirection, with the left child
+ * pointing to the command or previous redirection node, and the `file` field
+ * storing the redirection target (e.g., a file name). The function returns the
+ * root of the redirection AST or NULL if memory allocation fails. If any step
  * fails, it frees the previously allocated nodes to avoid memory leaks.
  */
 
@@ -293,8 +293,11 @@ t_ast	*parse_redir(t_tools *tools)
 // 	t_ast	*redir_node;
 
 // 	cmd_node = parse_cmd(tokens);
-// 	while (*tokens && ((*tokens)->token == T_REDIR_IN || (*tokens)->token == T_REDIR_OUT
-// 		|| (*tokens)->token == T_APPEND || (*tokens)->token == T_HEREDOC))
+// 	while (*tokens && ((*tokens)->token == T_REDIR_IN
+// (*tokens)->token ==
+// 	T_REDIR_OUT
+// 		|| (*tokens)->token == T_APPEND
+// || (*tokens)->token == T_HEREDOC))
 // 	{
 // 		redir_node = ast_new();
 // 		if (!redir_node)

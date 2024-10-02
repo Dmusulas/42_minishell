@@ -6,9 +6,12 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:34:48 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:34:48 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:16:15 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// NOTE: Most of this file will be redundant once we have working parser
+// that creates AST
 
 #include "exec.h"
 #include "libft.h"

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/02 16:43:22 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/10 13:54:05 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/02 16:01:54 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:01:54 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,18 @@
 
 bool	token_check(t_tokens tk)
 {
-	return (tk == T_REDIR_IN || tk == T_REDIR_OUT
-			|| tk == T_APPEND || tk == T_HEREDOC);
+	return (tk == T_REDIR_IN || tk == T_REDIR_OUT || tk == T_APPEND
+		|| tk == T_HEREDOC);
 }
 
 int	is_builtin(const char *cmd)
 {
 	if (!cmd)
-		return 0;
-
-	return (ft_strcmp(cmd, "echo") == 0
-			 || ft_strcmp(cmd, "cd") == 0
-			 || ft_strcmp(cmd, "pwd") == 0
-			 || ft_strcmp(cmd, "export") == 0
-			 || ft_strcmp(cmd, "unset") == 0
-			 || ft_strcmp(cmd, "env") == 0
-			 || ft_strcmp(cmd, "exit") == 0);
+		return (0);
+	return (ft_strcmp(cmd, "echo") == 0 || ft_strcmp(cmd, "cd") == 0
+		|| ft_strcmp(cmd, "pwd") == 0 || ft_strcmp(cmd, "export") == 0
+		|| ft_strcmp(cmd, "unset") == 0 || ft_strcmp(cmd, "env") == 0
+		|| ft_strcmp(cmd, "exit") == 0);
 }
 
 t_ast	*ast_new(void)
@@ -52,8 +48,6 @@ t_ast	*ast_new(void)
 	return (new_nd);
 }
 
-
-
 int	parse_input(t_tools *tools)
 {
 	t_ast	*tree;
@@ -68,7 +62,6 @@ int	parse_input(t_tools *tools)
 	if (!tree)
 		return (0);
 	tools->tree = tree;
-
 	return (1);
 }
 
@@ -77,11 +70,10 @@ int	parse_input(t_tools *tools)
 // 	t_ast	*tree;
 
 // 	tree = NULL;
-	
+
 // 	// printf("LL inside parse start:\n");
 // 	// print_tokens(tools->lexer_lst);
 
-	
 // 	if (!tree)
 // 		tree = parse_pipe(&tools->lexer_lst);
 // 	else if (!tree)

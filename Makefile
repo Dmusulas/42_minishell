@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+         #
+#    By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2024/07/05 17:14 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/01 22:27:42 by dmusulas         ###   ########.fr        #
+#    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
+#    Updated: 2024/10/02 16:07:00 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,17 +39,18 @@ VPATH			= src:include
 INCLUDES		= minishell.h \
 
 MINISHELL_SRCS	= main.c \
-					signals.c \
-					mini_loop.c \
-					clean_up.c \
-					err_msg.c \
-					dbg_utils.c\
-					lex/lexer.c \
-					lex/lex_utils.c \
-					lex/parse_prep_utils.c \
-					parse/expand.c \
-					parse/parse_utils.c \
-					parse/parser.c
+				  signals.c \
+				  mini_loop.c \
+				  clean_up.c \
+				  err_msg.c \
+				  lex/lexer.c \
+				  lex/lex_utils.c \
+				  lex/parse_prep_utils.c \
+				  parse/expand.c \
+				  parse/parse_utils.c \
+				  parse/parser.c\
+				  utils/debug.c\
+				  utils/arrays.c
 
 MINISHELL_OBJS	= $(MINISHELL_SRCS:%.c=obj/%.o)
 OBJ_DIRS		= $(sort $(dir $(MINISHELL_OBJS)))

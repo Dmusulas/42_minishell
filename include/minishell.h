@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/01 22:21:25 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:04:01 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,5 +68,8 @@ int		event(void);
 void	sigint_handler(int signal);
 void	sigquit_handler(int signal);
 void	init_signals(void);
+
+/* UTILS */
+void	free_2darray(char **array);
 
 #endif

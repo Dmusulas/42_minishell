@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: clinggad <clinggad@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/08/22 13:15:35 by clinggad          #+#    #+#             */
-/*   Updated: 2024/09/10 12:50:32 by clinggad         ###   ########.fr       */
+/*   Created: 2024/10/02 16:01:28 by dmusulas          #+#    #+#             */
+/*   Updated: 2024/10/02 16:01:28 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

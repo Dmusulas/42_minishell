@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:35 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:35:35 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 16:15:44 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,22 +68,4 @@ void	free_exec(t_exec *exec)
 	close(exec->in_fd);
 	close(exec->out_fd);
 	free(exec);
-}
-
-/**
- * Utility function to free memory allocated by splitting PATHs.
- *
- * @param array the 2d array to be freed
- */
-void	free_2darray(char **array)
-{
-	int	i;
-
-	i = 0;
-	while (array[i])
-	{
-		free(array[i]);
-		i++;
-	}
-	free(array);
 }
