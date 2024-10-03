@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:20:45 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/01 22:20:48 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/03 17:49:16 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ size_t	ft_strlen(const char *s);
 t_list	*ft_lstlast(t_list *lst);
 t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *));
 t_list	*ft_lstnew(void *content);
+t_list	*ft_lstfind_node(t_list *lst, void *val, int (*cmp)(void *, void *));
+void	ft_lstsort(t_list **lst, int (*cmp)(void *, void *));
 void	*ft_calloc(size_t nmemb, size_t size);
 void	*ft_memchr(const void *s, int c, size_t n);
 void	*ft_memcpy(void *dst, const void *src, size_t n);

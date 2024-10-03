@@ -281,6 +281,7 @@ t_ast	*parse_pipe(t_tools *tools)
 /*
 TODO: adjust parse_redir and helper functions to take t_tools *tools
 */
+
 /**
  * make_redir - Creates a new AST node for a redirection.
  * @cmd_node: The command node to which the redirection applies.

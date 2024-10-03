@@ -58,7 +58,9 @@ SRCS =	ft_atoi.c\
 		ft_lstlast.c\
 		ft_lstmap.c\
 		ft_lstnew.c\
+		ft_lstsort.c\
 		ft_lstsize.c\
+		ft_lstfind_node.c\
 		ft_strnumspace.c\
 		ft_strcmp.c
 all: $(NAME)
