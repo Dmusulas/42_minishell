@@ -93,3 +93,13 @@ void	print_linkedlist(t_list *lst)
 {
 	ft_lstiter(lst, print_content);
 }
+
+void	test_envp(t_list *envp)
+{
+	update_or_add_envp(&envp, "AAAA=TOP");
+	update_or_add_envp(&envp, "COLORTERM=tEST");
+	update_or_add_envp(&envp, "colorterm=tEST");
+	update_or_add_envp(&envp, "val=hehe");
+	update_or_add_envp(&envp, "___MEH=bot");
+	print_linkedlist(envp);
+}

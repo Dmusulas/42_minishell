@@ -13,7 +13,7 @@
 #include "libft.h"
 #include "minishell.h"
 
-static void delete (void *content)
+static void	delete_func(void *content)
 {
 	char	*str;
 
@@ -26,5 +26,5 @@ static void delete (void *content)
 
 void	delete_duplicated_envp(t_tools *tools)
 {
-	ft_lstclear(&tools->envp, delete);
+	ft_lstclear(&tools->envp, delete_func);
 }

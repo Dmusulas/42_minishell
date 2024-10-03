@@ -24,7 +24,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	tools.envp_org = envp;
-	tools.debug_mode = true;
+	tools.debug_mode = false;
 	rl_catch_signals = 0;
 	if (!duplicate_env(&tools))
 	{
@@ -32,8 +32,8 @@ int	main(int argc, char *argv[], char *envp[])
 			STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	if (tools.debug_mode)
-		print_linkedlist(tools.envp);
+	if (tools.debug_mode) // NOTE: Add more tests here if needed
+		test_envp(tools.envp);
 	init_tools(&tools);
 	mini_loop(&tools);
 	return (0);
