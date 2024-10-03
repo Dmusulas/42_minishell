@@ -3,15 +3,48 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:28 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:01:28 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/02 22:26:27 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "libft.h"
+
+/*
+ * This function calculates the length of the initial segment of string `s` which
+ * contains only characters not in string `reject`. It iterates through each character
+ * in `s` and checks if it is present in `reject`. If a character from `s` is found in
+ * `reject`, the function returns the index of that character in `s`. If no characters
+ * from `s` are found in `reject`, the function returns the length of `s`.
+ * 
+ * This function is necessary for tokenizing input strings in the context of a shell
+ * parser. It helps to identify the start of a token by finding the first character
+ * that is not part of the current token. For example, in a string like "ls -l", it
+ * would return the index of the first space character, indicating the end of the
+ * command token "ls".
+ */
+size_t ft_strcspn(const char *s, const char *reject)
+{
+    size_t i;
+    size_t j;
+
+    i = 0;
+    while (s[i])
+    {
+        j = 0;
+        while (reject[j])
+        {
+            if (s[i] == reject[j])
+                return (i);
+            j++;
+        }
+        i++;
+    }
+    return (i);
+}
 
 t_lexer	*make_tk(char *str, t_tokens token)
 {
