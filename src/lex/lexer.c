@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 22:27:21 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/03 12:21:27 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int	handle_arg(char *s, int start, t_tools *tools)
 {
 	int		i;
 	char	*arg;
-	t_tokens token_type;
 
 	i = start;
 	if (s[i] == '"' || s[i] == '\'')
@@ -65,8 +64,7 @@ int	handle_arg(char *s, int start, t_tools *tools)
 		perror("ft_substr");
 		return (0);
 	}
-	token_type = (tools->lexer_lst == NULL) ? T_CMD : T_ARG;
-	add_tk(&(tools->lexer_lst), make_tk(arg, token_type));
+	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
 	return (i - start);
 }
 
@@ -95,41 +93,42 @@ static int	skip_space(char *s, int i)
  */
 int	tokenize_input(t_tools *tools)
 {
-	int	i;
+	int	i = 0;
 	int	offset;
-	bool is_new_cmd;
+	bool is_cmd = true;
 
-	i = 0;
-	is_new_cmd = true; // Initialize flag to indicate the start of a new command
-	tools->lexer_lst = NULL; // Reset the lexer list
+	tools->lexer_lst = NULL;
 	while (tools->args[i])
 	{
-		i = skip_space(tools->args, i); // Skip spaces to find the next token
+		i = skip_space(tools->args, i);
 		if (tools->args[i] == '\0')
-			break ; // Exit if end of string is reached
-		offset = ft_two_tk(tools->args[i], tools->args[i + 1], tools); // Check for two-character tokens
+			break;
+
+		offset = ft_two_tk(tools->args[i], tools->args[i + 1], tools);
 		if (offset > 0)
 		{
-			i += offset; // Move index forward by the length of the token
-			is_new_cmd = true; // Reset flag to indicate a new command
+			i += offset;
+			is_cmd = false;
+			continue;
 		}
-		else if (check_tk(tools->args[i])) // Check for single-character tokens
+
+		if (check_tk(tools->args[i]))
 		{
-			i += ft_one_tk(tools->args[i], tools); // Process single-character token
-			is_new_cmd = true; // Reset flag to indicate a new command
+			i += ft_one_tk(tools->args[i], tools);
+			is_cmd = (tools->args[i - 1] == '|'); // Reset is_cmd after pipe
+			continue;
 		}
-		else // Process general arguments
+
+		if (is_cmd)
 		{
-			if (is_new_cmd) // If this is a new command
-			{
-				add_tk(&(tools->lexer_lst), make_tk(ft_substr(tools->args, 
-							i, ft_strcspn(&tools->args[i], " ")), T_CMD)); // Add command token
-				i += ft_strcspn(&tools->args[i], " "); // Move index forward by the length of the command
-				is_new_cmd = false; // Set flag to indicate this is not a new command
-			}
-			else // If this is an argument to the previous command
-				i += handle_arg(tools->args, i, tools); // Process argument
+			add_tk(&(tools->lexer_lst), make_tk(ft_substr(tools->args, i, ft_strcspn(&tools->args[i], " ")), T_CMD));
+			i += ft_strcspn(&tools->args[i], " ");
+			is_cmd = false;
+		}
+		else
+		{
+			i += handle_arg(tools->args, i, tools);
 		}
 	}
-	return (1); // Return success
+	return (1);
 }
