@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+         #
+#    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/02 17:40:08 by dmusulas         ###   ########.fr        #
+#    Updated: 2024/10/03 22:37:13 by pmolzer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,7 @@ MINISHELL_SRCS	= main.c \
 				  parse/expand.c \
 				  parse/parse_utils.c \
 				  parse/parser.c\
+				  builtins/builtins.c\
 				  utils/debug.c\
 				  utils/arrays.c
 
