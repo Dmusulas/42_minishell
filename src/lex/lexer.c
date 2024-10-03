@@ -81,47 +81,51 @@ static int	skip_space(char *s, int i)
 
 	* @tools: Pointer to the tools struct containing the input string and lexer list.
  *
- * This function iterates through the input string, skipping spaces, identifying tokens,
+ * This function iterates through the input string, skipping spaces,
+	identifying tokens,
 	and adding them to the lexer list. It processes tokens in the following order:
 	1. Two-character tokens (e.g., '>>', '<<')
 	2. Single-character tokens (e.g., '|', '<', '>')
 	3. General arguments (including quoted arguments)
- * The function maintains a flag `is_new_cmd` to determine whether the current token is a new command or an argument to the previous command.
- * This flag is reset after processing a token that indicates the start of a new command (e.g., '|', '<', '>', '>>', '<<').
+
+	* The function maintains a flag `is_new_cmd` to determine whether the current token is a new command or an argument to the previous command.
+
+	* This flag is reset after processing a token that indicates the start of a new command (e.g.,
+	'|', '<', '>', '>>', '<<').
  *
  * Returns 1 on success.
  */
 int	tokenize_input(t_tools *tools)
 {
-	int	i = 0;
-	int	offset;
-	bool is_cmd = true;
+	int		i;
+	int		offset;
+	bool	is_cmd;
 
+	i = 0;
+	is_cmd = true;
 	tools->lexer_lst = NULL;
 	while (tools->args[i])
 	{
 		i = skip_space(tools->args, i);
 		if (tools->args[i] == '\0')
-			break;
-
+			break ;
 		offset = ft_two_tk(tools->args[i], tools->args[i + 1], tools);
 		if (offset > 0)
 		{
 			i += offset;
 			is_cmd = false;
-			continue;
+			continue ;
 		}
-
 		if (check_tk(tools->args[i]))
 		{
 			i += ft_one_tk(tools->args[i], tools);
-			is_cmd = (tools->args[i - 1] == '|'); // Reset is_cmd after pipe
-			continue;
+			is_cmd = (tools->args[i - 1] == '|');
+			continue ;
 		}
-
 		if (is_cmd)
 		{
-			add_tk(&(tools->lexer_lst), make_tk(ft_substr(tools->args, i, ft_strcspn(&tools->args[i], " ")), T_CMD));
+			add_tk(&(tools->lexer_lst), make_tk(ft_substr(tools->args, i,
+						ft_strcspn(&tools->args[i], " ")), T_CMD));
 			i += ft_strcspn(&tools->args[i], " ");
 			is_cmd = false;
 		}
