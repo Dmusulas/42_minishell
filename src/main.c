@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:17:00 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/03 22:36:08 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	tools.envp_org = envp;
-	tools.debug_mode = false;
+	tools.debug_mode = true;
 	rl_catch_signals = 0;
 	if (!duplicate_env(&tools))
 	{
