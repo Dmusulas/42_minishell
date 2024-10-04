@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/03 12:21:27 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/04 12:24:52 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,24 +14,38 @@
 
 // TODO: add checks for syntax errors near tokens
 
-int	handle_q_arg(char *s, int start, t_tools *tools)
+int handle_q_arg(char *s, int start, t_tools *tools)
 {
-	int		i;
-	char	q_type;
-	char	*arg;
+    int     i;
+    char    quote;
+    char    *arg;
 
-	i = start;
-	q_type = s[i++];
-	while (s[i] && s[i] != q_type)
-		i++;
-	arg = ft_substr(s, start + 1, i - start - 1);
-	if (arg == NULL)
-	{
-		perror("ft_substr");
-		return (0);
-	}
-	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
-	return (i - start + 1);
+    i = start;
+    quote = s[i];
+    i++;
+    while (s[i] && s[i] != quote)
+    {
+        if (quote == '"' && s[i] == '$')
+        {
+            // TODO: Handle variable expansion here
+            i++;
+        }
+        else
+            i++;
+    }
+    if (s[i] != quote)
+    {
+        ft_putstr_fd("minishell: unclosed quote\n", STDERR_FILENO);
+        return (0);
+    }
+    arg = ft_substr(s, start + 1, i - start - 1);
+    if (arg == NULL)
+    {
+        perror("ft_substr");
+        return (0);
+    }
+    add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
+    return (i - start + 1);
 }
 
 static int	check_tk(char tk)
