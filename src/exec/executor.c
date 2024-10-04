@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "lexer_parser.h"
 
 /**
  * Redirects the old file descriptor to the new file descriptor
@@ -58,11 +59,11 @@ static void	setup_pipes(t_exec *exec, int *fd, int i)
  * @param envp An array of environment variables.
  * @param i The index of the command to execute in the pipeline.
  */
-static void	execute_cmd(t_exec *exec, char **envp, int i)
+void	exec_cmd(t_ast *node, char **envp)
 {
-	if (!access(exec->cmd_paths[i], X_OK))
-		execve(exec->cmd_paths[i], exec->cmd_args[i], envp);
-	free_exec(exec);
+	if (!access(node->str, X_OK))
+		execve(node->str, &node->left->str, envp);
+	msg_error("Execve failed", NULL);
 	exit(EXIT_FAILURE);
 }
 
@@ -105,29 +106,68 @@ static void	child_process(t_exec *exec, char **envp, int i, int *fd_in)
 	}
 }
 
-/**
- * Executes all commands in the pipeline by creating child processes
- * for each command.
- *
-
-	* @param exec A pointer to a t_exec structure containing
-	* pipeline information.
- * @param envp An array of environment variables.
- */
-void	ft_exec(t_exec *exec, char **envp)
+void	pipe_command(t_ast *node, char **envp)
 {
-	int	i;
-	int	fd_in;
+	int		fd[2];
+	pid_t	pid;
 
-	fd_in = -1;
-	i = 0;
-	while (i < exec->cmd_count)
+	if (pipe(fd) == -1)
+		msg_error("Pipe error", NULL);
+	pid = fork();
+	if (pid == -1)
+		msg_error("Fork error", NULL);
+	else if (pid == 0)
 	{
-		child_process(exec, envp, i, &fd_in);
-		i++;
+		close(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+		execute_ast(node->left, envp);
+		exit(EXIT_SUCCESS);
 	}
-	while (wait(NULL) > 0)
-		;
-	if (fd_in != -1)
-		close(fd_in);
+	else
+	{
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+		execute_ast(node->right, envp);
+		wait(NULL);
+	}
+}
+
+void	execute_ast(t_ast *node, char **envp)
+{
+	if (!node)
+		return ;
+	if (node->token == T_PIPE)
+	{
+		// Handle the pipe logic (create pipe, fork process, etc.)
+		pipe_command(node, envp);
+	}
+	else if (node->token == T_CMD || node->token == T_ARG)
+	{
+		// Execute command, assuming args are handled and stored in 'node'
+		exec_cmd(node, envp);
+	}
+	else if (node->token == T_REDIR_IN || node->token == T_REDIR_OUT)
+	{
+		// Handle redirection
+		redirect(node);
+	}
+	// Recursively call left and right children
+	execute_ast(node->left, envp);
+	execute_ast(node->right, envp);
+}
+
+void	redirect(t_ast *node)
+{
+	int	fd;
+
+	if (node->token == T_REDIR_IN)
+		fd = open(node->file, O_RDONLY);
+	else if (node->token == T_REDIR_OUT)
+		fd = open(node->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (fd == -1)
+		msg_error("Redirection error", NULL);
+	dup2(fd, (node->token == T_REDIR_IN) ? STDIN_FILENO : STDOUT_FILENO);
+	close(fd);
 }

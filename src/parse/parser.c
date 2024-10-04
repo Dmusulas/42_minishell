@@ -121,7 +121,6 @@ t_ast	*parse_cmd(t_tools *tools)
 		cmd_node->token = T_CMD;
 		cmd_node->b_cmd = true;
 		printf(" [ Debug: %s b_cmd = true ]\n", cmd_node->str);
-		execute_builtins(tools);
 	}
 	// cmd_node->token = tools->lexer_lst->token;
 	// cmd_node->str =ft_strdup(tools->lexer_lst->str);

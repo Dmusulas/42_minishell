@@ -32,8 +32,6 @@ int	main(int argc, char *argv[], char *envp[])
 			STDERR_FILENO);
 		return (EXIT_FAILURE);
 	}
-	if (tools.debug_mode) // NOTE: Add more tests here if needed
-		test_envp(tools.envp);
 	init_tools(&tools);
 	mini_loop(&tools);
 	return (0);

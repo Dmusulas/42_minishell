@@ -72,10 +72,8 @@ int	mini_loop(t_tools *tools)
 		return (ft_error(ERR_QUO, tools));
 	if (!tokenize_input(tools))
 		return (ft_error(ERR_LEX, tools));
-	// if (!parse_input(tools))
-	// 	return (ft_error(ERR_PAR, tools));
-	if (tools->lexer_lst && tools->debug_mode)
-		print_tokens(tools->lexer_lst);
+	if (!parse_input(tools))
+		return (ft_error(ERR_PAR, tools));
 	reset_tools(tools);
 	return (1);
 }

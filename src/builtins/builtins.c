@@ -12,11 +12,13 @@
 
 #include "lexer_parser.h"
 #include "minishell.h"
+#include <stdio.h>
 
 void	ft_pwd(t_tools *tools)
-{ // remove tools->debug_mode
+{
 	char	*pwd;
 
+	// remove tools->debug_mode
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 	{
@@ -33,10 +35,11 @@ void	ft_pwd(t_tools *tools)
 }
 
 void	ft_cd(char *path, t_tools *tools)
-{ // remove tools->debug_mode
+{
 	char	*cwd;
 	char	*full_path;
 
+	// remove tools->debug_mode
 	if (path)
 	{
 		if (path[0] == '/')
@@ -46,7 +49,7 @@ void	ft_cd(char *path, t_tools *tools)
 		}
 		else
 		{
-            // Path is relative, prepend the current working directory
+			// Path is relative, prepend the current working directory
 			cwd = getcwd(NULL, 0);
 			full_path = ft_strjoin(cwd, path);
 			free(cwd);
@@ -62,36 +65,35 @@ void	ft_cd(char *path, t_tools *tools)
 }
 
 void	ft_echo(char **args, t_tools *tools)
-{ // remove tools->debug_mode
-	int		i;
-	int		n_line;
+{
+	int	i;
+	int	n_line;
 
+	// remove tools->debug_mode
 	i = 1;
 	n_line = 1; // echo adds by default a new line
-    // Check for -n option
+				// Check for -n option
 	if (args[i] && strcmp(args[i], "-n") == 0)
 	{
 		newline = 0; // Do not print newline
 		i++;
 	}
 	// add $? functionality
-
 	// Print the arguments
 	while (args[i])
 	{
-    	write(STDOUT_FILENO, args[i], strlen(args[i]));
-    	if (args[i + 1])
-        	write(STDOUT_FILENO, " ", 1);
-    	i++;
+		write(STDOUT_FILENO, args[i], strlen(args[i]));
+		if (args[i + 1])
+			write(STDOUT_FILENO, " ", 1);
+		i++;
 	}
-
 	if (n_line)
-    	write(STDOUT_FILENO, "\n", 1);
+		write(STDOUT_FILENO, "\n", 1);
 	while (tools->debug_mode)
-    {
-        printf("[DEBUG] ft_echo: %s\n", args[i]);
-        i++;
-    }
+	{
+		printf("[DEBUG] ft_echo: %s\n", args[i]);
+		i++;
+	}
 }
 
 void	ft_export(char **args, t_tools *tools)
@@ -99,10 +101,9 @@ void	ft_export(char **args, t_tools *tools)
 	int		i;
 	char	*equals;
 
-	i = 1;	
+	i = 1;
 	while (args[i])
 	{
-        // Check if the argument is a valid environment variable name
 		equals = strchr(args[i], '=');
 		if (equals)
 		{
@@ -111,10 +112,7 @@ void	ft_export(char **args, t_tools *tools)
 			*equals = '=';
 		}
 		else
-		{
-            // If no '=' is found, set the variable with an empty value
 			setenv(args[i], "", 1);
-		}
 		i++;
 	}
 	if (tools->debug_mode)
@@ -125,7 +123,7 @@ void	ft_export(char **args, t_tools *tools)
 
 void	ft_unset(char **args, t_tools *tools)
 {
-	int		i;
+	int	i;
 
 	i = 1;
 	while (args[i])
@@ -142,7 +140,7 @@ void	ft_unset(char **args, t_tools *tools)
 void	ft_env(t_tools *tools)
 {
 	extern char	**environ;
-	char	**env;
+	char		**env;
 
 	env = environ;
 	while (*env)
@@ -160,13 +158,15 @@ void	ft_env(t_tools *tools)
 void	ft_exit(t_tools *tools)
 {
 	if (tools->debug_mode)
-        printf("[DEBUG]: ft_exit() executed\n");
-    exit(0);
+		printf("[DEBUG]: ft_exit() executed\n");
+	exit(0);
 }
 
-void execute_builtins(t_tools *tools)
+void	execute_builtins(t_tools *tools)
 {
-	t_ast *cmd_node = tools->tree;
+	t_ast	*cmd_node;
+
+	cmd_node = tools->tree;
 	if (cmd_node->token == T_CMD && cmd_node->b_cmd)
 	{
 		if (ft_strcmp(cmd_node->str, "echo") == 0)
