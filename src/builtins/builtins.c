@@ -6,71 +6,65 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/03 22:35:49 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/04 15:27:43 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
 
-void ft_pwd(t_tools *tools)
+void	ft_pwd(t_tools *tools)
 { // remove tools->debug_mode
-    char *pwd = getcwd(NULL, 0);
-    if (pwd)
-    {
-        write(STDOUT_FILENO, pwd, ft_strlen(pwd));
+	char	*pwd;
+
+	pwd = getcwd(NULL, 0);
+	if (pwd)
+	{
+		write(STDOUT_FILENO, pwd, ft_strlen(pwd));
 		write(STDOUT_FILENO, "\n", 1);
-        free(pwd);
-    }
-    else
-    {
-        perror("pwd");
-    }
-    if (tools->debug_mode)
-    {
-        printf("[DEBUG]: ft_pwd() executed\n");
-    }
+		free(pwd);
+	}
+	else
+		perror("pwd");
+	if (tools->debug_mode)
+	{
+		printf("[DEBUG]: ft_pwd() executed\n");
+	}
 }
 
-void ft_cd(char *path, t_tools *tools)
+void	ft_cd(char *path, t_tools *tools)
 { // remove tools->debug_mode
-    if (path)
-    {
-        if (path[0] == '/')
-        {
-            // Path is absolute, directly change directory
-            if (chdir(path) == -1)
-            {
-                perror("cd");
-            }
-        }
-        else
-        {
+	char	*cwd;
+	char	*full_path;
+
+	if (path)
+	{
+		if (path[0] == '/')
+		{
+			if (chdir(path) == -1)
+				perror("cd");
+		}
+		else
+		{
             // Path is relative, prepend the current working directory
-            char *cwd = getcwd(NULL, 0);
-            char *full_path = ft_strjoin(cwd, path);
-            free(cwd);
-            if (chdir(full_path) == -1)
-            {
-                perror("cd");
-            }
-            free(full_path);
-        }
-    }
-    else
-    {
-        printf("cd: expected argument\n");
-    }
-    if (tools->debug_mode)
-    {
-        printf("[DEBUG]: ft_cd() executed with path: %s\n", path);
-    }
+			cwd = getcwd(NULL, 0);
+			full_path = ft_strjoin(cwd, path);
+			free(cwd);
+			if (chdir(full_path) == -1)
+				perror("cd");
+			free(full_path);
+		}
+	}
+	else
+		printf("cd: expected argument\n");
+	if (tools->debug_mode)
+		printf("[DEBUG]: ft_cd() executed with path: %s\n", path);
 }
 
-void ft_echo(char **args, t_tools *tools)
+void	ft_echo(char **args, t_tools *tools)
 { // remove tools->debug_mode
-    int i;
-	int n_line;
+	int		i;
+	int		n_line;
 
 	i = 1;
 	n_line = 1; // echo adds by default a new line
@@ -100,69 +94,73 @@ void ft_echo(char **args, t_tools *tools)
     }
 }
 
-void ft_export(char **args, t_tools *tools)
+void	ft_export(char **args, t_tools *tools)
 {
-    int i = 1;
-    while (args[i])
-    {
+	int		i;
+	char	*equals;
+
+	i = 1;	
+	while (args[i])
+	{
         // Check if the argument is a valid environment variable name
-        char *equals = strchr(args[i], '=');
-        if (equals)
-        {
-            *equals = '\0';
-            setenv(args[i], equals + 1, 1);
-            *equals = '=';
-        }
-        else
-        {
+		equals = strchr(args[i], '=');
+		if (equals)
+		{
+			*equals = '\0';
+			setenv(args[i], equals + 1, 1);
+			*equals = '=';
+		}
+		else
+		{
             // If no '=' is found, set the variable with an empty value
-            setenv(args[i], "", 1);
-        }
-        i++;
-    }
-    if (tools->debug_mode)
-    {
-        printf("[DEBUG]: ft_export() executed\n");
-    }
+			setenv(args[i], "", 1);
+		}
+		i++;
+	}
+	if (tools->debug_mode)
+	{
+		printf("[DEBUG]: ft_export() executed\n");
+	}
 }
 
-void ft_unset(char **args, t_tools *tools)
+void	ft_unset(char **args, t_tools *tools)
 {
-    int i = 1;
-    while (args[i])
-    {
-        unsetenv(args[i]);
-        i++;
-    }
-    if (tools->debug_mode)
-    {
-        printf("[DEBUG]: ft_unset() executed\n");
-    }
+	int		i;
+
+	i = 1;
+	while (args[i])
+	{
+		unsetenv(args[i]);
+		i++;
+	}
+	if (tools->debug_mode)
+	{
+		printf("[DEBUG]: ft_unset() executed\n");
+	}
 }
 
-void ft_env(t_tools *tools)
+void	ft_env(t_tools *tools)
 {
-    extern char **environ;
-    char **env = environ;
+	extern char	**environ;
+	char	**env;
 
-    while (*env)
-    {
-        write(STDOUT_FILENO, *env, strlen(*env));
-        write(STDOUT_FILENO, "\n", 1);
-        env++;
-    }
-    if (tools->debug_mode)
-    {
-        printf("[DEBUG]: ft_env() executed\n");
-    }
+	env = environ;
+	while (*env)
+	{
+		write(STDOUT_FILENO, *env, strlen(*env));
+		write(STDOUT_FILENO, "\n", 1);
+		env++;
+	}
+	if (tools->debug_mode)
+	{
+		printf("[DEBUG]: ft_env() executed\n");
+	}
 }
 
-void ft_exit(t_tools *tools)
+void	ft_exit(t_tools *tools)
 {
-    if (tools->debug_mode)
-    {
+	if (tools->debug_mode)
         printf("[DEBUG]: ft_exit() executed\n");
-    }
     exit(0);
 }
 
