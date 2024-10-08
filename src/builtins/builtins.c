@@ -3,22 +3,73 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/04 15:27:43 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/08 16:35:28 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
-#include <stdio.h>
+
+void	ft_env(t_tools *tools)
+{
+	extern char	**environ;
+	char		**env;
+
+	env = environ;
+	while (*env)
+	{
+		write(STDOUT_FILENO, *env, strlen(*env));
+		write(STDOUT_FILENO, "\n", 1);
+		env++;
+	}
+	if (tools->debug_mode)
+	{
+		printf("[DEBUG]: ft_env() executed\n");
+	}
+}
+
+static void	remove_env_var(t_list **envp, const char *var_name)
+{
+	t_list	*prev;
+	t_list	*current;
+	char	*env_var;
+	char	*equals_pos;
+
+	prev = NULL;
+	current = *envp;
+	while (current)
+	{
+		env_var = (char *)current->content;
+		equals_pos = ft_strchr(env_var, '=');
+		if (equals_pos && ft_strncmp(env_var, 
+				var_name, equals_pos - env_var) == 0)
+		{
+			if (prev)
+				prev->next = current->next;
+			else
+				*envp = current->next;
+			free(current->content);
+			free(current);
+			return ;
+		}
+		prev = current;
+		current = current->next;
+	}
+}
+
+static void	unset_single_var(t_ast *arg_node, t_list **envp)
+{
+	if (arg_node && arg_node->str)
+		remove_env_var(envp, arg_node->str);
+}
 
 void	ft_pwd(t_tools *tools)
 {
 	char	*pwd;
 
-	// remove tools->debug_mode
 	pwd = getcwd(NULL, 0);
 	if (pwd)
 	{
@@ -39,7 +90,6 @@ void	ft_cd(char *path, t_tools *tools)
 	char	*cwd;
 	char	*full_path;
 
-	// remove tools->debug_mode
 	if (path)
 	{
 		if (path[0] == '/')
@@ -49,7 +99,7 @@ void	ft_cd(char *path, t_tools *tools)
 		}
 		else
 		{
-			// Path is relative, prepend the current working directory
+            // Path is relative, prepend the current working directory
 			cwd = getcwd(NULL, 0);
 			full_path = ft_strjoin(cwd, path);
 			free(cwd);
@@ -64,95 +114,78 @@ void	ft_cd(char *path, t_tools *tools)
 		printf("[DEBUG]: ft_cd() executed with path: %s\n", path);
 }
 
-void	ft_echo(char **args, t_tools *tools)
+void	ft_echo(t_ast *cmd_node, t_tools *tools)
 {
-	int	i;
-	int	n_line;
+ 	t_ast	*current;
+	int		n_line;
 
-	// remove tools->debug_mode
-	i = 1;
-	n_line = 1; // echo adds by default a new line
-				// Check for -n option
-	if (args[i] && strcmp(args[i], "-n") == 0)
+	current = cmd_node->right;
+	n_line = 1;
+	if (current && ft_strcmp(current->str, "-n") == 0)
 	{
-		newline = 0; // Do not print newline
-		i++;
+		n_line = 0;
+		current = current->right;
 	}
-	// add $? functionality
-	// Print the arguments
-	while (args[i])
+	while (current)
 	{
-		write(STDOUT_FILENO, args[i], strlen(args[i]));
-		if (args[i + 1])
-			write(STDOUT_FILENO, " ", 1);
-		i++;
+		ft_putstr_fd(current->str, STDOUT_FILENO);
+		if (current->right)
+			ft_putchar_fd(' ', STDOUT_FILENO);
+		current = current->right;
 	}
 	if (n_line)
-		write(STDOUT_FILENO, "\n", 1);
-	while (tools->debug_mode)
-	{
-		printf("[DEBUG] ft_echo: %s\n", args[i]);
-		i++;
-	}
+		ft_putchar_fd('\n', STDOUT_FILENO);
+	if (tools->debug_mode)
+		printf("[DEBUG]: ft_echo() executed\n");
 }
 
-void	ft_export(char **args, t_tools *tools)
+void	ft_export(t_ast *cmd_node, t_tools *tools)
 {
-	int		i;
-	char	*equals;
+	t_ast	*current;
+	char	*arg;
+	char	*equals_pos;
 
-	i = 1;
-	while (args[i])
+	current = cmd_node->right;
+	if (!current)
 	{
-		equals = strchr(args[i], '=');
-		if (equals)
+        // If no arguments, print the environment
+		ft_env(tools);
+		return;
+	}
+	while (current)
+	{
+        // Process each argument
+		arg = current->str;
+		equals_pos = ft_strchr(arg, '=');
+		if (equals_pos)
 		{
-			*equals = '\0';
-			setenv(args[i], equals + 1, 1);
-			*equals = '=';
+			// Valid assignment
+			*equals_pos = '\0';  // Temporarily split the string
+			update_or_add_envp(&tools->envp, arg);
+			*equals_pos = '=';  // Restore the string
 		}
 		else
-			setenv(args[i], "", 1);
-		i++;
+		{
+			// Just mark as exportable
+		}
+		current = current->right;
 	}
 	if (tools->debug_mode)
-	{
 		printf("[DEBUG]: ft_export() executed\n");
-	}
 }
 
-void	ft_unset(char **args, t_tools *tools)
+void	ft_unset(t_ast *cmd_node, t_tools *tools)
 {
-	int	i;
+	t_ast	*current;
 
-	i = 1;
-	while (args[i])
+	current = cmd_node->right;
+	while (current)
 	{
-		unsetenv(args[i]);
-		i++;
+		unset_single_var(current, &tools->envp);
+		current = current->right;
 	}
 	if (tools->debug_mode)
-	{
 		printf("[DEBUG]: ft_unset() executed\n");
-	}
-}
-
-void	ft_env(t_tools *tools)
-{
-	extern char	**environ;
-	char		**env;
-
-	env = environ;
-	while (*env)
-	{
-		write(STDOUT_FILENO, *env, strlen(*env));
-		write(STDOUT_FILENO, "\n", 1);
-		env++;
-	}
-	if (tools->debug_mode)
-	{
-		printf("[DEBUG]: ft_env() executed\n");
-	}
 }
 
 void	ft_exit(t_tools *tools)
@@ -162,27 +195,53 @@ void	ft_exit(t_tools *tools)
 	exit(0);
 }
 
-void	execute_builtins(t_tools *tools)
+static void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 {
-	t_ast	*cmd_node;
-
-	cmd_node = tools->tree;
-	if (cmd_node->token == T_CMD && cmd_node->b_cmd)
+	if (ft_strcmp(cmd_node->str, "echo") == 0)
+		ft_echo(cmd_node->right, tools);
+	else if (ft_strcmp(cmd_node->str, "cd") == 0)
 	{
-		if (ft_strcmp(cmd_node->str, "echo") == 0)
-			ft_echo(&tools->args, tools);
-		else if (ft_strcmp(cmd_node->str, "cd") == 0)
-			ft_cd(&tools->args[1], tools);
-		else if (ft_strcmp(cmd_node->str, "pwd") == 0)
-			ft_pwd(tools);
-		else if (ft_strcmp(cmd_node->str, "export") == 0)
-			ft_export(&tools->args, tools);
-		else if (ft_strcmp(cmd_node->str, "unset") == 0)
-			ft_unset(&tools->args, tools);
-		else if (ft_strcmp(cmd_node->str, "env") == 0)
-			ft_env(tools);
-		else if (ft_strcmp(cmd_node->str, "exit") == 0)
-			ft_exit(tools);
-		// add remaining builtins if any
+		if (cmd_node->right)
+			ft_cd(cmd_node->right->str, tools);
+		else
+			ft_cd(NULL, tools);
 	}
+	else if (ft_strcmp(cmd_node->str, "pwd") == 0)
+		ft_pwd(tools);
+	else if (ft_strcmp(cmd_node->str, "export") == 0)
+		ft_export(cmd_node->right, tools);
+	else if (ft_strcmp(cmd_node->str, "unset") == 0)
+		ft_unset(cmd_node->right, tools);
+	else if (ft_strcmp(cmd_node->str, "env") == 0)
+		ft_env(tools);
+	else if (ft_strcmp(cmd_node->str, "exit") == 0)
+		ft_exit(tools);
 }
+
+void	execute_command(t_ast *node, t_tools *tools)
+{
+	if (node->token == T_PIPE)
+	{
+		// Handle pipe execution
+		execute_command(node->left, tools);
+		execute_command(node->right, tools);
+	}
+	else if (node->token == T_CMD)
+	{
+		printf("[DEBUG]: executing command\n");
+		if (node->b_cmd)
+			execute_builtin(node, tools);
+		else
+		{
+			// Execute external command
+		}
+	}
+	// Handle other token types as needed
+}
+
+void	execute_ast(t_tools *tools)
+{
+	if (tools->tree)
+		execute_command(tools->tree, tools);
+}
+
