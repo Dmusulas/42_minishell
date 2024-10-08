@@ -68,14 +68,9 @@ int	mini_loop(t_tools *tools)
 	if (!tools->args || tools->args[0] == '\0')
 		return (reset_tools(tools));
 	add_history(tools->args);
-	if (!check_quotes(tools->args))
-		return (ft_error(ERR_QUO, tools));
-	if (!tokenize_input(tools))
-		return (ft_error(ERR_LEX, tools));
-	// if (!parse_input(tools))
+	handle_input(tools);
+	// if (!execute(tools))
 	// 	return (ft_error(ERR_PAR, tools));
-	if (tools->lexer_lst && tools->debug_mode)
-		print_tokens(tools->lexer_lst);
 	reset_tools(tools);
 	return (1);
 }

@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "lexer_parser.h"
 
 /**
  * Redirects the old file descriptor to the new file descriptor
@@ -58,11 +59,11 @@ static void	setup_pipes(t_exec *exec, int *fd, int i)
  * @param envp An array of environment variables.
  * @param i The index of the command to execute in the pipeline.
  */
-static void	execute_cmd(t_exec *exec, char **envp, int i)
+void	exec_cmd(t_ast *node, char **envp)
 {
-	if (!access(exec->cmd_paths[i], X_OK))
-		execve(exec->cmd_paths[i], exec->cmd_args[i], envp);
-	free_exec(exec);
+	if (!access(node->str, X_OK))
+		execve(node->str, &node->left->str, envp);
+	msg_error("Execve failed", NULL);
 	exit(EXIT_FAILURE);
 }
 
@@ -103,31 +104,4 @@ static void	child_process(t_exec *exec, char **envp, int i, int *fd_in)
 			*fd_in = fd[0];
 		}
 	}
-}
-
-/**
- * Executes all commands in the pipeline by creating child processes
- * for each command.
- *
-
-	* @param exec A pointer to a t_exec structure containing
-	* pipeline information.
- * @param envp An array of environment variables.
- */
-void	ft_exec(t_exec *exec, char **envp)
-{
-	int	i;
-	int	fd_in;
-
-	fd_in = -1;
-	i = 0;
-	while (i < exec->cmd_count)
-	{
-		child_process(exec, envp, i, &fd_in);
-		i++;
-	}
-	while (wait(NULL) > 0)
-		;
-	if (fd_in != -1)
-		close(fd_in);
 }

@@ -40,12 +40,12 @@ void	process_tokens(t_tools *tools)
 	if (tools->lexer_lst == NULL)
 		return ;
 	curr = tools->lexer_lst;
-	while (curr != NULL)
+	while (curr)
 	{
 		if (token_check(curr->token))
 		{
 			// tools->p_redir = curr;
-				//not sure if redir ptr should be assigned here
+			// not sure if redir ptr should be assigned here
 			tools->redir_num++;
 			if (curr->token == T_HEREDOC)
 				tools->heredoc = true;

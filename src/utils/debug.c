@@ -41,46 +41,34 @@ void	print_ast_node(t_ast *node)
 		printf("[DEBUG]: Redirection file: %s\n", node->file);
 }
 
-// Function to print the AST recursively
-/*
-	depth = 0 (root value)
-*/
+/**
+ * Recursively prints the AST structure with proper indentation.
+ *
+ * @param tree The current node in the AST.
+ * @param depth The current depth level in the tree.
+ */
 void	print_ast(t_ast *tree, int depth)
 {
 	int	i;
 
-	while (tree != NULL)
+	if (!tree)
+		return ;
+	for (i = 0; i < depth; i++)
+		printf("  ");
+	print_ast_node(tree);
+	if (tree->left)
 	{
-		i = 0;
-		while (i < depth)
-		{
+		for (i = 0; i < depth + 1; i++)
 			printf("  ");
-			i++;
-		}
-		print_ast_node(tree);
-		if (tree->left != NULL)
-		{
-			i = 0;
-			while (i < depth + 1)
-			{
-				printf("  ");
-				i++;
-			}
-			printf("Left:\n");
-			print_ast(tree->left, depth + 1);
-		}
-		if (tree->right != NULL)
-		{
-			i = 0;
-			while (i < depth + 1)
-			{
-				printf("  ");
-				i++;
-			}
-			printf("Right:\n");
-			print_ast(tree->right, depth + 1);
-		}
-		break ;
+		printf("Left:\n");
+		print_ast(tree->left, depth + 1);
+	}
+	if (tree->right)
+	{
+		for (i = 0; i < depth + 1; i++)
+			printf("  ");
+		printf("Right:\n");
+		print_ast(tree->right, depth + 1);
 	}
 }
 

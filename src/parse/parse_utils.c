@@ -54,9 +54,15 @@ int	parse_input(t_tools *tools)
 
 	tree = NULL;
 	if (tools->pipes > 0)
+	{
+		printf("Current command has %i pipes", tools->pipes);
 		tree = parse_pipe(tools);
+	}
 	else if (tools->redir_num > 0)
+	{
+		printf("Current command has %i redirections", tools->redir_num);
 		tree = parse_redir(tools);
+	}
 	else
 		tree = parse_cmd(tools);
 	if (!tree)
@@ -64,28 +70,3 @@ int	parse_input(t_tools *tools)
 	tools->tree = tree;
 	return (1);
 }
-
-// int	parse_input(t_tools *tools)
-// {
-// 	t_ast	*tree;
-
-// 	tree = NULL;
-
-// 	// printf("LL inside parse start:\n");
-// 	// print_tokens(tools->lexer_lst);
-
-// 	if (!tree)
-// 		tree = parse_pipe(&tools->lexer_lst);
-// 	else if (!tree)
-// 		tree = parse_redir(&tools->lexer_lst);
-// 	else if (!tree)
-// 		tree = parse_cmd(&tools->lexer_lst);
-// 	if (!tree)
-// 		return (0);
-// 	tools->tree = tree;
-
-// 	// printf("LL inside parse end:\n");
-// 	// print_tokens(tools->lexer_lst);
-
-// 	return (1);
-// }
