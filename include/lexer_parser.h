@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/03 22:27:37 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/08 14:07:23 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	add_tk(t_lexer **lexer_list, t_lexer *new_token);
 int		ft_one_tk(char c, t_tools *tools);
 int		ft_two_tk(char c1, char c2, t_tools *tools);
 int		check_quotes(char *s);
-size_t ft_strcspn(const char *s, const char *reject);
+size_t	ft_strcspn(const char *s, const char *reject);
 
 /* LEXER */
 int		handle_q_arg(char *s, int start, t_tools *tools);

@@ -26,7 +26,6 @@ static char	*trim_expd_arg(const char *s)
 	size_t	len;
 	char	*trim;
 
-	//	char	*expd;
 	len = ft_strlen(s);
 	if (s[0] == '\'' && s[len - 1] == '\'')
 		return (ft_strndup(s + 1, len - 2));
@@ -48,10 +47,6 @@ static char	*trim_expd_arg(const char *s)
 	return (ft_strdup(s));
 }
 
-/**
- *
- *
- **/
 static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 {
 	t_lexer	*curr;
@@ -78,57 +73,6 @@ static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 	tools->lexer_lst = curr;
 }
 
-// static void	parse_arg(t_ast *cmd_node, t_lexer **tokens)
-// {
-// 	t_lexer	*curr;
-// 	char	*new_str;
-
-// 	curr = *tokens;
-// 	while (curr && (curr->token == T_CMD || curr->token == T_ARG))
-// 	{
-// 		if (curr->token == T_ARG)
-// 		{
-// 			new_str = trim_expd_arg(curr->str);
-// 			if (new_str != curr->str)
-// 			{
-// 				free(curr->str);
-// 				curr->str = new_str;
-// 			}
-// 			else
-// 				free(new_str);
-// 		}
-// 		curr = curr->next;
-// 	}
-// 	// Update the token pointer to the next unprocessed token
-// 	*tokens = curr;
-// }
-
-t_ast	*parse_cmd(t_tools *tools)
-{
-	t_ast	*cmd_node;
-
-	if (!tools->lexer_lst)
-		return (NULL);
-	cmd_node = ast_new();
-	if (!cmd_node)
-		return (NULL);
-	cmd_node->token = tools->lexer_lst->token;
-	cmd_node->str = ft_strdup(tools->lexer_lst->str);
-	if (!cmd_node->str)
-		return (NULL);
-	if (is_builtin(tools->lexer_lst->str))
-	{
-		cmd_node->token = T_CMD;
-		cmd_node->b_cmd = true;
-		printf(" [ Debug: %s b_cmd = true ]\n", cmd_node->str);
-	}
-	// cmd_node->token = tools->lexer_lst->token;
-	// cmd_node->str =ft_strdup(tools->lexer_lst->str);
-	tools->lexer_lst = tools->lexer_lst->next;
-	parse_arg(cmd_node, tools);
-	return (cmd_node);
-}
-
 /*
 parse_cmd
 	Parses a command or argument from the lexer tokens
@@ -142,32 +86,31 @@ If the token is an argument,
 	or quote removals, updates the node's lexer string accordingly.
 returns the created AST node or NULL if memory allocation fails.
  */
-// t_ast	*parse_cmd(t_lexer **tokens)
-// {
-// 	t_ast	*cmd_node;
-// 	char	*new_str;
+t_ast	*parse_cmd(t_tools *tools)
+{
+	t_ast	*cmd_node;
 
-// 	cmd_node = ast_new();
-// 	if (!cmd_node)
-// 		return (NULL);
-// 	cmd_node->lexer = *tokens;
-// 	*tokens = (*tokens)->next;
-// 	if (cmd_node->lexer->token == T_CMD
-// 		&& (is_builtin(cmd_node->lexer->str)))
-// 			cmd_node->b_cmd = true;
-// 	if (cmd_node->lexer->token == T_ARG)
-// 	{
-// 		new_str = trim_expd_arg(cmd_node->lexer->str);
-// 		if (new_str != cmd_node->lexer->str)
-// 		{
-// 			free(cmd_node->lexer->str);
-// 			cmd_node->lexer->str = new_str;
-// 		}
-// 		else
-// 			free(new_str);
-// 	}
-// 	return (cmd_node);
-// }
+	if (!tools->lexer_lst)
+		return (NULL);
+	cmd_node = ast_new();
+	if (!cmd_node)
+		return (NULL);
+	cmd_node->token = tools->lexer_lst->token;
+	cmd_node->str = trim_expd_arg(tools->lexer_lst->str);
+	if (!cmd_node->str)
+		return (NULL);
+	if (is_builtin(tools->lexer_lst->str))
+	{
+		cmd_node->token = T_CMD;
+		cmd_node->b_cmd = true;
+		// printf(" [ Debug: %s b_cmd = true ]\n", cmd_node->str);
+	}
+	// cmd_node->token = tools->lexer_lst->token;
+	// cmd_node->str =ft_strdup(tools->lexer_lst->str);
+	tools->lexer_lst = tools->lexer_lst->next;
+	parse_arg(cmd_node, tools);
+	return (cmd_node);
+}
 
 t_ast	*parse_pipe(t_tools *tools)
 {
@@ -238,39 +181,6 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
 	return (redir_node);
 }
 
-/**
- * parse_redir
-	- Parses command redirections from lexer tokens and builds an AST.
- * @tokens: A pointer to the lexer tokens linked list.
- *
- * Returns the root of the redirection AST, or NULL on failure.
- */
-t_ast	*parse_redir(t_tools *tools)
-{
-	t_ast	*cmd_node;
-	t_lexer	*curr;
-
-	curr = tools->lexer_lst;
-	cmd_node = parse_cmd(tools);
-	if (!cmd_node)
-		return (NULL);
-	while (curr && (token_check(curr->token)))
-	{
-		if (curr->next == NULL)
-		{
-			free_ast(cmd_node);
-			return (NULL);
-		}
-		cmd_node = make_redir(cmd_node, curr, curr->next->str);
-		if (!cmd_node)
-			return (NULL);
-		curr = curr->next->next;
-	}
-	tools->lexer_lst = curr;
-	return (cmd_node);
-}
-
-// TODO: refactor ft has too many lines
 /*
  * parse_redir
 	- Parses command redirections from the lexer tokens and constructs
@@ -287,50 +197,27 @@ t_ast	*parse_redir(t_tools *tools)
  * root of the redirection AST or NULL if memory allocation fails. If any step
  * fails, it frees the previously allocated nodes to avoid memory leaks.
  */
+t_ast	*parse_redir(t_tools *tools)
+{
+	t_ast	*cmd_node;
+	t_lexer	*curr;
 
-// t_ast	*parse_redir(t_lexer **tokens)
-// {
-// 	t_ast	*cmd_node;
-// 	t_ast	*redir_node;
-
-// 	cmd_node = parse_cmd(tokens);
-// 	while (*tokens && ((*tokens)->token == T_REDIR_IN
-// (*tokens)->token ==
-// 	T_REDIR_OUT
-// 		|| (*tokens)->token == T_APPEND
-// || (*tokens)->token == T_HEREDOC))
-// 	{
-// 		redir_node = ast_new();
-// 		if (!redir_node)
-// 		{
-// 			free_ast(cmd_node);
-// 			return (NULL);
-// 		}
-// 		redir_node->lexer = *tokens;
-// 		*tokens = (*tokens)->next;
-// 		redir_node->left = cmd_node;
-// 		redir_node->file = ft_strdup((*tokens)->str);
-// 		if (!redir_node->file)
-// 		{
-// 			free_ast(redir_node);
-// 			free_ast(cmd_node);
-// 			return (NULL);
-// 		}
-// 		*tokens = (*tokens)->next;
-// 		cmd_node = redir_node;
-// 	}
-// 	return (cmd_node);
-// }
-
-// t_tokens	token_check(t_tokens tk)
-// {
-// 	if (tk == T_REDIR_IN)
-// 		return (T_REDIR_IN);
-// 	if (tk == T_REDIR_OUT)
-// 		return (T_REDIR_OUT);
-// 	if (tk == T_APPEND)
-// 		return (T_APPEND);
-// 	if (tk == T_HEREDOC)
-// 		return (T_HEREDOC);
-// 	return (T_INVALID);
-// }
+	cmd_node = parse_cmd(tools);
+	if (!cmd_node)
+		return (NULL);
+	curr = tools->lexer_lst;
+	while (curr && (token_check(curr->token)))
+	{
+		if (curr->next == NULL)
+		{
+			free_ast(cmd_node);
+			return (NULL);
+		}
+		cmd_node = make_redir(cmd_node, curr, curr->next->str);
+		if (!cmd_node)
+			return (NULL);
+		curr = curr->next->next;
+	}
+	tools->lexer_lst = curr;
+	return (cmd_node);
+}

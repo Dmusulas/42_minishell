@@ -68,31 +68,5 @@ int	parse_input(t_tools *tools)
 	if (!tree)
 		return (0);
 	tools->tree = tree;
-	print_ast(tree, 1);
 	return (1);
 }
-
-// int	parse_input(t_tools *tools)
-// {
-// 	t_ast	*tree;
-
-// 	tree = NULL;
-
-// 	// printf("LL inside parse start:\n");
-// 	// print_tokens(tools->lexer_lst);
-
-// 	if (!tree)
-// 		tree = parse_pipe(&tools->lexer_lst);
-// 	else if (!tree)
-// 		tree = parse_redir(&tools->lexer_lst);
-// 	else if (!tree)
-// 		tree = parse_cmd(&tools->lexer_lst);
-// 	if (!tree)
-// 		return (0);
-// 	tools->tree = tree;
-
-// 	// printf("LL inside parse end:\n");
-// 	// print_tokens(tools->lexer_lst);
-
-// 	return (1);
-// }

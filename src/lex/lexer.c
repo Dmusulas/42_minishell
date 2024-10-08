@@ -14,40 +14,6 @@
 
 // TODO: add checks for syntax errors near tokens
 
-int handle_q_arg(char *s, int start, t_tools *tools)
-{
-    int     i;
-    char    quote;
-    char    *arg;
-
-    i = start;
-    quote = s[i];
-    i++;
-    while (s[i] && s[i] != quote)
-    {
-        if (quote == '"' && s[i] == '$')
-        {
-            // TODO: Handle variable expansion here
-            i++;
-        }
-        else
-            i++;
-    }
-    if (s[i] != quote)
-    {
-        ft_putstr_fd("minishell: unclosed quote\n", STDERR_FILENO);
-        return (0);
-    }
-    arg = ft_substr(s, start + 1, i - start - 1);
-    if (arg == NULL)
-    {
-        perror("ft_substr");
-        return (0);
-    }
-    add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
-    return (i - start + 1);
-}
-
 static int	check_tk(char tk)
 {
 	if (tk == '|' || tk == '<' || tk == '>')
@@ -55,6 +21,40 @@ static int	check_tk(char tk)
 	else
 		return (0);
 }
+
+int	handle_q_arg(char *s, int start, t_tools *tools)
+{
+	int		i;
+	char	quote;
+	char	*arg;
+
+	i = start;
+	quote = s[i];
+	i++;
+	while (s[i] && s[i] != quote)
+	{
+		if (quote == '"' && s[i] == '$')
+		{
+			i++;
+		}
+		else
+			i++;
+	}
+	if (s[i] != quote)
+	{
+		ft_putstr_fd("minishell: unclosed quote\n", STDERR_FILENO);
+		return (1);
+	}
+	arg = ft_substr(s, start + 1, i - start - 1);
+	if (arg == NULL)
+	{
+		perror("ft_substr");
+		return (1);
+	}
+	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
+	return (i - start + 1);
+}
+
 /*
 arg = ft_substr(s, start + 1, i - start - 1)
 	Extract the argument, excluding the quotes
@@ -144,9 +144,7 @@ int	tokenize_input(t_tools *tools)
 			is_cmd = false;
 		}
 		else
-		{
 			i += handle_arg(tools->args, i, tools);
-		}
 	}
 	return (1);
 }

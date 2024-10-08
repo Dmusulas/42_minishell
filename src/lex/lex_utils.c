@@ -14,36 +14,31 @@
 #include "libft.h"
 
 /*
- * This function calculates the length of the initial segment of string `s` which
- * contains only characters not in string `reject`. It iterates through each character
- * in `s` and checks if it is present in `reject`. If a character from `s` is found in
- * `reject`, the function returns the index of that character in `s`. If no characters
- * from `s` are found in `reject`, the function returns the length of `s`.
- * 
- * This function is necessary for tokenizing input strings in the context of a shell
- * parser. It helps to identify the start of a token by finding the first character
- * that is not part of the current token. For example, in a string like "ls -l", it
- * would return the index of the first space character, indicating the end of the
- * command token "ls".
+ * This function calculates the length of the initial segment of string `s`
+ * that contains no characters from string `reject`. It checks each character
+ * in `s` to see if it appears in `reject`. If a match is found, it returns
+ * the index of that character in `s`. If no match is found, it returns the
+ * length of `s`. This function helps tokenize input strings in a shell parser
+ * by identifying the first character that is not part of the current token.
  */
-size_t ft_strcspn(const char *s, const char *reject)
+size_t	ft_strcspn(const char *s, const char *reject)
 {
-    size_t i;
-    size_t j;
+	size_t	i;
+	size_t	j;
 
-    i = 0;
-    while (s[i])
-    {
-        j = 0;
-        while (reject[j])
-        {
-            if (s[i] == reject[j])
-                return (i);
-            j++;
-        }
-        i++;
-    }
-    return (i);
+	i = 0;
+	while (s[i])
+	{
+		j = 0;
+		while (reject[j])
+		{
+			if (s[i] == reject[j])
+				return (i);
+			j++;
+		}
+		i++;
+	}
+	return (i);
 }
 
 t_lexer	*make_tk(char *str, t_tokens token)
@@ -103,24 +98,28 @@ int	ft_two_tk(char c1, char c2, t_tools *tools)
 	return (0);
 }
 
+/*
+ * This function checks how many double and sinlge quotes are in command.
+ * @returns 0 if there are unclosed quotes or 1 if there are not
+ */
 int	check_quotes(char *s)
 {
 	int	i;
-	int	q_q;
+	int	double_q;
 	int	q;
 
-	q_q = 0;
+	double_q = 0;
 	q = 0;
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] == 34)
-			q_q += 1;
-		if (s[i] == 39)
+		if (s[i] == '"')
+			double_q += 1;
+		if (s[i] == '\'')
 			q += 1;
 		i++;
 	}
-	if ((q_q > 0 && q_q % 2 != 0) || (q > 0 && q % 2 != 0))
+	if ((double_q > 0 && double_q % 2 != 0) || (q > 0 && q % 2 != 0))
 		return (0);
 	else
 		return (1);
