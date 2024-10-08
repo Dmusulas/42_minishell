@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/08 16:31:56 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/08 21:54:22 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,11 @@ int	reset_tools(t_tools *tools)
 	init_tools(tools);
 	mini_loop(tools);
 	return (0);
+	// function is clearing the environment variables after each command execution. 
+	// modify function to preserve the environment variables.
+	// -> Store copy of environment variables before cleaning.
+	// -> Only clean command-specific data in clean_tools.
+	// -> Restore environment variables after cleaning.
 }
 
 /*

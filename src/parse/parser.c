@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:46 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/03 22:28:31 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/08 21:55:16 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,11 @@
 		return expanded str
 	otherwise just return duplicate of src str
 */
-static char	*trim_expd_arg(const char *s)
+static char	*trim_expd_arg(const char *s, t_tools *tools)
 {
 	size_t	len;
 	char	*trim;
+	char	*expd;
 
 	len = ft_strlen(s);
 	if (s[0] == '\'' && s[len - 1] == '\'')
@@ -34,17 +35,11 @@ static char	*trim_expd_arg(const char *s)
 		trim = ft_strndup(s + 1, len - 2);
 		if (!trim)
 			return (NULL);
-		// if (ft_strchr(trim , '$'))
-		// {
-		// 	expd = expand_var(trim);
-		// 	free(trim);
-		// 	return (expd);
-		// }
-		return (trim);
+		expd = expand_var(trim, tools);
+		free(trim);
+		return (expd);
 	}
-	// if (ft_str(s, '$'))
-	// 	return (expand_var(s));
-	return (ft_strdup(s));
+	return (expand_var(s, tools));
 }
 
 static void	parse_arg(t_ast *cmd_node, t_tools *tools)
@@ -62,7 +57,7 @@ static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 		if (!arg_nd)
 			return ;
 		arg_nd->token = curr->token;
-		arg_nd->str = trim_expd_arg(curr->str);
+		arg_nd->str = trim_expd_arg(curr->str, tools);
 		// Attach the argument node to the right of the last node (cmd or previous arg)
 		prev_nd->right = arg_nd;
 		prev_nd = arg_nd;
@@ -96,7 +91,7 @@ t_ast	*parse_cmd(t_tools *tools)
 	if (!cmd_node)
 		return (NULL);
 	cmd_node->token = tools->lexer_lst->token;
-	cmd_node->str = trim_expd_arg(tools->lexer_lst->str);
+	cmd_node->str = trim_expd_arg(tools->lexer_lst->str, tools);
 	if (!cmd_node->str)
 		return (NULL);
 	if (is_builtin(tools->lexer_lst->str))
