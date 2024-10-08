@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/08 16:35:28 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/08 20:33:40 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,26 +90,31 @@ void	ft_cd(char *path, t_tools *tools)
 	char	*cwd;
 	char	*full_path;
 
-	if (path)
+	if (!path)
 	{
-		if (path[0] == '/')
-		{
-			if (chdir(path) == -1)
-				perror("cd");
-		}
-		else
-		{
-            // Path is relative, prepend the current working directory
-			cwd = getcwd(NULL, 0);
-			full_path = ft_strjoin(cwd, path);
-			free(cwd);
-			if (chdir(full_path) == -1)
-				perror("cd");
-			free(full_path);
-		}
+		printf("cd: expected argument\n");
+		return;
+	}
+	if (path[0] == '/')
+	{
+		if (chdir(path) == -1)
+			printf("cd: %s: No such file or directory\n", path);
 	}
 	else
-		printf("cd: expected argument\n");
+	{
+		cwd = getcwd(NULL, 0);
+		if (!cwd)
+		{
+			perror("cd");
+			return;
+		}
+		full_path = ft_strjoin(cwd, "/");
+		full_path = ft_strjoin(full_path, path);
+		free(cwd);
+		if (chdir(full_path) == -1)
+			printf("cd: %s: No such file or directory\n", path);
+		free(full_path);
+	}
 	if (tools->debug_mode)
 		printf("[DEBUG]: ft_cd() executed with path: %s\n", path);
 }
@@ -198,7 +203,7 @@ void	ft_exit(t_tools *tools)
 static void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 {
 	if (ft_strcmp(cmd_node->str, "echo") == 0)
-		ft_echo(cmd_node->right, tools);
+		ft_echo(cmd_node, tools);
 	else if (ft_strcmp(cmd_node->str, "cd") == 0)
 	{
 		if (cmd_node->right)
