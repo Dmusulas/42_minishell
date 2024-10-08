@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/08 20:33:40 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/08 20:45:09 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	ft_cd(char *path, t_tools *tools)
 	if (!path)
 	{
 		printf("cd: expected argument\n");
-		return;
+		return ;
 	}
 	if (path[0] == '/')
 	{
@@ -106,7 +106,7 @@ void	ft_cd(char *path, t_tools *tools)
 		if (!cwd)
 		{
 			perror("cd");
-			return;
+			return ;
 		}
 		full_path = ft_strjoin(cwd, "/");
 		full_path = ft_strjoin(full_path, path);
@@ -121,7 +121,7 @@ void	ft_cd(char *path, t_tools *tools)
 
 void	ft_echo(t_ast *cmd_node, t_tools *tools)
 {
- 	t_ast	*current;
+	t_ast	*current;
 	int		n_line;
 
 	current = cmd_node->right;
@@ -155,7 +155,7 @@ void	ft_export(t_ast *cmd_node, t_tools *tools)
 	{
         // If no arguments, print the environment
 		ft_env(tools);
-		return;
+		return ;
 	}
 	while (current)
 	{
@@ -249,4 +249,3 @@ void	execute_ast(t_tools *tools)
 	if (tools->tree)
 		execute_command(tools->tree, tools);
 }
-
