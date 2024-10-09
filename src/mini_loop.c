@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/01 22:22:53 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/08 16:31:56 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ int	mini_loop(t_tools *tools)
 		return (reset_tools(tools));
 	add_history(tools->args);
 	handle_input(tools);
+	execute_ast(tools); // Dummy execution
 	// if (!execute(tools))
 	// 	return (ft_error(ERR_PAR, tools));
 	reset_tools(tools);

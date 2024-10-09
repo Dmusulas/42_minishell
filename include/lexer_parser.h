@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/08 14:07:23 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/08 16:31:28 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ bool	token_check(t_tokens tk);
 int		is_builtin(const char *cmd);
 t_ast	*ast_new(void);
 int		parse_input(t_tools *tools);
-void	execute_builtins(t_tools *tools);
+void	execute_ast(t_tools *tools);
 
 /* PARSER */
 // char	*trim_expd_arg(const char *s);
