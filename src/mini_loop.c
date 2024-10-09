@@ -13,6 +13,7 @@
 // valgrind --leak-check=full --show-leak-kinds=all ./minishell
 
 // #include "exec.h"
+#include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
 #include <stdlib.h>
@@ -40,7 +41,7 @@ int	reset_tools(t_tools *tools)
 	init_tools(tools);
 	mini_loop(tools);
 	return (0);
-	// function is clearing the environment variables after each command execution. 
+	// function is clearing the environment variables after each command execution.
 	// modify function to preserve the environment variables.
 	// -> Store copy of environment variables before cleaning.
 	// -> Only clean command-specific data in clean_tools.
@@ -74,7 +75,7 @@ int	mini_loop(t_tools *tools)
 		return (reset_tools(tools));
 	add_history(tools->args);
 	handle_input(tools);
-	execute_ast(tools); // Dummy execution
+	execute_command(tools->tree, tools);
 	// if (!execute(tools))
 	// 	return (ft_error(ERR_PAR, tools));
 	reset_tools(tools);

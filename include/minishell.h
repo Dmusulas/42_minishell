@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/03 17:54:16 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/09 16:55:55 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ void	init_signals(void);
 
 /* UTILS */
 void	free_2darray(char **array);
+char	**list_to_array(t_list *list);
 /* DEBUG */
 
 void	print_tokens(t_lexer *lexer_list);
@@ -77,4 +78,7 @@ void	print_ast_node(t_ast *node);
 void	print_ast(t_ast *tree, int depth);
 void	print_linkedlist(t_list *lst);
 void	test_envp(t_list *envp);
+
+/* BUILTINS */
+void	execute_builtin(t_ast *cmd_node, t_tools *tools);
 #endif

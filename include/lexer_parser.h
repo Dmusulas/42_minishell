@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/08 21:55:55 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/09 16:47:19 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ void	execute_ast(t_tools *tools);
 t_ast	*parse_cmd(t_tools *tools);
 t_ast	*parse_pipe(t_tools *tools);
 t_ast	*parse_redir(t_tools *tools);
+char	*get_env_value(const char *var_name, t_tools *tools);
 
 /* EXPAND */
 char	*expand_var(const char *s, t_tools *tools);
