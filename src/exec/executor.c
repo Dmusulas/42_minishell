@@ -12,96 +12,134 @@
 
 #include "exec.h"
 #include "lexer_parser.h"
+#include "libft.h"
+#include "minishell.h"
 
-/**
- * Redirects the old file descriptor to the new file descriptor
- * and closes the old one.
- *
- * @param old_fd The file descriptor to be redirected.
- * @param new_fd The file descriptor to redirect to.
- */
-static void	redirect_fds(int old_fd, int new_fd)
-{
-	dup2(old_fd, new_fd);
-	close(old_fd);
-}
-
-/**
- * Sets up the pipes and redirects file descriptors for a specific
- * command in the pipeline.
- *
-
- * @param exec A pointer to a t_exec structure containing
- * pipeline information.
- * @param fd An array of two integers representing the pipe file descriptors.
- * @param i The index of the current command in the pipeline.
- */
-static void	setup_pipes(t_exec *exec, int *fd, int i)
-{
-	if (i == 0)
-		redirect_fds(exec->in_fd, STDIN_FILENO);
-	if (i == exec->cmd_count - 1)
-		redirect_fds(exec->out_fd, STDOUT_FILENO);
-	if (i < exec->cmd_count - 1)
-	{
-		close(fd[0]);
-		redirect_fds(fd[1], STDOUT_FILENO);
-	}
-}
-
-/**
- * Executes a command using execve, replacing the current process
- * image with a new process image.
- *
-
- * @param exec A pointer to a t_exec structure containing
- * pipeline information.
- * @param envp An array of environment variables.
- * @param i The index of the command to execute in the pipeline.
- */
-void	exec_cmd(t_ast *node, char **envp)
-{
-	if (!access(node->str, X_OK))
-		execve(node->str, &node->left->str, envp);
-	msg_error("Execve failed", NULL);
-	exit(EXIT_FAILURE);
-}
-
-/**
- * Handles the creation and setup of a child process for executing
- * a command in the pipeline.
- *
-
- * @param exec A pointer to a t_exec structure containing
- * pipeline information.
- * @param envp An array of environment variables.
- * @param i The index of the current command in the pipeline.
- */
-static void	child_process(t_exec *exec, char **envp, int i, int *fd_in)
+static void	handle_pipe(t_ast *node, t_tools *tools)
 {
 	int		fd[2];
 	pid_t	pid;
 
-	if (i < exec->cmd_count - 1 && pipe(fd) == -1)
-		msg_error(ERR_PIPE, exec);
+	if (pipe(fd) == -1)
+		msg_error(ERR_PIPE);
 	pid = fork();
 	if (pid == -1)
-		msg_error(ERR_FORK, exec);
+		msg_error(ERR_FORK);
 	else if (pid == 0)
 	{
-		if (i > 0)
-			redirect_fds(*fd_in, STDIN_FILENO);
-		setup_pipes(exec, fd, i);
-		execute_cmd(exec, envp, i);
+		close(fd[0]);
+		dup2(fd[1], STDOUT_FILENO);
+		close(fd[1]);
+		execute_command(node->left, tools);
+		exit(0);
 	}
 	else
 	{
-		if (i > 0)
-			close(*fd_in);
-		if (i < exec->cmd_count - 1)
-		{
-			close(fd[1]);
-			*fd_in = fd[0];
-		}
+		wait(NULL);
+		close(fd[1]);
+		dup2(fd[0], STDIN_FILENO);
+		close(fd[0]);
+		execute_command(node->right, tools);
 	}
+}
+
+static void	handle_redirect(t_ast *node, t_tools *tools)
+{
+	if (node->token == T_REDIR_IN)
+		set_infile(node);
+	else if (node->token == T_REDIR_OUT)
+		set_outfile(node, false);
+	else if (node->token == T_APPEND)
+		set_outfile(node, true);
+	execute_command(node->left, tools);
+}
+
+static void	handle_command(t_ast *node, t_tools *tools)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Fork failed");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		if (node->b_cmd)
+			execute_builtin(node, tools);
+		else
+			exec_cmd(node, list_to_array(tools->envp));
+		exit(0);
+	}
+	else
+	{
+		wait(NULL);
+	}
+}
+
+void	execute_command(t_ast *node, t_tools *tools)
+{
+	if (!node)
+		return ;
+	if (node->token == T_PIPE)
+		handle_pipe(node, tools);
+	else if (node->token == T_REDIR_IN || node->token == T_REDIR_OUT)
+		handle_redirect(node, tools);
+	else if (node->token == T_CMD)
+		handle_command(node, tools);
+}
+
+static char	**parse_cmd_args(char *cmd_path, t_ast *node)
+{
+	int		arg_count;
+	t_ast	*current;
+	char	**args;
+
+	arg_count = 1;
+	current = node->right;
+	while (current)
+	{
+		arg_count++;
+		current = current->right;
+	}
+	args = (char **)malloc(sizeof(char *) * (arg_count + 1));
+	if (!args)
+		return (NULL);
+	args[arg_count] = NULL;
+	args[0] = ft_strdup(cmd_path);
+	current = node->right;
+	arg_count = 1;
+	while (current != NULL)
+	{
+		args[arg_count] = ft_strdup(current->str);
+		current = current->right;
+		arg_count++;
+	}
+	return (args);
+}
+
+void	exec_cmd(t_ast *node, char **envp)
+{
+	char	**cmd_args;
+	char	*cmd_path;
+	char	*path_var;
+
+	path_var = find_path(envp);
+	if (!path_var)
+	{
+		perror("PATH variable not found");
+		exit(EXIT_FAILURE);
+	}
+	cmd_path = find_cmd(path_var, node->str);
+	free(path_var);
+	if (!cmd_path || !*cmd_path)
+	{
+		ft_printf("%s: command not found\n", node->str);
+		free(cmd_path);
+	}
+	cmd_args = parse_cmd_args(cmd_path, node);
+	ft_printf("Command Path: %s\n", cmd_path);
+	if (execve(cmd_path, cmd_args, envp) == -1)
+		perror("Execve failed");
 }

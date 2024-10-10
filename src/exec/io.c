@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "exec.h"
+#include "lexer_parser.h"
 #include "libft.h"
 
 /**
@@ -21,14 +22,14 @@
  * @param exec A pointer to a t_exec structure containing pipeline
  * information.
  */
-void	here_doc(char *limiter, t_exec *exec)
+void	here_doc(char *limiter, t_ast *node)
 {
 	char	*line;
 	int		tmp_file_fd;
 
 	tmp_file_fd = open(TEMP_FILE, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (tmp_file_fd == -1)
-		msg_error("Failed to open temporary file", exec);
+		msg_error("Failed to open temporary file");
 	while (1)
 	{
 		line = get_next_line(0);
@@ -42,8 +43,7 @@ void	here_doc(char *limiter, t_exec *exec)
 		free(line);
 	}
 	close(tmp_file_fd);
-	exec->in_fd = open(TEMP_FILE, O_RDONLY);
-	unlink(TEMP_FILE);
+	node->file = TEMP_FILE;
 }
 
 // TODO: Change so it handles multiple here_docs
@@ -54,22 +54,21 @@ void	here_doc(char *limiter, t_exec *exec)
  * @param exec A pointer to a t_exec structure containing pipeline
  * information.
  */
-void	set_infile(char **argv, t_exec *exec)
+void	set_infile(t_ast *node)
 {
-	if (!ft_strncmp("here_doc", argv[1], 9))
-	{
-		here_doc(argv[2], exec);
-		exec->here_doc = true;
-		exec->cmd_count -= 1;
-		exec->cmd_start_position += 1;
-	}
+	int	fd;
+
+	if (node->token == T_HEREDOC)
+		here_doc(node->file, node);
 	else
 	{
-		if (access(argv[1], R_OK) == -1)
-			msg_error(ERR_ACCESS, exec);
-		exec->in_fd = open(argv[1], O_RDONLY);
-		if (exec->in_fd < 0)
-			msg_error(ERR_INFILE, exec);
+		if (access(node->file, R_OK) == -1)
+			msg_error("Input file access error");
+		fd = open(node->file, O_RDONLY);
+		if (fd < 0)
+			msg_error("Failed to open input file");
+		dup2(fd, STDIN_FILENO);
+		close(fd);
 	}
 }
 
@@ -81,12 +80,16 @@ void	set_infile(char **argv, t_exec *exec)
  * @param exec A pointer to a t_exec structure
  * containing pipeline information.
  */
-void	set_outfile(char *argv, t_exec *exec)
+void	set_outfile(t_ast *node, bool append_mode)
 {
-	if (exec->here_doc)
-		exec->out_fd = open(argv, O_WRONLY | O_CREAT | O_APPEND, 0644);
+	int	fd;
+
+	if (append_mode)
+		fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
 	else
-		exec->out_fd = open(argv, O_CREAT | O_RDWR | O_TRUNC, 0644);
-	if (exec->out_fd < 0)
-		msg_error(ERR_OUTFILE, exec);
+		fd = open(node->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (fd < 0)
+		msg_error("Failed to open output file");
+	dup2(fd, STDOUT_FILENO); // Redirect stdout to the output file
+	close(fd);
 }

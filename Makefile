@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/03 22:37:13 by pmolzer          ###   ########.fr        #
+#    Updated: 2024/10/10 17:46:20 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -53,7 +53,11 @@ MINISHELL_SRCS	= main.c \
 				  parse/parser.c\
 				  builtins/builtins.c\
 				  utils/debug.c\
-				  utils/arrays.c
+				  utils/arrays.c\
+				  exec/err.c\
+				  exec/executor.c\
+				  exec/io.c\
+				  exec/path_finder.c\
 
 MINISHELL_OBJS	= $(MINISHELL_SRCS:%.c=obj/%.o)
 OBJ_DIRS		= $(sort $(dir $(MINISHELL_OBJS)))

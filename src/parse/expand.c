@@ -19,7 +19,7 @@
 
 // append_var
 
-static char	*get_env_value(const char *var_name, t_tools *tools)
+char	*get_env_value(const char *var_name, t_tools *tools)
 {
 	t_list	*env_var;
 	size_t	var_len;
@@ -68,8 +68,8 @@ static char	*append_char(char *str, char c)
 		ft_strlcpy(temp_str, str, len + 1); // Copy the original string
 		free(str);
 	}
-	if (len + 1 < len + 2) // Check if we can safely append the character
-		temp_str[len] = c; // Append the new character
+	if (len + 1 < len + 2)    // Check if we can safely append the character
+		temp_str[len] = c;    // Append the new character
 	temp_str[len + 1] = '\0'; // Null-terminate the new string
 	return (temp_str);
 }
@@ -106,8 +106,8 @@ char	*expand_var(const char *s, t_tools *tools)
 	i = 0;
 	while (s[i])
 	{
-		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i
-						+ 1]) || s[i + 1] == '_'))
+		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i + 1]) || s[i
+				+ 1] == '_'))
 			temp = expand_single_var(s, &i, tools);
 		else
 			temp = append_char(ft_strdup(""), s[i]);

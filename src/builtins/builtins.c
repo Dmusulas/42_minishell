@@ -44,8 +44,8 @@ static void	remove_env_var(t_list **envp, const char *var_name)
 	{
 		env_var = (char *)current->content;
 		equals_pos = ft_strchr(env_var, '=');
-		if (equals_pos && ft_strncmp(env_var, 
-				var_name, equals_pos - env_var) == 0)
+		if (equals_pos && ft_strncmp(env_var, var_name, equals_pos
+				- env_var) == 0)
 		{
 			if (prev)
 				prev->next = current->next;
@@ -153,21 +153,21 @@ void	ft_export(t_ast *cmd_node, t_tools *tools)
 	current = cmd_node->right;
 	if (!current)
 	{
-        // If no arguments, print the environment
+		// If no arguments, print the environment
 		ft_env(tools);
 		return ;
 	}
 	while (current)
 	{
-        // Process each argument
+		// Process each argument
 		arg = current->str;
 		equals_pos = ft_strchr(arg, '=');
 		if (equals_pos)
 		{
 			// Valid assignment
-			*equals_pos = '\0';  // Temporarily split the string
+			*equals_pos = '\0'; // Temporarily split the string
 			update_or_add_envp(&tools->envp, arg);
-			*equals_pos = '=';  // Restore the string
+			*equals_pos = '='; // Restore the string
 		}
 		else
 		{
@@ -200,7 +200,7 @@ void	ft_exit(t_tools *tools)
 	exit(0);
 }
 
-static void	execute_builtin(t_ast *cmd_node, t_tools *tools)
+void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 {
 	if (ft_strcmp(cmd_node->str, "echo") == 0)
 		ft_echo(cmd_node, tools);
@@ -221,31 +221,4 @@ static void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 		ft_env(tools);
 	else if (ft_strcmp(cmd_node->str, "exit") == 0)
 		ft_exit(tools);
-}
-
-void	execute_command(t_ast *node, t_tools *tools)
-{
-	if (node->token == T_PIPE)
-	{
-		// Handle pipe execution
-		execute_command(node->left, tools);
-		execute_command(node->right, tools);
-	}
-	else if (node->token == T_CMD)
-	{
-		printf("[DEBUG]: executing command\n");
-		if (node->b_cmd)
-			execute_builtin(node, tools);
-		else
-		{
-			// Execute external command
-		}
-	}
-	// Handle other token types as needed
-}
-
-void	execute_ast(t_tools *tools)
-{
-	if (tools->tree)
-		execute_command(tools->tree, tools);
 }

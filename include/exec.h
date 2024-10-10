@@ -6,13 +6,16 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 14:56:41 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:45:24 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// TODO: Rewrite errors messages
 
 #ifndef EXEC_H
 # define EXEC_H
 
+# include "lexer_parser.h"
 # include <stdbool.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -27,6 +30,7 @@
 # define ERR_PIPE "Pipe creation error"
 # define ERR_FORK "Fork creation error"
 # define ERR_EXEC "Child execution error"
+# define ERR_FILE "Cannot open file"
 # define TEMP_FILE "/tmp/here_doc_12342"
 
 typedef struct s_exec
@@ -41,14 +45,12 @@ typedef struct s_exec
 	int		cmd_start_position;
 }	t_exec;
 
-int		msg_error(char *err, t_exec *exec);
-t_exec	*init_exec(int argc);
-void	free_exec(t_exec *exec);
-void	set_outfile(char *argv, t_exec *exec);
-void	set_infile(char **argv, t_exec *exec);
-char	**parse_cmds(t_exec *exec, char **argv, char **envp);
-char	***parse_args(t_exec *exec, char **argv);
-void	ft_exec(t_exec *exec, char **envp);
-void	free_2darray(char **array);
+int		msg_error(char *err);
+void	set_outfile(t_ast *node, bool append_mode);
+void	set_infile(t_ast *node);
+void	execute_command(t_ast *node, t_tools *tools);
+void	exec_cmd(t_ast *node, char **envp);
+char	*find_cmd(char *paths, char *cmd);
+char	*find_path(char **envp);
 
 #endif

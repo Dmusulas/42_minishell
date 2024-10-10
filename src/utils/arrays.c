@@ -54,3 +54,38 @@ char	**ft_arrdup(char **arr)
 	}
 	return (dup);
 }
+
+void	fill_array(t_list *node, char **array, int *index)
+{
+	if (!node)
+	{
+		array[*index] = NULL;
+		return ;
+	}
+	array[*index] = node->content;
+	(*index)++;
+	fill_array(node->next, array, index);
+}
+
+// Function to convert linked list to 2D array
+char	**list_to_array(t_list *list)
+{
+	t_list	*current;
+	int		count;
+	int		index;
+	char	**envp_array;
+
+	current = list;
+	count = 0;
+	while (current)
+	{
+		count++;
+		current = current->next;
+	}
+	envp_array = malloc((count + 1) * sizeof(char *));
+	if (!envp_array)
+		return (NULL);
+	index = 0;
+	fill_array(list, envp_array, &index);
+	return (envp_array);
+}
