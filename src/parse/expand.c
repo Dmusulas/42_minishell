@@ -6,46 +6,30 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:24:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/08 22:18:38 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/10 18:02:08 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
 
-// TODO: duplicate envp in array/list
-
-// get_var from tools->envp/path
-
-// append_var
-
 static char	*get_env_value(const char *var_name, t_tools *tools)
 {
-	t_list	*env_var;
-	size_t	var_len;
-	char	*env_str;
+	char	*value;
 
-	env_var = tools->envp;
-	var_len = ft_strlen(var_name);
+	(void)tools; // We don't need tools anymore for this function
+	value = getenv(var_name);
 	if (tools->debug_mode == true)
-		printf("[DEBUG] Searching for env var: %s\n", var_name);
-	while (env_var)
 	{
-		env_str = (char *)env_var->content;
-		if (tools->debug_mode == true)
-			printf("[DEBUG] Checking env var: %s\n", env_str);
-		if (ft_strncmp(env_str, var_name, var_len) == 0
-			&& env_str[var_len] == '=')
-		{
-			if (tools->debug_mode == true)
-				printf("[DEBUG] Found env var: %s\n", env_str);
-			return (env_str + var_len + 1);
-		}
-		env_var = env_var->next;
+		if (value)
+			printf("[DEBUG] Found env var %s=%s\n", var_name, value);
+		else
+			printf("[DEBUG] Env var not found: %s\n", var_name);
 	}
-	if (tools->debug_mode == true)
-		printf("[DEBUG] Env var not found: %s\n", var_name);
-	return (NULL);
+	if (value)
+		return (ft_strdup(value));
+	else
+		return (ft_strdup(""));
 }
 
 static char	*append_char(char *str, char c)

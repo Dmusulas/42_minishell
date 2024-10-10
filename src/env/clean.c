@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   clean.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:29:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 17:29:05 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/10 16:35:11 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 #include "minishell.h"
 
-static void	delete_func(void *content)
+/* static void	delete_func(void *content)
 {
 	char	*str;
 
@@ -22,9 +22,4 @@ static void	delete_func(void *content)
 		return ;
 	str = NULL;
 	free(str);
-}
-
-void	delete_duplicated_envp(t_tools *tools)
-{
-	ft_lstclear(&tools->envp, delete_func);
-}
+} */

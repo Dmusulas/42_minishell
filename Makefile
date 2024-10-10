@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/03 22:37:13 by pmolzer          ###   ########.fr        #
+#    Updated: 2024/10/10 18:05:22 by pmolzer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -43,7 +43,6 @@ MINISHELL_SRCS	= main.c \
 				  mini_loop.c \
 				  clean_up.c \
 				  err_msg.c \
-				  env/dup_env.c\
 				  env/clean.c\
 				  lex/lexer.c \
 				  lex/lex_utils.c \

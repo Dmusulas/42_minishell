@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   debug.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:20 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:00:20 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/10 18:13:05 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,4 @@ void	print_content(void *content)
 void	print_linkedlist(t_list *lst)
 {
 	ft_lstiter(lst, print_content);
-}
-
-void	test_envp(t_list *envp)
-{
-	update_or_add_envp(&envp, "AAAA=TOP");
-	update_or_add_envp(&envp, "COLORTERM=tEST");
-	update_or_add_envp(&envp, "colorterm=tEST");
-	update_or_add_envp(&envp, "val=hehe");
-	update_or_add_envp(&envp, "___MEH=bot");
-	print_linkedlist(envp);
 }

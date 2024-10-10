@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:56 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:00:56 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/10 16:37:08 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,5 @@ void	clean_tools(t_tools *tools)
 		free_ast(tools->tree);
 	if (tools->lexer_lst != NULL)
 		clear_tokens(&tools->lexer_lst);
-	if (tools->envp != NULL)
-		delete_duplicated_envp(tools);
 	tools->p_redir = NULL;
 }
