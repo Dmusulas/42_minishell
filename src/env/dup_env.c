@@ -48,7 +48,7 @@ int	duplicate_env(t_tools *tools)
  * @param b Pointer to the second environment variable string.
  * @return A negative, 0, or positive value based on lexicographical comparison.
  */
-static int	cmp_envp(void *a, void *b)
+int	cmp_envp(void *a, void *b)
 {
 	char	*env1;
 	char	*env2;

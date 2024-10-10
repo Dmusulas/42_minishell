@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/09 16:55:55 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:37:26 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	init_signals(void);
 void	delete_duplicated_envp(t_tools *tools);
 int		duplicate_env(t_tools *tools);
 int		update_or_add_envp(t_list **lst, const char *new_envp);
+int		cmp_envp(void *a, void *b);
 
 /* MINI LOOP */
 int		reset_loop(t_tools *tools);

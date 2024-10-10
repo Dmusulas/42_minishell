@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/09 21:26:26 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/10 17:45:24 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,5 +50,7 @@ void	set_outfile(t_ast *node, bool append_mode);
 void	set_infile(t_ast *node);
 void	execute_command(t_ast *node, t_tools *tools);
 void	exec_cmd(t_ast *node, char **envp);
+char	*find_cmd(char *paths, char *cmd);
+char	*find_path(char **envp);
 
 #endif

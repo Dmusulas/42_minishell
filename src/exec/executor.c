@@ -12,6 +12,7 @@
 
 #include "exec.h"
 #include "lexer_parser.h"
+#include "libft.h"
 #include "minishell.h"
 
 static void	handle_pipe(t_ast *node, t_tools *tools)
@@ -55,10 +56,26 @@ static void	handle_redirect(t_ast *node, t_tools *tools)
 
 static void	handle_command(t_ast *node, t_tools *tools)
 {
-	if (node->b_cmd)
-		execute_builtin(node, tools);
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Fork failed");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		if (node->b_cmd)
+			execute_builtin(node, tools);
+		else
+			exec_cmd(node, list_to_array(tools->envp));
+		exit(0);
+	}
 	else
-		exec_cmd(node, list_to_array(tools->envp));
+	{
+		wait(NULL);
+	}
 }
 
 void	execute_command(t_ast *node, t_tools *tools)
@@ -73,24 +90,24 @@ void	execute_command(t_ast *node, t_tools *tools)
 		handle_command(node, tools);
 }
 
-static char	**parse_cmd_args(t_ast *node)
+static char	**parse_cmd_args(char *cmd_path, t_ast *node)
 {
 	int		arg_count;
 	t_ast	*current;
 	char	**args;
 
-	arg_count = 0;
+	arg_count = 1;
 	current = node->right;
 	while (current)
 	{
 		arg_count++;
 		current = current->right;
 	}
-	args = (char **)malloc(sizeof(char *) * (arg_count + 2));
+	args = (char **)malloc(sizeof(char *) * (arg_count + 1));
 	if (!args)
 		return (NULL);
-	args[arg_count + 1] = NULL;
-	args[0] = ft_strdup(node->str);
+	args[arg_count] = NULL;
+	args[0] = ft_strdup(cmd_path);
 	current = node->right;
 	arg_count = 1;
 	while (current != NULL)
@@ -105,14 +122,24 @@ static char	**parse_cmd_args(t_ast *node)
 void	exec_cmd(t_ast *node, char **envp)
 {
 	char	**cmd_args;
+	char	*cmd_path;
+	char	*path_var;
 
-	if (node->right)
-		cmd_args = parse_cmd_args(node->right);
-	if (!access(node->str, X_OK))
-		execve(node->str, cmd_args, envp);
-	else
+	path_var = find_path(envp);
+	if (!path_var)
 	{
-		perror("Execve failed");
+		perror("PATH variable not found");
 		exit(EXIT_FAILURE);
 	}
+	cmd_path = find_cmd(path_var, node->str);
+	free(path_var);
+	if (!cmd_path || !*cmd_path)
+	{
+		ft_printf("%s: command not found\n", node->str);
+		free(cmd_path);
+	}
+	cmd_args = parse_cmd_args(cmd_path, node);
+	ft_printf("Command Path: %s\n", cmd_path);
+	if (execve(cmd_path, cmd_args, envp) == -1)
+		perror("Execve failed");
 }
