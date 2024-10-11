@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/08 20:45:09 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/11 16:32:06 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,16 @@
 
 void	ft_env(t_tools *tools)
 {
-	extern char	**environ;
-	char		**env;
+	t_list	*current;
+	char	*env_var;
 
-	env = environ;
-	while (*env)
+	current = tools->envp;
+	while (current)
 	{
-		write(STDOUT_FILENO, *env, strlen(*env));
+		env_var = (char *)current->content;
+		write(STDOUT_FILENO, env_var, ft_strlen(env_var));
 		write(STDOUT_FILENO, "\n", 1);
-		env++;
+		current = current->next;
 	}
 	if (tools->debug_mode)
 	{
@@ -123,6 +124,7 @@ void	ft_echo(t_ast *cmd_node, t_tools *tools)
 {
 	t_ast	*current;
 	int		n_line;
+	char	*expanded_str;
 
 	current = cmd_node->right;
 	n_line = 1;
@@ -133,7 +135,11 @@ void	ft_echo(t_ast *cmd_node, t_tools *tools)
 	}
 	while (current)
 	{
-		ft_putstr_fd(current->str, STDOUT_FILENO);
+		printf("[DEBUG] Echo: Expanding '%s'\n", current->str);
+		expanded_str = expand_var(current->str, tools);
+		printf("[DEBUG] Echo: Expanded to '%s'\n", expanded_str);
+		ft_putstr_fd(expanded_str, STDOUT_FILENO);
+		free(expanded_str);
 		if (current->right)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		current = current->right;
@@ -148,35 +154,40 @@ void	ft_export(t_ast *cmd_node, t_tools *tools)
 {
 	t_ast	*current;
 	char	*arg;
-	char	*equals_pos;
 
-	current = cmd_node->right;
+	current = cmd_node;
 	if (!current)
 	{
-		// If no arguments, print the environment
 		ft_env(tools);
 		return ;
 	}
 	while (current)
 	{
-		// Process each argument
 		arg = current->str;
-		equals_pos = ft_strchr(arg, '=');
-		if (equals_pos)
+		if (tools->debug_mode)
+			printf("[DEBUG] Exporting argument: %s\n", arg);
+		if (ft_strchr(arg, '='))
 		{
-			// Valid assignment
-			*equals_pos = '\0'; // Temporarily split the string
-			update_or_add_envp(&tools->envp, arg);
-			*equals_pos = '='; // Restore the string
+			if (tools->debug_mode)
+				printf("[DEBUG] Exporting: %s\n", arg);
+			int result = update_or_add_envp(&tools->envp, arg);
+			if (tools->debug_mode)
+				printf("[DEBUG] update_or_add_envp result: %d\n", result);
 		}
 		else
 		{
-			// Just mark as exportable
+			if (tools->debug_mode)
+				printf("[DEBUG] Marking as exportable: %s\n", arg);
+			// Here you might want to mark the variable as exportable without setting a value
 		}
 		current = current->right;
 	}
 	if (tools->debug_mode)
+	{
 		printf("[DEBUG]: ft_export() executed\n");
+		printf("[DEBUG]: Current environment variables:\n");
+		print_linkedlist(tools->envp);
+	}
 }
 
 void	ft_unset(t_ast *cmd_node, t_tools *tools)
