@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:24:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/08 22:18:38 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/11 16:37:03 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,23 +28,23 @@ char	*get_env_value(const char *var_name, t_tools *tools)
 	env_var = tools->envp;
 	var_len = ft_strlen(var_name);
 	if (tools->debug_mode == true)
-		printf("[DEBUG] Searching for env var: %s\n", var_name);
+		printf("[DEBUG] get_env_value: Searching for env var: %s\n", var_name);
 	while (env_var)
 	{
 		env_str = (char *)env_var->content;
 		if (tools->debug_mode == true)
-			printf("[DEBUG] Checking env var: %s\n", env_str);
+			printf("[DEBUG] get_env_value: Checking env var: %s\n", env_str);
 		if (ft_strncmp(env_str, var_name, var_len) == 0
 			&& env_str[var_len] == '=')
 		{
 			if (tools->debug_mode == true)
-				printf("[DEBUG] Found env var: %s\n", env_str);
+				printf("[DEBUG] get_env_value: Found env var: %s\n", env_str);
 			return (env_str + var_len + 1);
 		}
 		env_var = env_var->next;
 	}
 	if (tools->debug_mode == true)
-		printf("[DEBUG] Env var not found: %s\n", var_name);
+		printf("[DEBUG] get_env_value: Env var not found: %s\n", var_name);
 	return (NULL);
 }
 
@@ -104,11 +104,16 @@ char	*expand_var(const char *s, t_tools *tools)
 
 	result = ft_strdup("");
 	i = 0;
+	if (tools->debug_mode)
+		printf("[DEBUG] expand_var: Expanding string: %s\n", s);
 	while (s[i])
 	{
-		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i + 1]) || s[i
-				+ 1] == '_'))
+		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i + 1]) || s[i + 1] == '_'))
+		{
 			temp = expand_single_var(s, &i, tools);
+			if (tools->debug_mode)
+				printf("[DEBUG] expand_var: Expanded variable to: %s\n", temp);
+		}
 		else
 			temp = append_char(ft_strdup(""), s[i]);
 		new_result = ft_strjoin(result, temp);
@@ -119,5 +124,7 @@ char	*expand_var(const char *s, t_tools *tools)
 			return (NULL);
 		i++;
 	}
+	if (tools->debug_mode)
+		printf("[DEBUG] expand_var: Final expanded string: %s\n", result);
 	return (result);
 }
