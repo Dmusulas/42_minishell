@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/11 16:32:06 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/11 22:14:30 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,7 +186,9 @@ void	ft_export(t_ast *cmd_node, t_tools *tools)
 	{
 		printf("[DEBUG]: ft_export() executed\n");
 		printf("[DEBUG]: Current environment variables:\n");
+		printf("[DEBUG]: ft_export() completed. Current environment variables:\n");
 		print_linkedlist(tools->envp);
+		printf("[DEBUG]: Address of tools->envp: %p\n", (void*)&tools->envp);
 	}
 }
 
@@ -225,7 +227,17 @@ void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 	else if (ft_strcmp(cmd_node->str, "pwd") == 0)
 		ft_pwd(tools);
 	else if (ft_strcmp(cmd_node->str, "export") == 0)
+	{
 		ft_export(cmd_node->right, tools);
+		if (tools->debug_mode)
+		{
+			printf("----------------------------------\n");
+			printf("[DEBUG]: Back in execute_builtin\n");
+			printf("[DEBUG]: Current environment variables:\n");
+			print_linkedlist(tools->envp);
+			printf("[DEBUG]: Address of tools->envp: %p\n", (void*)&tools->envp);
+		}
+	}
 	else if (ft_strcmp(cmd_node->str, "unset") == 0)
 		ft_unset(cmd_node->right, tools);
 	else if (ft_strcmp(cmd_node->str, "env") == 0)
