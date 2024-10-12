@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:56 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/11 22:34:02 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/12 14:13:10 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,10 +59,6 @@ void	free_ast(t_ast *tree)
 
 void	clean_tools(t_tools *tools)
 {
-	// Save the current environment
-	t_list *saved_env = tools->envp;
-
-	// Clean other resources
 	if (tools->args != NULL)
 	{
 		free(tools->args);
@@ -72,10 +68,5 @@ void	clean_tools(t_tools *tools)
 		free_ast(tools->tree);
 	if (tools->lexer_lst != NULL)
 		clear_tokens(&tools->lexer_lst);
-	/* if (tools->envp != NULL)
-		delete_duplicated_envp(tools); */
 	tools->p_redir = NULL;
-
-	// Restore the saved environment
-	tools->envp = saved_env;
 }

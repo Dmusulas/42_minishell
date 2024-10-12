@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/11 22:27:03 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/12 14:11:29 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	handle_redirect(t_ast *node, t_tools *tools)
 
 static void	handle_command(t_ast *node, t_tools *tools)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	if (node->b_cmd)
 	{
@@ -81,15 +81,6 @@ static void	handle_command(t_ast *node, t_tools *tools)
 			wait(NULL);
 		}
 	}
-
-	if (tools->debug_mode)
-	{
-		printf("----------------------------------\n");
-		printf("[DEBUG]: Back in handle_command\n");
-		printf("[DEBUG]: Current environment variables:\n");
-		print_linkedlist(tools->envp);
-		printf("[DEBUG]: Address of tools->envp: %p\n", (void*)&tools->envp);
-	}
 }
 
 void	execute_command(t_ast *node, t_tools *tools)
@@ -102,15 +93,6 @@ void	execute_command(t_ast *node, t_tools *tools)
 		handle_redirect(node, tools);
 	else if (node->token == T_CMD)
 		handle_command(node, tools);
-
-	if (tools->debug_mode)
-		{
-			printf("----------------------------------\n");
-			printf("[DEBUG]: Back in execute_command\n");
-			printf("[DEBUG]: Current environment variables:\n");
-			print_linkedlist(tools->envp);
-			printf("[DEBUG]: Address of tools->envp: %p\n", (void*)&tools->envp);
-		}
 }
 
 static char	**parse_cmd_args(char *cmd_path, t_ast *node)

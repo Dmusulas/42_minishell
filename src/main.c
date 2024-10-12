@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/11 22:28:01 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/12 14:14:31 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	tools.envp_org = envp;
-	tools.debug_mode = false ;
+	tools.debug_mode = true ;
 	rl_catch_signals = 0;
 	if (!duplicate_env(&tools))
 	{
@@ -34,5 +34,7 @@ int	main(int argc, char *argv[], char *envp[])
 	}
 	init_tools(&tools);
 	mini_loop(&tools);
+	if (tools.envp != NULL)
+		delete_duplicated_envp(&tools); // envp are deleted after the shell loop
 	return (0);
 }

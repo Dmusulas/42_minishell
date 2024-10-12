@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/10 17:37:26 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/12 14:07:42 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,4 +82,6 @@ void	test_envp(t_list *envp);
 
 /* BUILTINS */
 void	execute_builtin(t_ast *cmd_node, t_tools *tools);
+void	remove_env_var(t_list **envp, const char *var_name);
+
 #endif
