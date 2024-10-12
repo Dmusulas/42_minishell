@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:35:54 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/12 14:11:29 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,23 +58,28 @@ static void	handle_command(t_ast *node, t_tools *tools)
 {
 	pid_t	pid;
 
-	pid = fork();
-	if (pid == -1)
+	if (node->b_cmd)
 	{
-		perror("Fork failed");
-		exit(EXIT_FAILURE);
-	}
-	else if (pid == 0)
-	{
-		if (node->b_cmd)
-			execute_builtin(node, tools);
-		else
-			exec_cmd(node, list_to_array(tools->envp));
-		exit(0);
+		// Execute builtin in the current process
+		execute_builtin(node, tools);
 	}
 	else
 	{
-		wait(NULL);
+		pid = fork();
+		if (pid == -1)
+		{
+			perror("Fork failed");
+			exit(EXIT_FAILURE);
+		}
+		else if (pid == 0)
+		{
+			exec_cmd(node, list_to_array(tools->envp));
+			exit(0);
+		}
+		else
+		{
+			wait(NULL);
+		}
 	}
 }
 

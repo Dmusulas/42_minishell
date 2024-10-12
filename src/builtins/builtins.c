@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/08 20:45:09 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/12 14:08:58 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,55 +15,21 @@
 
 void	ft_env(t_tools *tools)
 {
-	extern char	**environ;
-	char		**env;
+	t_list	*current;
+	char	*env_var;
 
-	env = environ;
-	while (*env)
+	current = tools->envp;
+	while (current)
 	{
-		write(STDOUT_FILENO, *env, strlen(*env));
+		env_var = (char *)current->content;
+		write(STDOUT_FILENO, env_var, ft_strlen(env_var));
 		write(STDOUT_FILENO, "\n", 1);
-		env++;
+		current = current->next;
 	}
 	if (tools->debug_mode)
 	{
 		printf("[DEBUG]: ft_env() executed\n");
 	}
-}
-
-static void	remove_env_var(t_list **envp, const char *var_name)
-{
-	t_list	*prev;
-	t_list	*current;
-	char	*env_var;
-	char	*equals_pos;
-
-	prev = NULL;
-	current = *envp;
-	while (current)
-	{
-		env_var = (char *)current->content;
-		equals_pos = ft_strchr(env_var, '=');
-		if (equals_pos && ft_strncmp(env_var, var_name, equals_pos
-				- env_var) == 0)
-		{
-			if (prev)
-				prev->next = current->next;
-			else
-				*envp = current->next;
-			free(current->content);
-			free(current);
-			return ;
-		}
-		prev = current;
-		current = current->next;
-	}
-}
-
-static void	unset_single_var(t_ast *arg_node, t_list **envp)
-{
-	if (arg_node && arg_node->str)
-		remove_env_var(envp, arg_node->str);
 }
 
 void	ft_pwd(t_tools *tools)
@@ -123,6 +89,7 @@ void	ft_echo(t_ast *cmd_node, t_tools *tools)
 {
 	t_ast	*current;
 	int		n_line;
+	char	*expanded_str;
 
 	current = cmd_node->right;
 	n_line = 1;
@@ -133,7 +100,10 @@ void	ft_echo(t_ast *cmd_node, t_tools *tools)
 	}
 	while (current)
 	{
-		ft_putstr_fd(current->str, STDOUT_FILENO);
+		expanded_str = expand_var(current->str, tools);
+		printf("[DEBUG] Echo: Expanded to '%s'\n", expanded_str);
+		ft_putstr_fd(expanded_str, STDOUT_FILENO);
+		free(expanded_str);
 		if (current->right)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		current = current->right;
@@ -148,49 +118,36 @@ void	ft_export(t_ast *cmd_node, t_tools *tools)
 {
 	t_ast	*current;
 	char	*arg;
-	char	*equals_pos;
 
-	current = cmd_node->right;
+	current = cmd_node;
 	if (!current)
 	{
-		// If no arguments, print the environment
 		ft_env(tools);
 		return ;
 	}
 	while (current)
 	{
-		// Process each argument
 		arg = current->str;
-		equals_pos = ft_strchr(arg, '=');
-		if (equals_pos)
-		{
-			// Valid assignment
-			*equals_pos = '\0'; // Temporarily split the string
+		if (ft_strchr(arg, '='))
 			update_or_add_envp(&tools->envp, arg);
-			*equals_pos = '='; // Restore the string
-		}
 		else
 		{
-			// Just mark as exportable
+			// Here you might want to mark the variable as exportable without setting a value
 		}
 		current = current->right;
 	}
-	if (tools->debug_mode)
-		printf("[DEBUG]: ft_export() executed\n");
 }
 
 void	ft_unset(t_ast *cmd_node, t_tools *tools)
 {
 	t_ast	*current;
 
-	current = cmd_node->right;
+	current = cmd_node;
 	while (current)
 	{
-		unset_single_var(current, &tools->envp);
+		remove_env_var(&tools->envp, current->str);
 		current = current->right;
 	}
-	if (tools->debug_mode)
-		printf("[DEBUG]: ft_unset() executed\n");
 }
 
 void	ft_exit(t_tools *tools)
@@ -214,7 +171,9 @@ void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 	else if (ft_strcmp(cmd_node->str, "pwd") == 0)
 		ft_pwd(tools);
 	else if (ft_strcmp(cmd_node->str, "export") == 0)
+	{
 		ft_export(cmd_node->right, tools);
+	}
 	else if (ft_strcmp(cmd_node->str, "unset") == 0)
 		ft_unset(cmd_node->right, tools);
 	else if (ft_strcmp(cmd_node->str, "env") == 0)

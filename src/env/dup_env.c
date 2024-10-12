@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dup_env.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:12:32 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 17:12:32 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/11 16:31:49 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,23 +82,31 @@ int	update_or_add_envp(t_list **lst, const char *new_envp)
 
 	cur = *lst;
 	prev = NULL;
+	printf("[DEBUG] Updating or adding: %s\n", new_envp);
 	while (cur)
 	{
+		printf("[DEBUG] Comparing with: %s\n", (char *)cur->content);
 		if (!cmp_envp(cur->content, (void *)new_envp))
 		{
+			printf("[DEBUG] Found existing variable, updating\n");
 			cur->content = (void *)new_envp;
 			return (1);
 		}
 		prev = cur;
 		cur = cur->next;
 	}
-	new_node = ft_lstnew((void *)new_envp);
+	printf("[DEBUG] Variable not found, adding new node\n");
+	new_node = ft_lstnew((void *)ft_strdup(new_envp));
 	if (!new_node)
+	{
+		printf("[DEBUG] Failed to create new node\n");
 		return (-1);
+	}
 	if (prev)
 		prev->next = new_node;
 	else
 		*lst = new_node;
 	ft_lstsort(lst, cmp_envp);
+	printf("[DEBUG] New node added and list sorted\n");
 	return (1);
 }
