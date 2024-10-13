@@ -1,35 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 22:38:32 by pmolzer          ###   ########.fr       */
+/*   Created: 2024/10/12 22:37:06 by pmolzer           #+#    #+#             */
+/*   Updated: 2024/10/12 22:38:40 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_export(t_ast *cmd_node, t_tools *tools)
+void	ft_env(t_tools *tools)
 {
-	t_ast	*current;
-	char	*arg;
+	t_list	*current;
+	char	*env_var;
 
-	current = cmd_node;
-	if (!current)
-	{
-		ft_env(tools);
-		return ;
-	}
+	current = tools->envp;
 	while (current)
 	{
-		arg = current->str;
-		if (ft_strchr(arg, '='))
-			update_or_add_envp(&tools->envp, arg);
-		else
-			print_linkedlist(tools->envp);
-		current = current->right;
+		env_var = (char *)current->content;
+		write(STDOUT_FILENO, env_var, ft_strlen(env_var));
+		write(STDOUT_FILENO, "\n", 1);
+		current = current->next;
+	}
+	if (tools->debug_mode)
+	{
+		printf("[DEBUG]: ft_env() executed\n");
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 14:07:42 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/12 22:36:16 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,5 +83,13 @@ void	test_envp(t_list *envp);
 /* BUILTINS */
 void	execute_builtin(t_ast *cmd_node, t_tools *tools);
 void	remove_env_var(t_list **envp, const char *var_name);
+void	change_to_absolute_path(char *path);
+void	change_to_relative_path(char *path, t_tools *tools);
+void	ft_export(t_ast *cmd_node, t_tools *tools);
+void	ft_echo(t_ast *cmd_node, t_tools *tools);
+void	ft_unset(t_ast *cmd_node, t_tools *tools);
+void	ft_cd(char *path, t_tools *tools);
+void	ft_exit(t_tools *tools);
+void	ft_env(t_tools *tools);
 
 #endif

@@ -1,35 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export.c                                           :+:      :+:    :+:   */
+/*   cd.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 22:38:32 by pmolzer          ###   ########.fr       */
+/*   Created: 2024/10/12 22:34:42 by pmolzer           #+#    #+#             */
+/*   Updated: 2024/10/12 22:40:13 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_export(t_ast *cmd_node, t_tools *tools)
+void	ft_cd(char *path, t_tools *tools)
 {
-	t_ast	*current;
-	char	*arg;
-
-	current = cmd_node;
-	if (!current)
+	if (!path)
 	{
-		ft_env(tools);
+		write(STDERR_FILENO, "cd: expected argument\n", 21);
 		return ;
 	}
-	while (current)
-	{
-		arg = current->str;
-		if (ft_strchr(arg, '='))
-			update_or_add_envp(&tools->envp, arg);
-		else
-			print_linkedlist(tools->envp);
-		current = current->right;
-	}
+	if (path[0] == '/')
+		change_to_absolute_path(path);
+	else
+		change_to_relative_path(path, tools);
+	if (tools->debug_mode)
+		printf("[DEBUG]: ft_cd() executed with path: %s\n", path);
 }

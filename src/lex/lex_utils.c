@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:28 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 22:26:27 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/13 11:24:33 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,5 +122,5 @@ int	check_quotes(char *s)
 	if ((double_q > 0 && double_q % 2 != 0) || (q > 0 && q % 2 != 0))
 		return (0);
 	else
-		return (1);
+		return (1); // add here functionality to prompt user to close quotes, adding a new lines
 }
