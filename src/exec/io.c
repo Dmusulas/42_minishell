@@ -90,6 +90,6 @@ void	set_outfile(t_ast *node, bool append_mode)
 		fd = open(node->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd < 0)
 		msg_error("Failed to open output file");
-	dup2(fd, STDOUT_FILENO); // Redirect stdout to the output file
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }

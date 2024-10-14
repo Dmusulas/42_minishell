@@ -199,7 +199,9 @@ t_ast	*parse_redir(t_tools *tools)
 
 	cmd_node = parse_cmd(tools);
 	if (!cmd_node)
+	{
 		return (NULL);
+	}
 	curr = tools->lexer_lst;
 	while (curr && (token_check(curr->token)))
 	{

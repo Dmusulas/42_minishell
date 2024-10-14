@@ -24,7 +24,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	tools.envp_org = envp;
-	tools.debug_mode = true ;
+	tools.debug_mode = false;
 	rl_catch_signals = 0;
 	if (!duplicate_env(&tools))
 	{
@@ -35,6 +35,6 @@ int	main(int argc, char *argv[], char *envp[])
 	init_tools(&tools);
 	mini_loop(&tools);
 	if (tools.envp != NULL)
-		delete_duplicated_envp(&tools); // envp are deleted after the shell loop
+		delete_duplicated_envp(&tools);
 	return (0);
 }
