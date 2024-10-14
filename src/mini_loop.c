@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/08 21:54:22 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/13 11:10:15 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@
 #include "lexer_parser.h"
 #include "minishell.h"
 #include <stdlib.h>
-
-int		mini_loop(t_tools *tools);
 
 void	init_tools(t_tools *tools)
 {
@@ -41,11 +39,6 @@ int	reset_tools(t_tools *tools)
 	init_tools(tools);
 	mini_loop(tools);
 	return (0);
-	// function is clearing the environment variables after each command execution.
-	// modify function to preserve the environment variables.
-	// -> Store copy of environment variables before cleaning.
-	// -> Only clean command-specific data in clean_tools.
-	// -> Restore environment variables after cleaning.
 }
 
 /*
@@ -57,7 +50,7 @@ int	reset_tools(t_tools *tools)
 */
 int	mini_loop(t_tools *tools)
 {
-	char	*tmp;
+	//char	*tmp;
 
 	tools->args = readline("minishell$ ");
 	if (tools->debug_mode)
@@ -68,16 +61,14 @@ int	mini_loop(t_tools *tools)
 		ft_putendl_fd("exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
-	tmp = ft_strtrim(tools->args, " ");
-	free(tools->args);
-	tools->args = tmp;
+	//tmp = ft_strtrim(tools->args, " "); // is this necessary?
+	//free(tools->args);
+	//tools->args = tmp;
 	if (!tools->args || tools->args[0] == '\0')
 		return (reset_tools(tools));
 	add_history(tools->args);
 	handle_input(tools);
 	execute_command(tools->tree, tools);
-	// if (!execute(tools))
-	// 	return (ft_error(ERR_PAR, tools));
 	reset_tools(tools);
 	return (1);
 }
