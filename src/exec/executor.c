@@ -17,7 +17,7 @@
 
 static void	handle_redirect(t_ast *node, t_tools *tools)
 {
-	if (node->token == T_REDIR_IN)
+	if (node->token == T_REDIR_IN || node->token == T_HEREDOC)
 		set_infile(node);
 	else if (node->token == T_REDIR_OUT)
 		set_outfile(node, false);
@@ -86,8 +86,7 @@ void	execute_command(t_ast *node, t_tools *tools)
 	save_stdin_stdout(&saved_stdin, &saved_stdout);
 	if (node->token == T_PIPE)
 		handle_pipes(node, tools);
-	else if (node->token == T_REDIR_IN || node->token == T_REDIR_OUT
-		|| node->token == T_APPEND)
+	else if (token_check(node->token))
 		handle_redirect(node, tools);
 	else if (node->token == T_CMD)
 		handle_command(node, tools);
