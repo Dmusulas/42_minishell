@@ -6,17 +6,30 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 22:33:09 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/12 22:38:47 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:12:43 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_echo(t_ast *cmd_node, t_tools *tools)
+static void	print_argument(t_ast *current, t_tools *tools)
+{
+	char	*expanded_str;
+
+	if (ft_strcmp(current->str, "$?") == 0)
+		ft_putnbr_fd(tools->last_exit_status, STDOUT_FILENO);
+	else
+	{
+		expanded_str = expand_var(current->str, tools);
+		ft_putstr_fd(expanded_str, STDOUT_FILENO);
+		free(expanded_str);
+	}
+}
+
+int	ft_echo(t_ast *cmd_node, t_tools *tools)
 {
 	t_ast	*current;
 	int		n_line;
-	char	*expanded_str;
 
 	current = cmd_node->right;
 	n_line = 1;
@@ -27,10 +40,7 @@ void	ft_echo(t_ast *cmd_node, t_tools *tools)
 	}
 	while (current)
 	{
-		expanded_str = expand_var(current->str, tools);
-		printf("[DEBUG] Echo: Expanded to '%s'\n", expanded_str);
-		ft_putstr_fd(expanded_str, STDOUT_FILENO);
-		free(expanded_str);
+		print_argument(current, tools);
 		if (current->right)
 			ft_putchar_fd(' ', STDOUT_FILENO);
 		current = current->right;
@@ -39,4 +49,5 @@ void	ft_echo(t_ast *cmd_node, t_tools *tools)
 		ft_putchar_fd('\n', STDOUT_FILENO);
 	if (tools->debug_mode)
 		printf("[DEBUG]: ft_echo() executed\n");
+	return (0);
 }

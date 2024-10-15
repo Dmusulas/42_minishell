@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 14:11:29 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/14 13:53:38 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,25 +74,43 @@ static void	handle_command(t_ast *node, t_tools *tools)
 		else if (pid == 0)
 		{
 			exec_cmd(node, list_to_array(tools->envp));
-			exit(0);
+			exit(EXIT_FAILURE);  // In case exec_cmd fails
 		}
 		else
 		{
-			wait(NULL);
+			waitpid(pid, &tools->last_exit_status, 0);
+			if (WIFEXITED(tools->last_exit_status))
+			{
+				tools->last_exit_status = WEXITSTATUS(tools->last_exit_status);
+				printf("[DEBUG] Command exited with status: %d\n", tools->last_exit_status);
+			}
+			else if (WIFSIGNALED(tools->last_exit_status))
+			{
+				tools->last_exit_status = 128 + WTERMSIG(tools->last_exit_status);
+				printf("[DEBUG] Command terminated by signal: %d\n", WTERMSIG(tools->last_exit_status));
+			}
+			printf("[DEBUG] Last exit status after command execution: %d\n", tools->last_exit_status);
 		}
 	}
 }
 
 void	execute_command(t_ast *node, t_tools *tools)
 {
+	int status;
+
 	if (!node)
-		return ;
+		return;
 	if (node->token == T_PIPE)
 		handle_pipe(node, tools);
 	else if (node->token == T_REDIR_IN || node->token == T_REDIR_OUT)
 		handle_redirect(node, tools);
 	else if (node->token == T_CMD)
+	{
 		handle_command(node, tools);
+		wait(&status);
+		if (WIFEXITED(status))
+			tools->last_exit_status = WEXITSTATUS(status);
+	}
 }
 
 static char	**parse_cmd_args(char *cmd_path, t_ast *node)
@@ -133,18 +151,27 @@ void	exec_cmd(t_ast *node, char **envp)
 	path_var = find_path(envp);
 	if (!path_var)
 	{
-		perror("PATH variable not found");
-		exit(EXIT_FAILURE);
+		ft_putstr_fd("PATH variable not found\n", STDERR_FILENO);
+		exit(127);  // Command not found
 	}
 	cmd_path = find_cmd(path_var, node->str);
 	free(path_var);
 	if (!cmd_path || !*cmd_path)
 	{
 		ft_printf("%s: command not found\n", node->str);
-		free(cmd_path);
+		exit(127);  // Command not found
 	}
 	cmd_args = parse_cmd_args(cmd_path, node);
-	ft_printf("Command Path: %s\n", cmd_path);
+	if (!cmd_args)
+	{
+		perror("Memory allocation failed");
+		exit(1);
+	}
+	printf("[DEBUG] Executing command: %s\n", cmd_path);
 	if (execve(cmd_path, cmd_args, envp) == -1)
+	{
 		perror("Execve failed");
+		exit(EXIT_FAILURE);
+	}
+	printf("[DEBUG] Command executed successfully: %s\n", cmd_path);
 }

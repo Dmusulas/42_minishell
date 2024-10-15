@@ -6,13 +6,13 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 22:37:06 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/12 22:38:40 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:20:32 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_env(t_tools *tools)
+int	ft_env(t_tools *tools)
 {
 	t_list	*current;
 	char	*env_var;
@@ -29,4 +29,5 @@ void	ft_env(t_tools *tools)
 	{
 		printf("[DEBUG]: ft_env() executed\n");
 	}
+	return (0);
 }
