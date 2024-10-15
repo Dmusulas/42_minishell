@@ -6,30 +6,36 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 22:38:32 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/14 17:22:03 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_export(t_ast *cmd_node, t_tools *tools)
+int	ft_export(t_ast *cmd_node, t_tools *tools)
 {
 	t_ast	*current;
 	char	*arg;
+	int		success;
 
+	success = 0;
 	current = cmd_node;
 	if (!current)
 	{
 		ft_env(tools);
-		return ;
+		return (success);
 	}
 	while (current)
 	{
 		arg = current->str;
 		if (ft_strchr(arg, '='))
-			update_or_add_envp(&tools->envp, arg);
+		{
+			if (update_or_add_envp(&tools->envp, arg) != 0)
+				success = 1;
+		}
 		else
 			print_linkedlist(tools->envp);
 		current = current->right;
 	}
+	return (success);
 }

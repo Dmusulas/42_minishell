@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 14:14:31 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/14 14:07:24 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int argc, char *argv[], char *envp[])
 		return (EXIT_FAILURE);
 	}
 	init_tools(&tools);
+	set_initial_exit_status(&tools);
 	mini_loop(&tools);
 	if (tools.envp != NULL)
 		delete_duplicated_envp(&tools);
