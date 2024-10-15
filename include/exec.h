@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 20:36:26 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/15 11:55:49 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ void	handle_pipes(t_ast *node, t_tools *tools);
 /* EXEC */
 void	execute_command(t_ast *node, t_tools *tools);
 void	exec_cmd(t_ast *node, char **envp);
+void	fork_and_execute_command(t_ast *node, t_tools *tools);
 
 /* PATH THINGS */
 char	*find_cmd(char *paths, char *cmd);

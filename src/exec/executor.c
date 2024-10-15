@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/15 11:18:37 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/15 12:05:19 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,11 @@
 #include "libft.h"
 #include "minishell.h"
 
+/**
+ * Handles input redirection for the given AST node.
+ * It sets the appropriate input file based on the type of redirection token
+ * and then recursively executes the left child of the node.
+ */
 static void	handle_redirect(t_ast *node, t_tools *tools)
 {
 	if (node->token == T_REDIR_IN || node->token == T_HEREDOC)
@@ -26,32 +31,25 @@ static void	handle_redirect(t_ast *node, t_tools *tools)
 	execute_command(node->left, tools);
 }
 
+/**
+ * Handles the execution of a command represented by the given AST node.
+ * It checks if the node is a built-in command and executes it accordingly,
+ * or forks a new process to execute the command.
+ */
 static void	handle_command(t_ast *node, t_tools *tools)
 {
-	pid_t	pid;
-
 	if (node->b_cmd)
 		execute_builtin(node, tools);
 	else
-	{
-		pid = fork();
-		if (pid == -1)
-		{
-			perror("Fork failed");
-			exit(EXIT_FAILURE);
-		}
-		else if (pid == 0)
-		{
-			exec_cmd(node, list_to_array(tools->envp));
-			exit(0);
-		}
-		else
-		{
-			waitpid(pid, NULL, 0);
-		}
-	}
+		fork_and_execute_command(node, tools);
 }
 
+/**
+ * Executes a command represented by the given AST node.
+ * It finds the command's path, prepares the command arguments,
+ * and calls execve to execute the command in a new process.
+ * If the command cannot be found or execution fails, it exits with an error.
+ */
 void	exec_cmd(t_ast *node, char **envp)
 {
 	char	**cmd_args;
@@ -61,8 +59,8 @@ void	exec_cmd(t_ast *node, char **envp)
 	path_var = find_path(envp);
 	if (!path_var)
 	{
-		perror("PATH variable not found");
-		exit(EXIT_FAILURE);
+		ft_putendl_fd("PATH variable not found", STDERR_FILENO);
+		exit(127);
 	}
 	cmd_path = find_cmd(path_var, node->str);
 	free(path_var);
@@ -70,12 +68,22 @@ void	exec_cmd(t_ast *node, char **envp)
 	{
 		ft_printf("%s: command not found\n", node->str);
 		free(cmd_path);
+		exit(127);
 	}
 	cmd_args = parse_cmd_args(cmd_path, node);
 	if (execve(cmd_path, cmd_args, envp) == -1)
+	{
 		perror("Execve failed");
+		exit(126);
+	}
 }
 
+/**
+ * Executes a command represented by the given AST node.
+ * It saves the current standard input and output, handles pipes,
+ * redirects, or commands based on the node's token, and restores
+ * the standard input and output afterwards.
+ */
 void	execute_command(t_ast *node, t_tools *tools)
 {
 	int	saved_stdin;

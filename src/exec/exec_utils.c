@@ -3,15 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   exec_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 20:32:35 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 20:32:35 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/15 12:03:02 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
-#include "libft.h"
+#include "minishell.h"
+#include "exec.h"
+
+/**
+ * Forks a new process to execute a command represented by the given AST node.
+ * In the child process, it calls exec_cmd to execute the command with the
+ * environment variables. In the parent process, it waits for the child to
+ * finish and updates the last exit status based on the child's exit status.
+ * If the child process exits normally, the last exit status is set to the
+ * exit code of the child. If the child process does not exit normally, the
+ * last exit status is set to 1, indicating an error occurred during execution.
+ */
+void	fork_and_execute_command(t_ast *node, t_tools *tools)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid == -1)
+	{
+		perror("Fork failed");
+		exit(EXIT_FAILURE);
+	}
+	else if (pid == 0)
+	{
+		exec_cmd(node, list_to_array(tools->envp));
+		exit(EXIT_FAILURE);
+	}
+	else
+	{
+		waitpid(pid, &status, 0);
+		if (WIFEXITED(status))
+			tools->last_exit_status = WEXITSTATUS(status);
+		else
+			tools->last_exit_status = 1;
+	}
+}
 
 char	**parse_cmd_args(char *cmd_path, t_ast *node)
 {
