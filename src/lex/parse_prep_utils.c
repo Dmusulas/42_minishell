@@ -67,16 +67,12 @@ void	handle_input(t_tools *tools)
 	if (tools->lexer_lst != NULL)
 	{
 		process_tokens(tools);
-		printf("   lexer list after process_tokens:\n");
-		print_tokens(tools->lexer_lst);
 		orig_lexer_lst = tools->lexer_lst;
 		if (!parse_input(tools))
 			ft_error(ERR_PAR, tools);
-		if (tools->tree)
+		if (tools->tree && tools->debug_mode)
 		{
-			printf("   lexer list after parsing:\n");
 			print_tokens(orig_lexer_lst);
-			printf("   printing ast tree:\n");
 			print_ast(tools->tree, 0);
 		}
 	}

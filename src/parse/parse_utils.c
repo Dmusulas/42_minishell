@@ -55,12 +55,10 @@ int	parse_input(t_tools *tools)
 	tree = NULL;
 	if (tools->pipes > 0)
 	{
-		printf("Current command has %i pipes", tools->pipes);
 		tree = parse_pipe(tools);
 	}
 	else if (tools->redir_num > 0)
 	{
-		printf("Current command has %i redirections", tools->redir_num);
 		tree = parse_redir(tools);
 	}
 	else

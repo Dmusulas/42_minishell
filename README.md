@@ -1,12 +1,15 @@
 # Minishell
 
+[![C CI](https://github.com/Dmusulas/42_minishell/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/Dmusulas/42_minishell/actions/workflows/c-cpp.yml)
+
 ## Table of contents
+
 1. [Minishell](#minishell)
    1. [Contribution](#contribution)
       1. [Compilation](#compilation)
       2. [Style](#style)
       3. [Pull requests](#pull-requests)
-   2. [TODO (continiously updated)](#todo-(continiously-updated))
+   2. [TODO (continiously updated)](<#todo-(continiously-updated)>)
       1. [built ins](#built-ins)
       2. [lexer](#lexer)
       3. [lexer/parsing syntax error handling](#lexer/parsing-syntax-error-handling)
@@ -23,9 +26,10 @@ For development it is advised to use [compiledb](https://github.com/nickdiego/co
 
 ### Style
 
-Adhere to norminette style as well as make sure that before merging to main the project compiles. 
+Adhere to norminette style as well as make sure that before merging to main the project compiles.
 
 ### Pull requests
+
 To avoid merge conflicts make sure to:
 
 1. `git pull origin main` (origin or whatever this github repo is name in your remote check with `git remote -v`).
@@ -43,6 +47,7 @@ To avoid merge conflicts make sure to:
 - [ ] Simple executor which picks up arguments from prompts and executes them (adapt PIPEX).
 
 ### built ins
+
 - [ ] echo with option -n
 - [ ] cd
 - [ ] pwd
@@ -52,10 +57,12 @@ To avoid merge conflicts make sure to:
 - [ ] exit
 
 ### lexer
+
 - [x] tokenize in lexer struct (linked list)
 - [x] pre parse info processing/labeling
 
 ### lexer/parsing syntax error handling
+
 - [x] check for quotes and find match
 - [ ] redir token used without specifying target file
 - [ ] invalid use of pipe (no command, pipe at end)
@@ -66,4 +73,3 @@ To avoid merge conflicts make sure to:
 - [ ] undefined env_vars (bash expands into empty string)
 - [ ] empty command/argument
 - [ ] special characters without escape.
-

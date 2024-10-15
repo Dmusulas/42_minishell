@@ -51,6 +51,7 @@ void	ft_exit(t_tools *tools)
 {
 	if (tools->debug_mode)
 		printf("[DEBUG]: ft_exit() executed\n");
+	printf("exit\n");
 	exit(0);
 }
 

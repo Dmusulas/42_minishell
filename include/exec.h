@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/10 17:45:24 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/14 20:36:26 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,11 +45,26 @@ typedef struct s_exec
 	int		cmd_start_position;
 }	t_exec;
 
+/* UTILS */
 int		msg_error(char *err);
+void	restore_stdin_stdout(int saved_stdin, int saved_stdout);
+void	save_stdin_stdout(int *saved_stdin, int *saved_stdout);
+char	**parse_cmd_args(char *cmd_path, t_ast *node);
+
+/* IO */
 void	set_outfile(t_ast *node, bool append_mode);
 void	set_infile(t_ast *node);
+
+/* PIPES */
+void	handle_pipe_parent(int *fd, int *fd_in);
+void	handle_pipe_child(int *fd, int *fd_in, t_ast *node, t_tools *tools);
+void	handle_pipes(t_ast *node, t_tools *tools);
+
+/* EXEC */
 void	execute_command(t_ast *node, t_tools *tools);
 void	exec_cmd(t_ast *node, char **envp);
+
+/* PATH THINGS */
 char	*find_cmd(char *paths, char *cmd);
 char	*find_path(char **envp);
 
