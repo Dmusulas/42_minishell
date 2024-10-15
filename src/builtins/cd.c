@@ -16,7 +16,7 @@ void	ft_cd(char *path, t_tools *tools)
 {
 	if (!path)
 	{
-		write(STDERR_FILENO, "cd: expected argument\n", 21);
+		write(STDERR_FILENO, "cd: expected argument\n", 22);
 		return ;
 	}
 	if (path[0] == '/')

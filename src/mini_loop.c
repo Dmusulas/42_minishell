@@ -50,20 +50,14 @@ int	reset_tools(t_tools *tools)
 */
 int	mini_loop(t_tools *tools)
 {
-	//char	*tmp;
-
 	tools->args = readline("minishell$ ");
 	if (tools->debug_mode)
 		printf("[DEBUG]: received arguments %s\n", tools->args);
 	if (tools->args == NULL)
 	{
-		ft_putendl_fd("minishell$", STDOUT_FILENO);
-		ft_putendl_fd("exit", STDOUT_FILENO);
+		ft_putendl_fd("minishell$ exit", STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
-	//tmp = ft_strtrim(tools->args, " "); // is this necessary?
-	//free(tools->args);
-	//tools->args = tmp;
 	if (!tools->args || tools->args[0] == '\0')
 		return (reset_tools(tools));
 	add_history(tools->args);

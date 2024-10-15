@@ -12,7 +12,7 @@
 
 #include "exec.h"
 #include "lexer_parser.h"
-#include "libft.h"
+#include "minishell.h"
 
 /**
  * Sets up a pipe and forks a process to handle reading input for
@@ -32,15 +32,11 @@ void	here_doc(char *limiter, t_ast *node)
 		msg_error("Failed to open temporary file");
 	while (1)
 	{
-		line = get_next_line(0);
+		line = readline(">");
 		if (!line || !ft_strncmp(line, limiter, ft_strlen(line) - 1))
-		{
-			free(line);
 			break ;
-		}
 		write(tmp_file_fd, line, ft_strlen(line));
 		write(tmp_file_fd, "\n", 1);
-		free(line);
 	}
 	close(tmp_file_fd);
 	node->file = TEMP_FILE;
@@ -60,16 +56,13 @@ void	set_infile(t_ast *node)
 
 	if (node->token == T_HEREDOC)
 		here_doc(node->file, node);
-	else
-	{
-		if (access(node->file, R_OK) == -1)
-			msg_error("Input file access error");
-		fd = open(node->file, O_RDONLY);
-		if (fd < 0)
-			msg_error("Failed to open input file");
-		dup2(fd, STDIN_FILENO);
-		close(fd);
-	}
+	if (access(node->file, R_OK) == -1)
+		msg_error("Input file access error");
+	fd = open(node->file, O_RDONLY);
+	if (fd < 0)
+		msg_error("Failed to open input file");
+	dup2(fd, STDIN_FILENO);
+	close(fd);
 }
 
 /**
@@ -90,6 +83,6 @@ void	set_outfile(t_ast *node, bool append_mode)
 		fd = open(node->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd < 0)
 		msg_error("Failed to open output file");
-	dup2(fd, STDOUT_FILENO); // Redirect stdout to the output file
+	dup2(fd, STDOUT_FILENO);
 	close(fd);
 }

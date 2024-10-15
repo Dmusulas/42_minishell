@@ -43,7 +43,7 @@ void	free_ast(t_ast *tree)
 		free_ast(tree->left);
 	if (tree->right != NULL)
 		free_ast(tree->right);
-	if (tree->file != NULL)
+	if (tree->file != NULL && tree->token != T_HEREDOC)
 	{
 		free(tree->file);
 		tree->file = NULL;
