@@ -24,9 +24,9 @@ static void	handle_redirect(t_ast *node, t_tools *tools)
 {
 	if (node->token == T_REDIR_IN || node->token == T_HEREDOC)
 		set_infile(node);
-	else if (node->token == T_REDIR_OUT)
+	if (node->token == T_REDIR_OUT)
 		set_outfile(node, false);
-	else if (node->token == T_APPEND)
+	if (node->token == T_APPEND)
 		set_outfile(node, true);
 	execute_command(node->left, tools);
 }
@@ -86,17 +86,17 @@ void	exec_cmd(t_ast *node, char **envp)
  */
 void	execute_command(t_ast *node, t_tools *tools)
 {
-	int	saved_stdin;
-	int	saved_stdout;
-
 	if (!node)
 		return ;
-	save_stdin_stdout(&saved_stdin, &saved_stdout);
 	if (node->token == T_PIPE)
+	{
 		handle_pipes(node, tools);
-	else if (token_check(node->token))
+		return ;
+	}
+	if (token_check(node->token))
+	{
 		handle_redirect(node, tools);
-	else if (node->token == T_CMD)
-		handle_command(node, tools);
-	restore_stdin_stdout(saved_stdin, saved_stdout);
+		return ;
+	}
+	handle_command(node, tools);
 }

@@ -55,8 +55,6 @@ void	handle_pipes(t_ast *node, t_tools *tools)
 			handle_pipe_parent(fd, &fd_in);
 		node = node->right;
 	}
-	if (fd_in != -1)
-		dup2(fd_in, STDIN_FILENO);
 	execute_command(node, tools);
 	waitpid(pid, NULL, 0);
 }

@@ -27,6 +27,7 @@ void	here_doc(char *limiter, t_ast *node)
 	char	*line;
 	int		tmp_file_fd;
 
+	printf("[DEBUG] Executing HERE DOC reading \n");
 	tmp_file_fd = open(TEMP_FILE, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (tmp_file_fd == -1)
 		msg_error("Failed to open temporary file");
@@ -40,15 +41,13 @@ void	here_doc(char *limiter, t_ast *node)
 	}
 	close(tmp_file_fd);
 	node->file = TEMP_FILE;
+	printf("[DEBUG] Changing the infile to %s\n", node->file);
 }
 
-// TODO: Change so it handles multiple here_docs
 /**
- * Sets the input file for the pipeline, handling here_doc
- *
- * @param argv An array of arguments passed to the program.
- * @param exec A pointer to a t_exec structure containing pipeline
- * information.
+ * Sets the input file for the pipeline, handling here_doc if necessary.
+ * It redirects stdin to the specified input file and restores
+ * it after execution.
  */
 void	set_infile(t_ast *node)
 {
@@ -61,21 +60,21 @@ void	set_infile(t_ast *node)
 	fd = open(node->file, O_RDONLY);
 	if (fd < 0)
 		msg_error("Failed to open input file");
-	dup2(fd, STDIN_FILENO);
+	if (dup2(fd, STDIN_FILENO) == -1)
+		msg_error("Failed to redirect stdin");
+	printf("[DEBUG] Changing the infile to %s\n", node->file);
 	close(fd);
 }
 
 /**
- * Sets the output file for the pipeline,
-	handling here_doc case for append mode.
- *
- * @param argv The output file path.
- * @param exec A pointer to a t_exec structure
- * containing pipeline information.
+ * Sets the output file for the pipeline. It redirects stdout to the specified
+ * output file and supports append mode if needed.
+ * Restores stdout after execution.
  */
 void	set_outfile(t_ast *node, bool append_mode)
 {
 	int	fd;
+	int	new_fd;
 
 	if (append_mode)
 		fd = open(node->file, O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -83,6 +82,9 @@ void	set_outfile(t_ast *node, bool append_mode)
 		fd = open(node->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd < 0)
 		msg_error("Failed to open output file");
-	dup2(fd, STDOUT_FILENO);
+	new_fd = dup2(fd, STDOUT_FILENO);
+	if (new_fd == -1)
+		msg_error("Failed to redirect stdout");
+	printf("[DEBUG] Changing the outfile to %s\n", node->file);
 	close(fd);
 }

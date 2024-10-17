@@ -108,7 +108,8 @@ char	*expand_var(const char *s, t_tools *tools)
 		printf("[DEBUG] expand_var: Expanding string: %s\n", s);
 	while (s[i])
 	{
-		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i + 1]) || s[i + 1] == '_'))
+		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i + 1]) || s[i
+				+ 1] == '_'))
 		{
 			temp = expand_single_var(s, &i, tools);
 			if (tools->debug_mode)

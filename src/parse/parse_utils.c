@@ -47,24 +47,3 @@ t_ast	*ast_new(void)
 	new_nd->b_cmd = false;
 	return (new_nd);
 }
-
-int	parse_input(t_tools *tools)
-{
-	t_ast	*tree;
-
-	tree = NULL;
-	if (tools->pipes > 0)
-	{
-		tree = parse_pipe(tools);
-	}
-	else if (tools->redir_num > 0)
-	{
-		tree = parse_redir(tools);
-	}
-	else
-		tree = parse_cmd(tools);
-	if (!tree)
-		return (0);
-	tools->tree = tree;
-	return (1);
-}

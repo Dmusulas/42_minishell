@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/14 20:40:44 by dmusulas         ###   ########.fr        #
+#    Updated: 2024/10/17 18:54:51 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -51,6 +51,9 @@ MINISHELL_SRCS	= main.c \
 				  parse/expand.c \
 				  parse/parse_utils.c \
 				  parse/parser.c\
+				  parse/commands.c\
+				  parse/pipes.c\
+				  parse/redirects.c\
 				  builtins/builtins.c\
 				  builtins/builtins_utils.c\
 				  builtins/echo.c\

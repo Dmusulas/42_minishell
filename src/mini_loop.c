@@ -56,6 +56,10 @@ int	reset_tools(t_tools *tools)
 */
 int	mini_loop(t_tools *tools)
 {
+	int	saved_stdin;
+	int	saved_stdout;
+
+	save_stdin_stdout(&saved_stdin, &saved_stdout);
 	tools->args = readline("minishell$ ");
 	if (tools->debug_mode)
 		printf("[DEBUG]: received arguments %s\n", tools->args);
@@ -69,7 +73,11 @@ int	mini_loop(t_tools *tools)
 	add_history(tools->args);
 	handle_input(tools);
 	execute_command(tools->tree, tools);
-	printf("[DEBUG] Last exit status preserved: %d\n", tools->last_exit_status);
+	if (tools->debug_mode)
+		printf("[DEBUG] Last exit status preserved: %d\n",
+			tools->last_exit_status);
+	restore_stdin_stdout(saved_stdin, saved_stdout);
+	printf("[DEBUG]: Restored stding stoud\n");
 	reset_tools(tools);
 	return (1);
 }
