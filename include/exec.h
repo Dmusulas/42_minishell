@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/15 11:55:49 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/17 16:53:54 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,6 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include <errno.h>
-# define ERR_OUTFILE "Outfile error"
-# define ERR_INFILE "Infile error"
-# define ERR_ACCESS "Access error"
-# define ERR_MALLOC "Memory allocation error"
-# define ERR_PIPE "Pipe creation error"
-# define ERR_FORK "Fork creation error"
-# define ERR_EXEC "Child execution error"
-# define ERR_FILE "Cannot open file"
-# define TEMP_FILE "/tmp/here_doc_12342"
 
 typedef struct s_exec
 {
