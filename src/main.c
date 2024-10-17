@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 14:07:24 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/17 16:47:43 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,3 +39,9 @@ int	main(int argc, char *argv[], char *envp[])
 		delete_duplicated_envp(&tools);
 	return (0);
 }
+
+// create a new header file for error handling
+// implement relative path for minishell: like ./minishell or .././minishell or smth like that
+//			--> orient yourself to bash
+// check what this rl_catch_signals and rl_event_hook do --> connected to the event function in signals
+// double check if the export function now works

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 17:26:55 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/17 16:31:07 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,8 @@ int	mini_loop(t_tools *tools)
 	add_history(tools->args);
 	handle_input(tools);
 	execute_command(tools->tree, tools);
-	printf("[DEBUG] Last exit status preserved: %d\n", tools->last_exit_status);
+	if (tools->debug_mode)
+		printf("[DEBUG] Last exit status preserved: %d\n", tools->last_exit_status);
 	reset_tools(tools);
 	return (1);
 }
