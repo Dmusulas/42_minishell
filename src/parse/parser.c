@@ -13,6 +13,7 @@
 #include "lexer_parser.h"
 #include "libft.h"
 #include "minishell.h"
+
 /**
  * Parses the input from lexer tokens and constructs an AST.
  * Handles commands, pipes, and redirections in one loop.
@@ -54,5 +55,6 @@ int	parse_input(t_tools *tools)
 		curr_lexer = tools->lexer_lst;
 	}
 	tools->tree = prev_node;
+	tools->tree = swap_redirection_nodes(tools->tree);
 	return (1);
 }

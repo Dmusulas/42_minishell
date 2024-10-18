@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/15 11:55:49 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/18 14:56:39 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,11 +62,14 @@ void	handle_pipes(t_ast *node, t_tools *tools);
 
 /* EXEC */
 void	execute_command(t_ast *node, t_tools *tools);
-void	exec_cmd(t_ast *node, char **envp);
 void	fork_and_execute_command(t_ast *node, t_tools *tools);
+void	execute_at_path(char *path, t_ast *node, char **envp);
+void	execute_external_command(t_ast *node, char **envp);
 
 /* PATH THINGS */
 char	*find_cmd(char *paths, char *cmd);
 char	*find_path(char **envp);
+char	*resolve_relative_path(char *rel_path);
+int		is_absolute_or_relative_path(char *cmd);
 
 #endif

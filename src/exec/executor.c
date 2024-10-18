@@ -16,12 +16,21 @@
 #include "minishell.h"
 
 /**
- * Handles input redirection for the given AST node.
- * It sets the appropriate input file based on the type of redirection token
- * and then recursively executes the left child of the node.
+ * Redirects input or output based on the AST node type.
+ * For input redirection (`<` or `<<`), it sets the input file.
+ * For output redirection (`>` or `>>`), it sets the output file.
+ * After handling redirection,
+	it executes the command from the left child of the node.
+ *
+ * @param node The AST node representing a redirection operation.
+ * @param tools Struct containing necessary tools for execution.
  */
-static void	handle_redirect(t_ast *node, t_tools *tools)
+static void	handle_io_redirection(t_ast *node, t_tools *tools)
 {
+	int	saved_stdin;
+	int	saved_stdout;
+
+	save_stdin_stdout(&saved_stdin, &saved_stdout);
 	if (node->token == T_REDIR_IN || node->token == T_HEREDOC)
 		set_infile(node);
 	if (node->token == T_REDIR_OUT)
@@ -29,14 +38,18 @@ static void	handle_redirect(t_ast *node, t_tools *tools)
 	if (node->token == T_APPEND)
 		set_outfile(node, true);
 	execute_command(node->left, tools);
+	restore_stdin_stdout(saved_stdin, saved_stdout);
 }
 
 /**
  * Handles the execution of a command represented by the given AST node.
- * It checks if the node is a built-in command and executes it accordingly,
- * or forks a new process to execute the command.
+ * If the command is a built-in command, it is executed directly. Otherwise,
+ * a new process is forked, and the external command is executed.
+ *
+ * @param node The AST node representing a command.
+ * @param tools Struct containing necessary tools for execution.
  */
-static void	handle_command(t_ast *node, t_tools *tools)
+static void	execute_single_command(t_ast *node, t_tools *tools)
 {
 	if (node->b_cmd)
 		execute_builtin(node, tools);
@@ -45,33 +58,21 @@ static void	handle_command(t_ast *node, t_tools *tools)
 }
 
 /**
- * Executes a command represented by the given AST node.
- * It finds the command's path, prepares the command arguments,
- * and calls execve to execute the command in a new process.
- * If the command cannot be found or execution fails, it exits with an error.
+ * Executes a command at the given path.
+ *
+ * @param path The command path (absolute or relative).
+ * @param node The AST node representing the command.
+ * @param envp The environment variables.
+ * @return void, exits on failure.
  */
-void	exec_cmd(t_ast *node, char **envp)
+void	execute_at_path(char *path, t_ast *node, char **envp)
 {
 	char	**cmd_args;
-	char	*cmd_path;
-	char	*path_var;
+	int		exec_status;
 
-	path_var = find_path(envp);
-	if (!path_var)
-	{
-		ft_putendl_fd("PATH variable not found", STDERR_FILENO);
-		exit(127);
-	}
-	cmd_path = find_cmd(path_var, node->str);
-	free(path_var);
-	if (!cmd_path || !*cmd_path)
-	{
-		ft_printf("%s: command not found\n", node->str);
-		free(cmd_path);
-		exit(127);
-	}
-	cmd_args = parse_cmd_args(cmd_path, node);
-	if (execve(cmd_path, cmd_args, envp) == -1)
+	cmd_args = parse_cmd_args(path, node);
+	exec_status = execve(path, cmd_args, envp);
+	if (exec_status == -1)
 	{
 		perror("Execve failed");
 		exit(126);
@@ -79,10 +80,42 @@ void	exec_cmd(t_ast *node, char **envp)
 }
 
 /**
- * Executes a command represented by the given AST node.
- * It saves the current standard input and output, handles pipes,
- * redirects, or commands based on the node's token, and restores
- * the standard input and output afterwards.
+ * Executes the command represented by the given AST node.
+ * If the command is an absolute or relative path, it executes it directly.
+ * Otherwise, it searches for the command in the system PATH and executes it.
+ *
+ * @param node The AST node representing the command.
+ * @param envp The environment variables as a null-terminated array of strings.
+ */
+void	execute_external_command(t_ast *node, char **envp)
+{
+	char	*cmd_path;
+	char	*path_var;
+
+	if (is_absolute_or_relative_path(node->str))
+	{
+		if (node->str[0] == '.')
+			cmd_path = resolve_relative_path(node->str);
+		else
+			cmd_path = node->str;
+		if (cmd_path)
+			execute_at_path(cmd_path, node, envp);
+	}
+	path_var = find_path(envp);
+	cmd_path = find_cmd(path_var, node->str);
+	free(path_var);
+	if (!cmd_path || !*cmd_path)
+		exit(127);
+	execute_at_path(cmd_path, node, envp);
+}
+
+/**
+ * Executes the command or operation represented by the given AST node.
+ * Depending on the token, it either handles pipes, redirects input/output,
+ * or executes a single command. It restores standard input/output afterward.
+ *
+ * @param node The AST node representing a command, pipe, or redirection.
+ * @param tools Struct containing necessary tools for execution.
  */
 void	execute_command(t_ast *node, t_tools *tools)
 {
@@ -95,8 +128,8 @@ void	execute_command(t_ast *node, t_tools *tools)
 	}
 	if (token_check(node->token))
 	{
-		handle_redirect(node, tools);
+		handle_io_redirection(node, tools);
 		return ;
 	}
-	handle_command(node, tools);
+	execute_single_command(node, tools);
 }

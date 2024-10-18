@@ -27,21 +27,21 @@ void	here_doc(char *limiter, t_ast *node)
 	char	*line;
 	int		tmp_file_fd;
 
-	printf("[DEBUG] Executing HERE DOC reading \n");
+	printf("executing here_doc\n");
 	tmp_file_fd = open(TEMP_FILE, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (tmp_file_fd == -1)
 		msg_error("Failed to open temporary file");
 	while (1)
 	{
 		line = readline(">");
-		if (!line || !ft_strncmp(line, limiter, ft_strlen(line) - 1))
+		if (!line || !ft_strncmp(line, limiter, ft_strlen(limiter)))
 			break ;
 		write(tmp_file_fd, line, ft_strlen(line));
 		write(tmp_file_fd, "\n", 1);
+		free(line);
 	}
 	close(tmp_file_fd);
 	node->file = TEMP_FILE;
-	printf("[DEBUG] Changing the infile to %s\n", node->file);
 }
 
 /**
@@ -62,7 +62,6 @@ void	set_infile(t_ast *node)
 		msg_error("Failed to open input file");
 	if (dup2(fd, STDIN_FILENO) == -1)
 		msg_error("Failed to redirect stdin");
-	printf("[DEBUG] Changing the infile to %s\n", node->file);
 	close(fd);
 }
 
@@ -85,6 +84,5 @@ void	set_outfile(t_ast *node, bool append_mode)
 	new_fd = dup2(fd, STDOUT_FILENO);
 	if (new_fd == -1)
 		msg_error("Failed to redirect stdout");
-	printf("[DEBUG] Changing the outfile to %s\n", node->file);
 	close(fd);
 }
