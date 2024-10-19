@@ -69,7 +69,10 @@ int	mini_loop(t_tools *tools)
 	add_history(tools->args);
 	handle_input(tools);
 	execute_command(tools->tree, tools);
-	printf("[DEBUG] Last exit status preserved: %d\n", tools->last_exit_status);
+	if (tools->debug_mode)
+		printf("[DEBUG] Last exit status preserved: %d\n",
+			tools->last_exit_status);
+	printf("[DEBUG]: Restored stding stoud\n");
 	reset_tools(tools);
 	return (1);
 }

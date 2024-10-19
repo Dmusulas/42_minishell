@@ -95,3 +95,45 @@ char	*find_cmd(char *paths, char *cmd)
 	free_2darray(paths_split);
 	return (NULL);
 }
+
+/**
+ * Checks if the given command is an absolute or relative path.
+ * An absolute path starts with a `/`, and a relative path starts with `./`,
+	`../`, or similar.
+ *
+ * @param cmd The command string to check.
+ * @return 1 if the command is an absolute or relative path, 0 otherwise.
+ */
+int	is_absolute_or_relative_path(char *cmd)
+{
+	if (!cmd)
+		return (0);
+	if (!(ft_strncmp("/", cmd, 1)))
+		return (1);
+	if (!ft_strncmp("./", cmd, 2) || !ft_strncmp("../", cmd, 3))
+		return (1);
+	return (0);
+}
+
+/**
+ * Resolves a relative path to an absolute paths
+ * using the current working directory.
+ *
+ * @param rel_path The relative path to resolve.
+ * @return The full absolute path, or NULL if an error occurs.
+ */
+char	*resolve_relative_path(char *rel_path)
+{
+	char	*cwd;
+	char	*full_path;
+
+	cwd = getcwd(NULL, 0);
+	if (!cwd)
+	{
+		perror("getcwd failed");
+		return (NULL);
+	}
+	full_path = join_paths(cwd, rel_path);
+	free(cwd);
+	return (full_path);
+}

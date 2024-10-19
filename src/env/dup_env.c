@@ -12,6 +12,7 @@
 
 #include "libft.h"
 #include "minishell.h"
+#include <stdlib.h>
 
 /**
  * Duplicates the environment variables from tools->envp_org into a linked list.
@@ -24,6 +25,7 @@ int	duplicate_env(t_tools *tools)
 	t_list	*envp_l;
 	t_list	*new_node;
 	int		i;
+	char	*content;
 
 	envp_l = ft_lstnew(tools->envp_org[0]);
 	if (!envp_l)
@@ -31,7 +33,8 @@ int	duplicate_env(t_tools *tools)
 	i = 1;
 	while (tools->envp_org[i])
 	{
-		new_node = ft_lstnew(tools->envp_org[i]);
+		content = ft_strdup(tools->envp_org[i]);
+		new_node = ft_lstnew(content);
 		if (!new_node)
 			return (0);
 		ft_lstadd_back(&envp_l, new_node);
@@ -87,7 +90,7 @@ int	update_or_add_envp(t_list **lst, const char *new_envp)
 		if (!cmp_envp(cur->content, (void *)new_envp))
 		{
 			cur->content = (void *)new_envp;
-			return (1);
+			return (EXIT_FAILURE);
 		}
 		prev = cur;
 		cur = cur->next;
@@ -100,5 +103,5 @@ int	update_or_add_envp(t_list **lst, const char *new_envp)
 	else
 		*lst = new_node;
 	ft_lstsort(lst, cmp_envp);
-	return (1);
+	return (EXIT_SUCCESS);
 }

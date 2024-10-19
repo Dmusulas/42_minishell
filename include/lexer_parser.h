@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 13:33:57 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/18 16:00:39 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,9 +114,10 @@ int		parse_input(t_tools *tools);
 /* PARSER */
 // char	*trim_expd_arg(const char *s);
 t_ast	*parse_cmd(t_tools *tools);
-t_ast	*parse_pipe(t_tools *tools);
-t_ast	*parse_redir(t_tools *tools);
+t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools);
+t_ast	*handle_redir(t_ast *prev_node, t_tools *tools);
 char	*get_env_value(const char *var_name, t_tools *tools);
+t_ast	*swap_redirection_nodes(t_ast *node);
 
 /* EXPAND */
 char	*expand_var(const char *s, t_tools *tools);

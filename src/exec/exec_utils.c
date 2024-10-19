@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
-#include "exec.h"
 
 /**
  * Forks a new process to execute a command represented by the given AST node.
@@ -36,7 +36,7 @@ void	fork_and_execute_command(t_ast *node, t_tools *tools)
 	}
 	else if (pid == 0)
 	{
-		exec_cmd(node, list_to_array(tools->envp));
+		execute_external_command(node, list_to_array(tools->envp));
 		exit(EXIT_FAILURE);
 	}
 	else

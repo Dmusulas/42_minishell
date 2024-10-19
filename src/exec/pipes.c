@@ -40,9 +40,11 @@ void	handle_pipes(t_ast *node, t_tools *tools)
 	int		fd[2];
 	pid_t	pid;
 	int		fd_in;
+	t_ast	*current_node;
 
 	fd_in = -1;
-	while (node && node->token == T_PIPE)
+	current_node = node;
+	while (current_node && current_node->token == T_PIPE)
 	{
 		if (pipe(fd) == -1)
 			msg_error(ERR_PIPE);
@@ -50,13 +52,14 @@ void	handle_pipes(t_ast *node, t_tools *tools)
 		if (pid == -1)
 			msg_error(ERR_FORK);
 		else if (pid == 0)
-			handle_pipe_child(fd, &fd_in, node, tools);
+			handle_pipe_child(fd, &fd_in, current_node, tools);
 		else
 			handle_pipe_parent(fd, &fd_in);
-		node = node->right;
+		current_node = current_node->right;
 	}
 	if (fd_in != -1)
 		dup2(fd_in, STDIN_FILENO);
-	execute_command(node, tools);
-	waitpid(pid, NULL, 0);
+	execute_command(current_node, tools);
+	while (wait(NULL) > 0)
+		;
 }
