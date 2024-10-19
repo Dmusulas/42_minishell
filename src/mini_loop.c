@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 17:26:55 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/19 11:55:41 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,8 @@ int	mini_loop(t_tools *tools)
 	if (tools->debug_mode)
 		printf("[DEBUG] Last exit status preserved: %d\n",
 			tools->last_exit_status);
-	printf("[DEBUG]: Restored stding stoud\n");
+	if (tools->debug_mode)
+		printf("[DEBUG]: Restored stding stoud\n");
 	reset_tools(tools);
 	return (1);
 }
