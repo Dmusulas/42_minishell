@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/18 14:56:39 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:18:43 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,14 +23,6 @@
 # include <stdio.h>
 # include <sys/wait.h>
 # include <errno.h>
-# define ERR_OUTFILE "Outfile error"
-# define ERR_INFILE "Infile error"
-# define ERR_ACCESS "Access error"
-# define ERR_MALLOC "Memory allocation error"
-# define ERR_PIPE "Pipe creation error"
-# define ERR_FORK "Fork creation error"
-# define ERR_EXEC "Child execution error"
-# define ERR_FILE "Cannot open file"
 # define TEMP_FILE "/tmp/here_doc_12342"
 
 typedef struct s_exec
@@ -52,8 +44,8 @@ void	save_stdin_stdout(int *saved_stdin, int *saved_stdout);
 char	**parse_cmd_args(char *cmd_path, t_ast *node);
 
 /* IO */
-void	set_outfile(t_ast *node, bool append_mode);
-void	set_infile(t_ast *node);
+void	set_outfile(t_ast *node, bool append_mode, t_tools *tools);
+void	set_infile(t_ast *node, t_tools *tools);
 
 /* PIPES */
 void	handle_pipe_parent(int *fd, int *fd_in);
@@ -63,13 +55,13 @@ void	handle_pipes(t_ast *node, t_tools *tools);
 /* EXEC */
 void	execute_command(t_ast *node, t_tools *tools);
 void	fork_and_execute_command(t_ast *node, t_tools *tools);
-void	execute_at_path(char *path, t_ast *node, char **envp);
-void	execute_external_command(t_ast *node, char **envp);
+void	execute_at_path(char *path, t_ast *node, char **envp, t_tools *tools);
+void	execute_external_command(t_ast *node, char **envp, t_tools *tools);
 
 /* PATH THINGS */
 char	*find_cmd(char *paths, char *cmd);
 char	*find_path(char **envp);
-char	*resolve_relative_path(char *rel_path);
+char	*resolve_relative_path(char *rel_path, t_tools *tools);
 int		is_absolute_or_relative_path(char *cmd);
 
 #endif

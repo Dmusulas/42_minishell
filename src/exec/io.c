@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   io.c                                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:34:24 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/08/15 17:34:24 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 14:43:22 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
  * @param exec A pointer to a t_exec structure containing pipeline
  * information.
  */
-void	here_doc(char *limiter, t_ast *node)
+void	here_doc(char *limiter, t_ast *node, t_tools *tools)
 {
 	char	*line;
 	int		tmp_file_fd;
@@ -30,7 +30,7 @@ void	here_doc(char *limiter, t_ast *node)
 	printf("executing here_doc\n");
 	tmp_file_fd = open(TEMP_FILE, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (tmp_file_fd == -1)
-		msg_error("Failed to open temporary file");
+		ft_error(ERR_PIPE_FAIL, tools);
 	while (1)
 	{
 		line = readline(">");
@@ -49,19 +49,19 @@ void	here_doc(char *limiter, t_ast *node)
  * It redirects stdin to the specified input file and restores
  * it after execution.
  */
-void	set_infile(t_ast *node)
+void	set_infile(t_ast *node, t_tools *tools)
 {
 	int	fd;
 
 	if (node->token == T_HEREDOC)
-		here_doc(node->file, node);
+		here_doc(node->file, node, tools);
 	if (access(node->file, R_OK) == -1)
-		msg_error("Input file access error");
+		ft_error(ERR_NO_SUCH_FILE, tools);
 	fd = open(node->file, O_RDONLY);
 	if (fd < 0)
-		msg_error("Failed to open input file");
+		ft_error(ERR_NO_SUCH_FILE, tools);
 	if (dup2(fd, STDIN_FILENO) == -1)
-		msg_error("Failed to redirect stdin");
+		ft_error(ERR_DUP2_FAIL, tools);
 	close(fd);
 }
 
@@ -70,7 +70,7 @@ void	set_infile(t_ast *node)
  * output file and supports append mode if needed.
  * Restores stdout after execution.
  */
-void	set_outfile(t_ast *node, bool append_mode)
+void	set_outfile(t_ast *node, bool append_mode, t_tools *tools)
 {
 	int	fd;
 	int	new_fd;
@@ -80,9 +80,9 @@ void	set_outfile(t_ast *node, bool append_mode)
 	else
 		fd = open(node->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd < 0)
-		msg_error("Failed to open output file");
+		ft_error(ERR_NO_SUCH_FILE, tools);
 	new_fd = dup2(fd, STDOUT_FILENO);
 	if (new_fd == -1)
-		msg_error("Failed to redirect stdout");
+		ft_error(ERR_DUP2_FAIL, tools);
 	close(fd);
 }

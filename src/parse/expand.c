@@ -6,18 +6,12 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:24:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/11 16:37:03 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:20:57 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
-
-// TODO: duplicate envp in array/list
-
-// get_var from tools->envp/path
-
-// append_var
 
 char	*get_env_value(const char *var_name, t_tools *tools)
 {

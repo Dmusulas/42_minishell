@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirects.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:47:32 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/17 18:47:32 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:17:07 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,11 @@
  * @param file_str The string representing the file for redirection.
  * @return The redirection node or NULL on failure.
  */
-static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str)
+static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str, t_tools tools)
 {
 	t_ast	*redir_node;
 
-	redir_node = ast_new();
+	redir_node = ast_new(&tools);
 	if (!redir_node)
 		return (free_ast(cmd_node), NULL);
 	redir_node->token = token->token;
@@ -48,7 +48,7 @@ t_ast	*handle_redir(t_ast *prev_node, t_tools *tools)
 	t_ast	*redir_node;
 
 	redir_node = make_redir(prev_node, tools->lexer_lst,
-			tools->lexer_lst->next->str);
+			tools->lexer_lst->next->str, *tools);
 	if (!redir_node)
 		return (NULL);
 	tools->lexer_lst = tools->lexer_lst->next->next;

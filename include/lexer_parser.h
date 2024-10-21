@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/18 16:00:39 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:14:50 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ void	handle_input(t_tools *tools);
 /* PARSE_UTILS */
 bool	token_check(t_tokens tk);
 int		is_builtin(const char *cmd);
-t_ast	*ast_new(void);
+t_ast	*ast_new(t_tools *tools);
 int		parse_input(t_tools *tools);
 
 /* PARSER */

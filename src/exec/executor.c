@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/15 12:05:19 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:10:43 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,11 +32,11 @@ static void	handle_io_redirection(t_ast *node, t_tools *tools)
 
 	save_stdin_stdout(&saved_stdin, &saved_stdout);
 	if (node->token == T_REDIR_IN || node->token == T_HEREDOC)
-		set_infile(node);
+		set_infile(node, tools);
 	if (node->token == T_REDIR_OUT)
-		set_outfile(node, false);
+		set_outfile(node, false, tools);
 	if (node->token == T_APPEND)
-		set_outfile(node, true);
+		set_outfile(node, true, tools);
 	execute_command(node->left, tools);
 	restore_stdin_stdout(saved_stdin, saved_stdout);
 }
@@ -65,7 +65,7 @@ static void	execute_single_command(t_ast *node, t_tools *tools)
  * @param envp The environment variables.
  * @return void, exits on failure.
  */
-void	execute_at_path(char *path, t_ast *node, char **envp)
+void	execute_at_path(char *path, t_ast *node, char **envp, t_tools *tools)
 {
 	char	**cmd_args;
 	int		exec_status;
@@ -74,7 +74,7 @@ void	execute_at_path(char *path, t_ast *node, char **envp)
 	exec_status = execve(path, cmd_args, envp);
 	if (exec_status == -1)
 	{
-		perror("Execve failed");
+		ft_error(ERR_EXECVE_FAIL, tools);
 		exit(126);
 	}
 }
@@ -87,7 +87,7 @@ void	execute_at_path(char *path, t_ast *node, char **envp)
  * @param node The AST node representing the command.
  * @param envp The environment variables as a null-terminated array of strings.
  */
-void	execute_external_command(t_ast *node, char **envp)
+void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 {
 	char	*cmd_path;
 	char	*path_var;
@@ -95,18 +95,18 @@ void	execute_external_command(t_ast *node, char **envp)
 	if (is_absolute_or_relative_path(node->str))
 	{
 		if (node->str[0] == '.')
-			cmd_path = resolve_relative_path(node->str);
+			cmd_path = resolve_relative_path(node->str, tools);
 		else
 			cmd_path = node->str;
 		if (cmd_path)
-			execute_at_path(cmd_path, node, envp);
+			execute_at_path(cmd_path, node, envp, tools);
 	}
 	path_var = find_path(envp);
 	cmd_path = find_cmd(path_var, node->str);
 	free(path_var);
 	if (!cmd_path || !*cmd_path)
 		exit(127);
-	execute_at_path(cmd_path, node, envp);
+	execute_at_path(cmd_path, node, envp, tools);
 }
 
 /**

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:48:19 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/17 18:48:19 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:15:11 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools)
 {
 	t_ast	*pipe_node;
 
-	pipe_node = ast_new();
+	pipe_node = ast_new(tools);
 	if (!pipe_node)
 		return (NULL);
 	pipe_node->token = T_PIPE;

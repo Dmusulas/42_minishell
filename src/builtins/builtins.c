@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/14 16:57:54 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:32:16 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,7 @@ int	ft_pwd(t_tools *tools)
 	}
 	else
 	{
-		perror("pwd");
-		return (1);
+		return (ft_error(ERR_NO_SUCH_FILE, tools));
 	}
 	if (tools->debug_mode)
 		printf("[DEBUG]: ft_pwd() executed\n");

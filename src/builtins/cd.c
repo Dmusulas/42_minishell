@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 22:34:42 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/15 11:19:30 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:32:02 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,25 @@
 
 int	ft_cd(char *path, t_tools *tools)
 {
+	char	*home;
+	char	*oldpwd;
+
 	if (!path)
 	{
-		write(STDERR_FILENO, "cd: expected argument\n", 22);
-		return (1);
+		home = get_env_value("HOME", tools);
+		if (!home)
+			return (ft_error(ERR_HOME_NOT_SET, tools));
+		return (change_to_absolute_path(home, tools));
+	}
+	if (ft_strcmp(path, "-") == 0)
+	{
+		oldpwd = get_env_value("OLDPWD", tools);
+		if (!oldpwd)
+			return (ft_error(ERR_OLDPWD_NOT_SET, tools));
+		return (change_to_absolute_path(oldpwd, tools));
 	}
 	if (path[0] == '/')
-		return (change_to_absolute_path(path));
+		return (change_to_absolute_path(path, tools));
 	else
 		return (change_to_relative_path(path, tools));
 }

@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 14:07:03 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/14 17:15:18 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:31:48 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,10 @@ void	remove_env_var(t_list **envp, const char *var_name)
 	}
 }
 
-int	change_to_absolute_path(char *path)
+int	change_to_absolute_path(char *path, t_tools *tools)
 {
 	if (chdir(path) == -1)
-	{
-		write(STDERR_FILENO, "cd: ", 4);
-		write(STDERR_FILENO, path, ft_strlen(path));
-		write(STDERR_FILENO, ": No such file or directory\n", 28);
-		return (1);
-	}
+		return (ft_error(ERR_NO_SUCH_FILE, tools));
 	return (0);
 }
 
@@ -60,10 +55,7 @@ int	change_to_relative_path(char *path, t_tools *tools)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-	{
-		perror("cd");
-		return (1);
-	}
+		return (ft_error(ERR_NO_SUCH_FILE, tools));
 	full_path = ft_strjoin(cwd, "/");
 	full_path = ft_strjoin(full_path, path);
 	free(cwd);
@@ -71,7 +63,7 @@ int	change_to_relative_path(char *path, t_tools *tools)
 		printf("[DEBUG]: Changing to relative path: %s\n", full_path);
 	if (chdir(full_path) == -1)
 	{
-		printf("cd: %s: No such file or directory\n", path);
+		ft_error(ERR_NO_SUCH_FILE, tools);
 		free(full_path);
 		return (1);
 	}

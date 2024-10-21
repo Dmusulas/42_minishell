@@ -3,15 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 20:31:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 20:31:14 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:20:14 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "lexer_parser.h"
+#include "error_messages.h"
 
 void	handle_pipe_parent(int *fd, int *fd_in)
 {
@@ -47,10 +48,10 @@ void	handle_pipes(t_ast *node, t_tools *tools)
 	while (current_node && current_node->token == T_PIPE)
 	{
 		if (pipe(fd) == -1)
-			msg_error(ERR_PIPE);
+			ft_error(ERR_PIPE, tools);
 		pid = fork();
 		if (pid == -1)
-			msg_error(ERR_FORK);
+			ft_error(ERR_FORK, tools);
 		else if (pid == 0)
 			handle_pipe_child(fd, &fd_in, current_node, tools);
 		else

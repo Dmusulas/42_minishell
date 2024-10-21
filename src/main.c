@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/19 12:29:19 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:21:52 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,11 +27,7 @@ int	main(int argc, char *argv[], char *envp[])
 	tools.debug_mode = true;
 	rl_catch_signals = 0;
 	if (!duplicate_env(&tools))
-	{
-		ft_putendl_fd("Failed to duplicate environment variables",
-			STDERR_FILENO);
-		return (EXIT_FAILURE);
-	}
+		return (ft_error(ERR_MALLOC, &tools)); // Changed error handling to use ft_error
 	init_tools(&tools);
 	set_initial_exit_status(&tools);
 	mini_loop(&tools);

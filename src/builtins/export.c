@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/19 12:29:39 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:19:22 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,7 @@ int	export_validation(char *arg, t_tools *tools)
 	{
 		if (tools->debug_mode)
 			printf("[DEBUG] Invalid first character\n");
-		ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-		ft_putstr_fd(arg, STDERR_FILENO);
-		ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+		ft_error(ERR_INVALID_IDENTIFIER, tools);
 		return (0);
 	}
 	i = 1;
@@ -35,9 +33,7 @@ int	export_validation(char *arg, t_tools *tools)
 		{
 			if (tools->debug_mode)
 				printf("[DEBUG] Invalid character: %c at position %d\n", arg[i], i);
-			ft_putstr_fd("minishell: export: `", STDERR_FILENO);
-			ft_putstr_fd(arg, STDERR_FILENO);
-			ft_putendl_fd("': not a valid identifier", STDERR_FILENO);
+			ft_error(ERR_INVALID_IDENTIFIER, tools);
 			return (0);
 		}
 		i++;

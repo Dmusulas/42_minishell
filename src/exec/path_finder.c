@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   path_finder.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/10 17:41:31 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/10 17:41:31 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:10:27 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int	is_absolute_or_relative_path(char *cmd)
  * @param rel_path The relative path to resolve.
  * @return The full absolute path, or NULL if an error occurs.
  */
-char	*resolve_relative_path(char *rel_path)
+char	*resolve_relative_path(char *rel_path, t_tools *tools)
 {
 	char	*cwd;
 	char	*full_path;
@@ -130,7 +130,7 @@ char	*resolve_relative_path(char *rel_path)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		perror("getcwd failed");
+		ft_error(ERR_EXECVE_FAIL, tools); // Changed error handling to use ft_error
 		return (NULL);
 	}
 	full_path = join_paths(cwd, rel_path);

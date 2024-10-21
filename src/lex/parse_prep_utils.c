@@ -3,30 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   parse_prep_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:37 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:01:37 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:13:53 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
-
-// static t_tokens	arg_check(char *token)
-// {
-// 	if (is_builtin(token))
-// 		return (T_CMD);
-// 	return (T_ARG);
-// }
-
-// void	add_tk_cmd_check(char *str, t_tools *tools)
-// {
-// 	t_tokens	token_type;
-
-// 	token_type = arg_check(str);
-// 	add_tk(&(tools->lexer_lst), make_tk(str, token_type));
-// }
 
 /*
 	set p_redir as whole command,
