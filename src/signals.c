@@ -3,22 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:22 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:01:22 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 17:23:37 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-The event function that will be periodically called by Readline
-*/
-int	event(void)
-{
-	return (0);
-}
 
 /*
 handles Ctrl+C
@@ -55,10 +47,10 @@ void	sigquit_handler(int signal)
 Set the event hook function to be called periodically by Readline.
 Set the SIGINT signal handler to sigint_handler.
 Ignore the SIGQUIT signal when not in cmd execution.
+
 */
 void	init_signals(void)
 {
-	rl_event_hook = event;
 	signal(SIGINT, sigint_handler);
 	signal(SIGQUIT, SIG_IGN);
 }
