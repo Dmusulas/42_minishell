@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 14:19:22 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 17:10:45 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,10 @@
 
 int	export_validation(char *arg, t_tools *tools)
 {
-	int i;
+	int		i;
 
 	if (tools->debug_mode)
 		printf("[DEBUG] Validating: %s\n", arg);
-
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 	{
 		if (tools->debug_mode)
@@ -61,7 +60,6 @@ int	ft_export(t_ast *cmd_node, t_tools *tools)
 		arg = current->str;
 		if (tools->debug_mode)
 			printf("[DEBUG] Processing argument: %s\n", arg);
-		
 		if (!export_validation(arg, tools))
 		{
 			if (tools->debug_mode)

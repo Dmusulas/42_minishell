@@ -6,15 +6,15 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 14:07:03 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/22 16:14:05 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 17:12:13 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	ft_non_int(char *str)
+int	ft_is_not_integer(char *str)
 {
-	int i;
+	int		i;
 
 	i = 0;
 	if (str[0] == '-' || str[0] == '+')
