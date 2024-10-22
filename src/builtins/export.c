@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/22 17:10:45 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 17:29:15 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,6 @@ int	ft_export(t_ast *cmd_node, t_tools *tools)
 				printf("[DEBUG] Updating or adding to envp\n");
 			if (update_or_add_envp(&tools->envp, arg) != 0)
 				success = 1;
-		}
-		else
-		{
-			if (tools->debug_mode)
-				printf("[DEBUG] Printing linked list\n");
-			print_linkedlist(tools->envp);
 		}
 		current = current->right;
 	}
