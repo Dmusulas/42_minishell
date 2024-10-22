@@ -60,4 +60,6 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+minishell_tester/
+
 # find . -type f -name "_*" -exec rm -f {} \;

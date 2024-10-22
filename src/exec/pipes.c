@@ -10,9 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "error_messages.h"
 #include "exec.h"
 #include "lexer_parser.h"
-#include "error_messages.h"
 
 void	handle_pipe_parent(int *fd, int *fd_in)
 {
@@ -25,15 +25,20 @@ void	handle_pipe_parent(int *fd, int *fd_in)
 void	handle_pipe_child(int *fd, int *fd_in, t_ast *node, t_tools *tools)
 {
 	close(fd[0]);
+	if (node->token == T_REDIR_IN || node->token == T_HEREDOC)
+		set_infile(node, tools);
+	if (node->right)
+	{
+		dup2(fd[1], STDOUT_FILENO);
+	}
+	close(fd[1]);
 	if (*fd_in != -1)
 	{
 		dup2(*fd_in, STDIN_FILENO);
 		close(*fd_in);
 	}
-	dup2(fd[1], STDOUT_FILENO);
-	close(fd[1]);
 	execute_command(node->left, tools);
-	exit(0);
+	exit(1);
 }
 
 void	handle_pipes(t_ast *node, t_tools *tools)
@@ -58,6 +63,8 @@ void	handle_pipes(t_ast *node, t_tools *tools)
 			handle_pipe_parent(fd, &fd_in);
 		current_node = current_node->right;
 	}
+	if (current_node->token == T_REDIR_IN)
+		set_infile(current_node, tools);
 	if (fd_in != -1)
 		dup2(fd_in, STDIN_FILENO);
 	execute_command(current_node, tools);

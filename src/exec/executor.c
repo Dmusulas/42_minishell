@@ -40,7 +40,6 @@ static void	handle_io_redirection(t_ast *node, t_tools *tools)
 	execute_command(node->left, tools);
 	restore_stdin_stdout(saved_stdin, saved_stdout);
 }
-
 /**
  * Handles the execution of a command represented by the given AST node.
  * If the command is a built-in command, it is executed directly. Otherwise,
@@ -77,6 +76,7 @@ void	execute_at_path(char *path, t_ast *node, char **envp, t_tools *tools)
 		ft_error(ERR_EXECVE_FAIL, tools);
 		exit(126);
 	}
+	tools->last_exit_status = exec_status;
 }
 
 /**

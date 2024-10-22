@@ -21,7 +21,8 @@
  * @param file_str The string representing the file for redirection.
  * @return The redirection node or NULL on failure.
  */
-static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str, t_tools tools)
+static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str,
+		t_tools tools)
 {
 	t_ast	*redir_node;
 

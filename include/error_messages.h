@@ -6,38 +6,40 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 14:14:12 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/21 15:18:37 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 03:03:04 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ERROR_MESSAGES_H
 # define ERROR_MESSAGES_H
 
+# include "lexer_parser.h"
+
 typedef enum e_error_type
 {
-    ERR_SYNTAX,
-    ERR_CMD_NOT_FOUND,
-    ERR_NO_SUCH_FILE,
-    ERR_PERMISSION_DENIED,
-    ERR_TOO_MANY_ARGS,
-    ERR_NUMERIC_ARG_REQUIRED,
-    ERR_HOME_NOT_SET,
-    ERR_OLDPWD_NOT_SET,
-    ERR_INVALID_IDENTIFIER,
-    ERR_MALLOC_FAIL,
-    ERR_PIPE_FAIL,
-    ERR_FORK_FAIL,
-    ERR_DUP2_FAIL,
-    ERR_EXECVE_FAIL,
-    ERR_OUTFILE,
-    ERR_INFILE,
-    ERR_ACCESS,
-    ERR_MALLOC,
-    ERR_PIPE,
-    ERR_FORK,
-    ERR_EXEC,
-    ERR_FILE,
-} t_error_type;
+	ERR_SYNTAX,
+	ERR_CMD_NOT_FOUND,
+	ERR_NO_SUCH_FILE,
+	ERR_PERMISSION_DENIED,
+	ERR_TOO_MANY_ARGS,
+	ERR_NUMERIC_ARG_REQUIRED,
+	ERR_HOME_NOT_SET,
+	ERR_OLDPWD_NOT_SET,
+	ERR_INVALID_IDENTIFIER,
+	ERR_MALLOC_FAIL,
+	ERR_PIPE_FAIL,
+	ERR_FORK_FAIL,
+	ERR_DUP2_FAIL,
+	ERR_EXECVE_FAIL,
+	ERR_OUTFILE,
+	ERR_INFILE,
+	ERR_ACCESS,
+	ERR_MALLOC,
+	ERR_PIPE,
+	ERR_FORK,
+	ERR_EXEC,
+	ERR_FILE,
+}	t_error_type;
 
 # define ERR_SYNTAX_MSG "syntax error near unexpected token"
 # define ERR_CMD_NOT_FOUND_MSG "command not found"
@@ -61,7 +63,6 @@ typedef enum e_error_type
 # define ERR_FORK_MSG "Fork creation error"
 # define ERR_EXEC_MSG "Child execution error"
 # define ERR_FILE_MSG "Cannot open file"
-#include "minishell.h"
 
 int		ft_error(t_error_type err_type, t_tools *tools);
 

@@ -56,7 +56,11 @@ void	set_infile(t_ast *node, t_tools *tools)
 	if (node->token == T_HEREDOC)
 		here_doc(node->file, node, tools);
 	if (access(node->file, R_OK) == -1)
+	{
+		tools->last_exit_status = 1;
 		ft_error(ERR_NO_SUCH_FILE, tools);
+		exit(1);
+	}
 	fd = open(node->file, O_RDONLY);
 	if (fd < 0)
 		ft_error(ERR_NO_SUCH_FILE, tools);
@@ -80,7 +84,11 @@ void	set_outfile(t_ast *node, bool append_mode, t_tools *tools)
 	else
 		fd = open(node->file, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (fd < 0)
+	{
+		tools->last_exit_status = 1;
 		ft_error(ERR_NO_SUCH_FILE, tools);
+		exit(1);
+	}
 	new_fd = dup2(fd, STDOUT_FILENO);
 	if (new_fd == -1)
 		ft_error(ERR_DUP2_FAIL, tools);
