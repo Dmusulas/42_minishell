@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:37 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:13:53 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 15:38:39 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	handle_input(t_tools *tools)
 		if (tools->tree && tools->debug_mode)
 		{
 			print_tokens(orig_lexer_lst);
-			print_ast(tools->tree, 0);
+			//print_ast(tools->tree, 0);
 		}
 	}
 }

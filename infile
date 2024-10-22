@@ -1,6 +1,0 @@
-[DEBUG] Changing the outfile to infile
-[DEBUG] expand_var: Expanding string: test
-[DEBUG] expand_var: Final expanded string: test
-test
-[DEBUG]: ft_echo() executed
-[DEBUG] Last exit status preserved: 0

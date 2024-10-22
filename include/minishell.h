@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 14:31:26 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:14:14 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,8 @@ int		ft_export(t_ast *cmd_node, t_tools *tools);
 int		ft_echo(t_ast *cmd_node, t_tools *tools);
 int		ft_unset(t_ast *cmd_node, t_tools *tools);
 int		ft_cd(char *path, t_tools *tools);
-void	ft_exit(t_tools *tools);
+int 	ft_exit(t_ast *cmd_node, t_tools *tools);
 int		ft_env(t_tools *tools);
+int		ft_non_int(char *str);
 
 #endif

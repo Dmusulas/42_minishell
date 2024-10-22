@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/21 14:32:16 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 16:13:59 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,34 @@ int	ft_unset(t_ast *cmd_node, t_tools *tools)
 	return (0);
 }
 
-void	ft_exit(t_tools *tools)
+int	ft_exit(t_ast *cmd_node, t_tools *tools)
 {
+	long long exit_code = 0;
+	char *arg;
+
 	if (tools->debug_mode)
 		printf("[DEBUG]: ft_exit() executed\n");
+	
 	printf("exit\n");
-	exit(0);
+
+	if (cmd_node->right)
+	{
+		arg = cmd_node->right->str;
+		if (ft_non_int(arg))
+		{
+			ft_putstr_fd("exit: numeric argument required\n", STDERR_FILENO);
+			exit(2);
+		}
+		exit_code = ft_atoi(arg);
+		if (cmd_node->right->right)
+		{
+			ft_putstr_fd("exit: too many arguments\n", STDERR_FILENO);
+			return (1);
+		}
+	}
+
+	clean_tools(tools);
+	exit((unsigned char)exit_code);
 }
 
 void	execute_builtin(t_ast *cmd_node, t_tools *tools)
@@ -79,6 +101,6 @@ void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 	else if (ft_strcmp(cmd_node->str, "env") == 0)
 		status_result = ft_env(tools);
 	else if (ft_strcmp(cmd_node->str, "exit") == 0)
-		ft_exit(tools);
+		status_result = ft_exit(cmd_node, tools);
 	tools->last_exit_status = status_result;
 }
