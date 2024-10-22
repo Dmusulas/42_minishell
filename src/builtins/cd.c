@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 22:34:42 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/22 22:35:50 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 22:55:09 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	ft_cd(char *path, t_tools *tools)
 	char	*oldpwd;
 
 	if (path && ft_isdigit(path[0]))
-		return (1); // add ft_error
+		return (ft_error(ERR_NUMERIC_ARG_REQUIRED, tools));
 	if (!path)
 	{
 		home = get_env_value("HOME", tools);
