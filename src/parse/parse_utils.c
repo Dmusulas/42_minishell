@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/02 16:01:54 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:14:32 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ int	is_builtin(const char *cmd)
 		|| ft_strcmp(cmd, "exit") == 0);
 }
 
-t_ast	*ast_new(void)
+t_ast	*ast_new(t_tools *tools)
 {
 	t_ast	*new_nd;
 
 	new_nd = malloc(sizeof(t_ast));
 	if (!new_nd)
 	{
-		perror("ast_new: malloc");
+		ft_error(ERR_MALLOC_FAIL, tools);
 		return (NULL);
 	}
 	new_nd->str = NULL;

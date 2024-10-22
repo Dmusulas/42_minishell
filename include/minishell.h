@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/14 16:57:28 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:31:26 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 // # include "exec.h"
 # include "libft.h"
 # include "lexer_parser.h"
+# include "error_messages.h"
 
 # define ERR_LEX 1
 # define ERR_QUO 2
@@ -42,7 +43,6 @@ int		reset_tools(t_tools *tools);
 int		mini_loop(t_tools *tools);
 void	clean_tools(t_tools *tools);
 
-int		ft_error(int err_type, t_tools *tools);
 void	clear_tokens(t_lexer **lexer_list);
 void	free_ast(t_ast *tree);
 
@@ -83,7 +83,7 @@ void	test_envp(t_list *envp);
 /* BUILTINS */
 void	execute_builtin(t_ast *cmd_node, t_tools *tools);
 void	remove_env_var(t_list **envp, const char *var_name);
-int		change_to_absolute_path(char *path);
+int		change_to_absolute_path(char *path, t_tools *tools);
 int		change_to_relative_path(char *path, t_tools *tools);
 int		ft_export(t_ast *cmd_node, t_tools *tools);
 int		ft_echo(t_ast *cmd_node, t_tools *tools);

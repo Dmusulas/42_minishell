@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 20:32:35 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/15 12:03:02 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 14:47:47 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,12 +31,11 @@ void	fork_and_execute_command(t_ast *node, t_tools *tools)
 	pid = fork();
 	if (pid == -1)
 	{
-		perror("Fork failed");
-		exit(EXIT_FAILURE);
+		ft_error(ERR_FORK, tools);
 	}
 	else if (pid == 0)
 	{
-		execute_external_command(node, list_to_array(tools->envp));
+		execute_external_command(node, list_to_array(tools->envp), tools);
 		exit(EXIT_FAILURE);
 	}
 	else

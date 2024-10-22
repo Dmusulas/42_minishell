@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   commands.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:49:09 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/17 18:49:09 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/10/21 15:15:05 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ static void	parse_arg(t_ast *cmd_node, t_tools *tools)
 	prev_node = cmd_node;
 	while (curr && (curr->token == T_CMD || curr->token == T_ARG))
 	{
-		arg_node = ast_new();
+		arg_node = ast_new(tools);
 		if (!arg_node)
 			return ;
 		arg_node->token = curr->token;
@@ -78,7 +78,7 @@ t_ast	*parse_cmd(t_tools *tools)
 {
 	t_ast	*cmd_node;
 
-	cmd_node = ast_new();
+	cmd_node = ast_new(tools);
 	if (!cmd_node)
 		return (NULL);
 	cmd_node->token = tools->lexer_lst->token;

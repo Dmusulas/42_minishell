@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/04 12:24:52 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/21 15:13:34 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,11 @@ int	handle_q_arg(char *s, int start, t_tools *tools)
 	}
 	if (s[i] != quote)
 	{
-		ft_putstr_fd("minishell: unclosed quote\n", STDERR_FILENO);
-		return (1);
+		return (ft_error(ERR_SYNTAX, tools));
 	}
 	arg = ft_substr(s, start + 1, i - start - 1);
 	if (arg == NULL)
-	{
-		perror("ft_substr");
-		return (1);
-	}
+		return (ft_error(ERR_MALLOC_FAIL, tools));
 	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
 	return (i - start + 1);
 }
@@ -74,10 +70,7 @@ int	handle_arg(char *s, int start, t_tools *tools)
 		i++;
 	arg = ft_substr(s, start, i - start);
 	if (arg == NULL)
-	{
-		perror("ft_substr");
-		return (0);
-	}
+		return (ft_error(ERR_MALLOC_FAIL, tools));
 	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
 	return (i - start);
 }
