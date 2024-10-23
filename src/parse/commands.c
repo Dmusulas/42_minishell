@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:49:09 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:15:05 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 12:05:57 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,31 @@
  */
 static char	*trim_expd_arg(const char *s, t_tools *tools)
 {
-	size_t	len;
-	char	*trim;
-	char	*expd;
+	char	*result;
+	char	*temp;
+	int		i;
+	int		j;
 
-	len = ft_strlen(s);
-	if (s[0] == '\'' && s[len - 1] == '\'')
-		return (ft_strndup(s + 1, len - 2));
-	if (s[0] == '"' && s[len - 1] == '"')
+	if (!s)
+		return (NULL);
+	temp = ft_strdup(s);
+	if (!temp)
+		return (NULL);
+	result = ft_calloc(ft_strlen(s) + 1, sizeof(char));
+	if (!result)
+		return (free(temp), NULL);
+	i = 0;
+	j = 0;
+	while (temp[i])
 	{
-		trim = ft_strndup(s + 1, len - 2);
-		if (!trim)
-			return (NULL);
-		expd = expand_var(trim, tools);
-		return (free(trim), expd);
+		if (temp[i] != '\'' && temp[i] != '"')
+			result[j++] = temp[i];
+		i++;
 	}
-	return (expand_var(s, tools));
+	free(temp);
+	if (result[0] == '\0')
+		return (expand_var(s, tools));
+	return (expand_var(result, tools));
 }
 
 /**
