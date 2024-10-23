@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:32 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:18:59 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 22:52:43 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	error_extension(t_error_type err_type)
 
 int	ft_error(t_error_type err_type, t_tools *tools)
 {
+	(void)tools;
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	if (err_type == ERR_SYNTAX)
 		ft_putstr_fd(ERR_SYNTAX_MSG, STDERR_FILENO);
@@ -65,6 +66,6 @@ int	ft_error(t_error_type err_type, t_tools *tools)
 	else
 		error_extension(err_type);
 	ft_putstr_fd("\n", STDERR_FILENO);
-	reset_tools(tools);
+	// reset_tools(tools);
 	return (EXIT_FAILURE);
 }

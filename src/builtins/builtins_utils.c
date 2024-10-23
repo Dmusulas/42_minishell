@@ -6,11 +6,27 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 14:07:03 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/21 14:31:48 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 17:12:13 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	ft_is_not_integer(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (str[0] == '-' || str[0] == '+')
+		i++;
+	while (str[i])
+	{
+		if (str[i] < '0' || str[i] > '9')
+			return (1);
+		i++;
+	}
+	return (0);
+}
 
 void	remove_env_var(t_list **envp, const char *var_name)
 {

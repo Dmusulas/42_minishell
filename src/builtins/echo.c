@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 22:33:09 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/21 14:33:20 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/22 17:11:29 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	print_argument(t_ast *current, t_tools *tools)
 		if (!expanded_str)
 		{
 			ft_error(ERR_MALLOC_FAIL, tools);
-			return;
+			return ;
 		}
 		ft_putstr_fd(expanded_str, STDOUT_FILENO);
 		free(expanded_str);

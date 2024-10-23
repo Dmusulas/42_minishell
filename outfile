@@ -1,8 +1,0 @@
-[DEBUG] Changing the outfile to outfile
-[DEBUG] Executing HERE DOC reading 
-[?2004h>test
-[?2004l[?2004h>EOF
-[?2004l[DEBUG] Changing the infile to /tmp/here_doc_12342
-[DEBUG] Changing the infile to /tmp/here_doc_12342
-test
-[DEBUG] Last exit status preserved: 0
