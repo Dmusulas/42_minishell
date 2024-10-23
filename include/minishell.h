@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/22 17:12:01 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 11:11:44 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,7 @@ int		ft_unset(t_ast *cmd_node, t_tools *tools);
 int		ft_cd(char *path, t_tools *tools);
 int 	ft_exit(t_ast *cmd_node, t_tools *tools);
 int		ft_env(t_tools *tools);
+int		ft_pwd(t_tools *tools);
 int		ft_is_not_integer(char *str);
 
 #endif

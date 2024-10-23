@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 22:33:09 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/22 17:11:29 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 11:44:00 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,20 +14,25 @@
 
 static void	print_argument(t_ast *current, t_tools *tools)
 {
-	char	*expanded_str;
+	char	*str;
+	int		i;
 
 	if (ft_strcmp(current->str, "$?") == 0)
 		ft_putnbr_fd(tools->last_exit_status, STDOUT_FILENO);
 	else
 	{
-		expanded_str = expand_var(current->str, tools);
-		if (!expanded_str)
+		str = current->str;
+		i = 0;
+		while (str[i])
 		{
-			ft_error(ERR_MALLOC_FAIL, tools);
-			return ;
+			if (str[i] == '$' && str[i + 1] == '?')
+			{
+				ft_putnbr_fd(tools->last_exit_status, STDOUT_FILENO);
+				i += 2;
+			}
+			else
+				ft_putchar_fd(str[i++], STDOUT_FILENO);
 		}
-		ft_putstr_fd(expanded_str, STDOUT_FILENO);
-		free(expanded_str);
 	}
 }
 

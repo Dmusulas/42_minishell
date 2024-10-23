@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/22 17:29:15 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 11:23:13 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ int	export_validation(char *arg, t_tools *tools)
 		return (0);
 	}
 	i = 1;
+	// Only validate the variable name part (before '=')
 	while (arg[i] && arg[i] != '=')
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
@@ -72,6 +73,7 @@ int	ft_export(t_ast *cmd_node, t_tools *tools)
 				printf("[DEBUG] Updating or adding to envp\n");
 			if (update_or_add_envp(&tools->envp, arg) != 0)
 				success = 1;
+			return (success);
 		}
 		current = current->right;
 	}

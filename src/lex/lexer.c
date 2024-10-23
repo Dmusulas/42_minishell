@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:13:34 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 12:55:01 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,8 @@ int	handle_q_arg(char *s, int start, t_tools *tools)
 	{
 		return (ft_error(ERR_SYNTAX, tools));
 	}
-	arg = ft_substr(s, start + 1, i - start - 1);
+	// Include the quotes in the substring
+	arg = ft_substr(s, start, i - start + 1);
 	if (arg == NULL)
 		return (ft_error(ERR_MALLOC_FAIL, tools));
 	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
