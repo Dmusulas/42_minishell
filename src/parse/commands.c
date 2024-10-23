@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:49:09 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 13:02:35 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 21:33:02 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static char	*trim_expd_arg(const char *s, t_tools *tools)
 	{
 		if (s[0] == '\'')
 		{
+			tools->in_single_quotes = true;
 			return (ft_substr(s, 1, ft_strlen(s) - 2));
 		}
 		if (s[0] == '"')
