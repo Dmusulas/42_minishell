@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:28 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/13 11:24:33 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 11:56:15 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ int	ft_two_tk(char c1, char c2, t_tools *tools)
 }
 
 /*
- * This function checks how many double and sinlge quotes are in command.
+ * This function checks how many double and single quotes are in command.
  * @returns 0 if there are unclosed quotes or 1 if there are not
  */
 int	check_quotes(char *s)
