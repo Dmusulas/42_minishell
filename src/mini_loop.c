@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/19 11:55:41 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 12:32:59 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	reset_tools(t_tools *tools)
 /*
 	handle_input
 		quotes/match check, sends error msg if not correct + restart
-		tokenize_input (+ chceck if NULL, error msg + restart)
+		tokenize_input (+ check if NULL, error msg + restart)
 		labels T_ARG / T_CMD
 		process token -> assigns values vars related to redir tokens
 */
