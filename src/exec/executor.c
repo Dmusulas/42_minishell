@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:10:43 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/24 12:41:00 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,13 +99,25 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 		else
 			cmd_path = node->str;
 		if (cmd_path)
+		{
+			if (access(cmd_path, F_OK) == -1)
+			{
+				ft_putstr_fd(node->str, 2);
+				ft_putendl_fd(": No such file or directory", 2);
+				exit(127);  // Changed from 1 to 127 for "command not found"
+			}
 			execute_at_path(cmd_path, node, envp, tools);
+		}
 	}
 	path_var = find_path(envp);
 	cmd_path = find_cmd(path_var, node->str);
 	free(path_var);
 	if (!cmd_path || !*cmd_path)
-		exit(127);
+	{
+		ft_putstr_fd(node->str, 2);
+		ft_putendl_fd(": No such file or directory", 2);
+		exit(127);  // Changed from 1 to 127 for "command not found"
+	}
 	execute_at_path(cmd_path, node, envp, tools);
 }
 

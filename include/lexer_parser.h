@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:14:50 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 21:26:48 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,6 @@
 # include <stdbool.h>
 # include "libft.h"
 
-/*
-	T_REDIR_IN <
-	T_REDIR_OUT >
-	T_APPEND >>
-	T_HEREDOC <<
-*/
 typedef enum s_tokens
 {
 	T_INVALID = 0,
@@ -82,6 +76,7 @@ typedef struct s_tools
 	int		out_fd;
 	bool	heredoc;
 	bool	debug_mode;
+	bool	in_single_quotes;
 	t_ast	*tree;
 	int		last_exit_status;
 }	t_tools;

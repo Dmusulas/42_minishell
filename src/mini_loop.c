@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 12:32:59 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/10/23 21:29:34 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	init_tools(t_tools *tools)
 	tools->in_fd = 0;
 	tools->out_fd = 0;
 	tools->tree = NULL;
+	tools->in_single_quotes = false;
 	init_signals();
 }
 
