@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 16:24:16 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:27:45 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,14 +136,25 @@ void    check_env_directory(t_ast *node, t_tools *tools)
 
     if (!node || !node->str || node->str[0] != '$')
         return;
+    
+    // Skip for $ and $? special cases
     if (ft_strcmp(node->str, "$") == 0 || ft_strcmp(node->str, "$?") == 0)
         return;
+
+    // Get the environment variable value (skip the '$' character)
     env_value = get_env_value(node->str + 1, tools);
     if (!env_value)
     {
-        tools->last_exit_status = 0;
-        exit(0);
+        // Only exit if this is the command itself (no right node)
+        if (!node->right)
+        {
+            tools->last_exit_status = 0;
+            exit(0);
+        }
+        return;  // Otherwise continue execution
     }
+
+    // Check if the path exists and is a directory
     if (stat(env_value, &path_stat) == 0)
     {
         if (S_ISDIR(path_stat.st_mode))
@@ -177,6 +188,22 @@ void	execute_command(t_ast *node, t_tools *tools)
 	{
 		handle_io_redirection(node, tools);
 		return ;
+	}
+	// Skip empty environment variables at the start of a command
+	if (node->str && node->str[0] == '$')
+	{
+		char *env_value;
+		// Skip for $ and $? special cases
+		if (ft_strcmp(node->str, "$") != 0 && ft_strcmp(node->str, "$?") != 0)
+		{
+			env_value = get_env_value(node->str + 1, tools);
+			if (!env_value && node->right)
+			{
+				// Skip this node and execute the right part
+				execute_command(node->right, tools);
+				return;
+			}
+		}
 	}
 	check_env_directory(node, tools);
 	execute_single_command(node, tools);
