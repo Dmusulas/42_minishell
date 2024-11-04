@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 15:20:29 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:50:05 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <stdbool.h>
+#include <dirent.h>
 # include "libft.h"
 
 typedef enum s_tokens

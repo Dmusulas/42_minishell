@@ -6,15 +6,13 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 16:31:00 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:50:14 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "lexer_parser.h"
-#include "libft.h"
 #include "minishell.h"
-#include <dirent.h>
 
 /**
  * Redirects input or output based on the AST node type.
