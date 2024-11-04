@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 16:50:14 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:56:04 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ static void	handle_io_redirection(t_ast *node, t_tools *tools)
 	execute_command(node->left, tools);
 	restore_stdin_stdout(saved_stdin, saved_stdout);
 }
+
 /**
  * Handles the execution of a command represented by the given AST node.
  * If the command is a built-in command, it is executed directly. Otherwise,
@@ -126,42 +127,35 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
  *
  * @param node The AST node representing the command.
  * @param tools Struct containing necessary tools for execution.
- */
-void    check_env_directory(t_ast *node, t_tools *tools)
+*/
+void	check_env_directory(t_ast *node, t_tools *tools)
 {
-    char    *env_value;
-    DIR     *dir;
+	char	*env_value;
+	DIR		*dir;
 
-    if (!node || !node->str || node->str[0] != '$')
-        return;
-    
-    // Skip for $ and $? special cases
-    if (ft_strcmp(node->str, "$") == 0 || ft_strcmp(node->str, "$?") == 0)
-        return;
-
-    // Get the environment variable value (skip the '$' character)
-    env_value = get_env_value(node->str + 1, tools);
-    if (!env_value)
-    {
-        // Only exit if this is the command itself (no right node)
-        if (!node->right)
-        {
-            tools->last_exit_status = 0;
-            exit(0);
-        }
-        return;  // Otherwise continue execution
-    }
-
-    // Try to open as directory
-    dir = opendir(env_value);
-    if (dir)
-    {
-        closedir(dir);
-        ft_putstr_fd(env_value, 2);
-        ft_error(ERR_IS_A_DIRECTORY, tools);
-        tools->last_exit_status = 126;
-        exit(126);
-    }
+	if (!node || !node->str || node->str[0] != '$')
+		return ;
+	if (ft_strcmp(node->str, "$") == 0 || ft_strcmp(node->str, "$?") == 0)
+		return ;
+	env_value = get_env_value(node->str + 1, tools);
+	if (!env_value)
+	{
+		if (!node->right)
+		{
+			tools->last_exit_status = 0;
+			exit(0);
+		}
+		return ;
+	}
+	dir = opendir(env_value);
+	if (dir)
+	{
+		closedir(dir);
+		ft_putstr_fd(env_value, 2);
+		ft_error(ERR_IS_A_DIRECTORY, tools);
+		tools->last_exit_status = 126;
+		exit(126);
+	}
 }
 
 /**
@@ -174,6 +168,8 @@ void    check_env_directory(t_ast *node, t_tools *tools)
  */
 void	execute_command(t_ast *node, t_tools *tools)
 {
+	char	*env_value;
+
 	if (!node)
 		return ;
 	if (node->token == T_PIPE)
@@ -189,7 +185,6 @@ void	execute_command(t_ast *node, t_tools *tools)
 	// Skip empty environment variables at the start of a command
 	if (node->str && node->str[0] == '$')
 	{
-		char *env_value;
 		// Skip for $ and $? special cases
 		if (ft_strcmp(node->str, "$") != 0 && ft_strcmp(node->str, "$?") != 0)
 		{
@@ -198,7 +193,7 @@ void	execute_command(t_ast *node, t_tools *tools)
 			{
 				// Skip this node and execute the right part
 				execute_command(node->right, tools);
-				return;
+				return ;
 			}
 		}
 	}
