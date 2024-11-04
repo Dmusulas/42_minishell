@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/24 12:41:00 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 15:44:49 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include "lexer_parser.h"
 #include "libft.h"
 #include "minishell.h"
+#include <sys/stat.h>
 
 /**
  * Redirects input or output based on the AST node type.
@@ -103,8 +104,8 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 			if (access(cmd_path, F_OK) == -1)
 			{
 				ft_putstr_fd(node->str, 2);
-				ft_putendl_fd(": No such file or directory", 2);
-				exit(127);  // Changed from 1 to 127 for "command not found"
+				ft_error(ERR_NO_SUCH_FILE, tools);
+				exit(127);
 			}
 			execute_at_path(cmd_path, node, envp, tools);
 		}
@@ -115,10 +116,43 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 	if (!cmd_path || !*cmd_path)
 	{
 		ft_putstr_fd(node->str, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-		exit(127);  // Changed from 1 to 127 for "command not found"
+		ft_error(ERR_CMD_NOT_FOUND, tools);
+		exit(127);
 	}
 	execute_at_path(cmd_path, node, envp, tools);
+}
+
+/**
+ * Checks if the command is an environment variable that resolves to a directory.
+ * If it is, prints an error message and sets the appropriate exit status.
+ *
+ * @param node The AST node representing the command.
+ * @param tools Struct containing necessary tools for execution.
+ */
+void    check_env_directory(t_ast *node, t_tools *tools)
+{
+    char    *env_value;
+    struct stat path_stat;
+
+    if (!node || !node->str || node->str[0] != '$')
+        return;
+
+    // Get the environment variable value (skip the '$' character)
+    env_value = get_env_value(node->str + 1, tools);
+    if (!env_value)
+        return;
+
+    // Check if the path exists and is a directory
+    if (stat(env_value, &path_stat) == 0)
+    {
+        if (S_ISDIR(path_stat.st_mode))
+        {
+            ft_putstr_fd(env_value, 2);
+            ft_error(ERR_IS_A_DIRECTORY, tools);
+            tools->last_exit_status = 126;
+            exit(126);
+        }
+    }
 }
 
 /**
@@ -143,5 +177,6 @@ void	execute_command(t_ast *node, t_tools *tools)
 		handle_io_redirection(node, tools);
 		return ;
 	}
+	check_env_directory(node, tools);
 	execute_single_command(node, tools);
 }
