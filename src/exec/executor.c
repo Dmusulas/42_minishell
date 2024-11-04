@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 16:27:45 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:31:00 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "lexer_parser.h"
 #include "libft.h"
 #include "minishell.h"
-#include <sys/stat.h>
+#include <dirent.h>
 
 /**
  * Redirects input or output based on the AST node type.
@@ -132,7 +132,7 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 void    check_env_directory(t_ast *node, t_tools *tools)
 {
     char    *env_value;
-    struct stat path_stat;
+    DIR     *dir;
 
     if (!node || !node->str || node->str[0] != '$')
         return;
@@ -154,16 +154,15 @@ void    check_env_directory(t_ast *node, t_tools *tools)
         return;  // Otherwise continue execution
     }
 
-    // Check if the path exists and is a directory
-    if (stat(env_value, &path_stat) == 0)
+    // Try to open as directory
+    dir = opendir(env_value);
+    if (dir)
     {
-        if (S_ISDIR(path_stat.st_mode))
-        {
-            ft_putstr_fd(env_value, 2);
-            ft_error(ERR_IS_A_DIRECTORY, tools);
-            tools->last_exit_status = 126;
-            exit(126);
-        }
+        closedir(dir);
+        ft_putstr_fd(env_value, 2);
+        ft_error(ERR_IS_A_DIRECTORY, tools);
+        tools->last_exit_status = 126;
+        exit(126);
     }
 }
 
