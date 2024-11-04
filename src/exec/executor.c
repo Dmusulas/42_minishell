@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 15:44:49 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:24:16 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,13 +136,14 @@ void    check_env_directory(t_ast *node, t_tools *tools)
 
     if (!node || !node->str || node->str[0] != '$')
         return;
-
-    // Get the environment variable value (skip the '$' character)
+    if (ft_strcmp(node->str, "$") == 0 || ft_strcmp(node->str, "$?") == 0)
+        return;
     env_value = get_env_value(node->str + 1, tools);
     if (!env_value)
-        return;
-
-    // Check if the path exists and is a directory
+    {
+        tools->last_exit_status = 0;
+        exit(0);
+    }
     if (stat(env_value, &path_stat) == 0)
     {
         if (S_ISDIR(path_stat.st_mode))

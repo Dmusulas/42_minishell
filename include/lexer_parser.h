@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 21:26:48 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 15:20:29 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ typedef struct s_ast
 /*
 *args: str of argument for curr cmd
 **paths: arr of paths where exec may be found (PATH env variable)
-**envp: arr of environment varriables
+**envp: arr of environment variables
 *lexer_lst: ptr to head of lexer list
 *p_redir: ptr to curr redir token in lexer_lst
 

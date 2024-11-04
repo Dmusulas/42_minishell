@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 14:14:12 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/22 03:03:04 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/11/04 15:25:59 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,13 @@ typedef enum e_error_type
 	ERR_FORK,
 	ERR_EXEC,
 	ERR_FILE,
+	ERR_IS_A_DIRECTORY,
 }	t_error_type;
 
 # define ERR_SYNTAX_MSG "syntax error near unexpected token"
 # define ERR_CMD_NOT_FOUND_MSG "command not found"
 # define ERR_NO_SUCH_FILE_MSG "No such file or directory"
+# define ERR_IS_A_DIRECTORY_MSG "is a directory"
 # define ERR_PERMISSION_DENIED_MSG "Permission denied"
 # define ERR_TOO_MANY_ARGS_MSG "too many arguments"
 # define ERR_NUMERIC_ARG_REQUIRED_MSG "numeric argument required"
