@@ -6,17 +6,19 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/23 11:17:16 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/05 13:23:48 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "minishell.h"
 
-int execute_cd(t_ast *cmd_node, t_tools *tools) {
+int	execute_cd(t_ast *cmd_node, t_tools *tools)
+{
 	t_ast	*arg_node;
-	int		status_result = 0;
+	int		status_result;
 
+	status_result = 0;
 	arg_node = cmd_node->right;
 	if (arg_node && arg_node->right)
 		status_result = ft_error(ERR_TOO_MANY_ARGS, tools);
