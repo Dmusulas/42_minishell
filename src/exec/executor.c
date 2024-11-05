@@ -6,13 +6,12 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/24 12:41:00 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/04 16:56:04 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "lexer_parser.h"
-#include "libft.h"
 #include "minishell.h"
 
 /**
@@ -40,6 +39,7 @@ static void	handle_io_redirection(t_ast *node, t_tools *tools)
 	execute_command(node->left, tools);
 	restore_stdin_stdout(saved_stdin, saved_stdout);
 }
+
 /**
  * Handles the execution of a command represented by the given AST node.
  * If the command is a built-in command, it is executed directly. Otherwise,
@@ -103,8 +103,8 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 			if (access(cmd_path, F_OK) == -1)
 			{
 				ft_putstr_fd(node->str, 2);
-				ft_putendl_fd(": No such file or directory", 2);
-				exit(127);  // Changed from 1 to 127 for "command not found"
+				ft_error(ERR_NO_SUCH_FILE, tools);
+				exit(127);
 			}
 			execute_at_path(cmd_path, node, envp, tools);
 		}
@@ -115,10 +115,47 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 	if (!cmd_path || !*cmd_path)
 	{
 		ft_putstr_fd(node->str, 2);
-		ft_putendl_fd(": No such file or directory", 2);
-		exit(127);  // Changed from 1 to 127 for "command not found"
+		ft_error(ERR_CMD_NOT_FOUND, tools);
+		exit(127);
 	}
 	execute_at_path(cmd_path, node, envp, tools);
+}
+
+/**
+ * Checks if the command is an environment variable that resolves to a directory.
+ * If it is, prints an error message and sets the appropriate exit status.
+ *
+ * @param node The AST node representing the command.
+ * @param tools Struct containing necessary tools for execution.
+*/
+void	check_env_directory(t_ast *node, t_tools *tools)
+{
+	char	*env_value;
+	DIR		*dir;
+
+	if (!node || !node->str || node->str[0] != '$')
+		return ;
+	if (ft_strcmp(node->str, "$") == 0 || ft_strcmp(node->str, "$?") == 0)
+		return ;
+	env_value = get_env_value(node->str + 1, tools);
+	if (!env_value)
+	{
+		if (!node->right)
+		{
+			tools->last_exit_status = 0;
+			exit(0);
+		}
+		return ;
+	}
+	dir = opendir(env_value);
+	if (dir)
+	{
+		closedir(dir);
+		ft_putstr_fd(env_value, 2);
+		ft_error(ERR_IS_A_DIRECTORY, tools);
+		tools->last_exit_status = 126;
+		exit(126);
+	}
 }
 
 /**
@@ -131,6 +168,8 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
  */
 void	execute_command(t_ast *node, t_tools *tools)
 {
+	char	*env_value;
+
 	if (!node)
 		return ;
 	if (node->token == T_PIPE)
@@ -143,5 +182,21 @@ void	execute_command(t_ast *node, t_tools *tools)
 		handle_io_redirection(node, tools);
 		return ;
 	}
+	// Skip empty environment variables at the start of a command
+	if (node->str && node->str[0] == '$')
+	{
+		// Skip for $ and $? special cases
+		if (ft_strcmp(node->str, "$") != 0 && ft_strcmp(node->str, "$?") != 0)
+		{
+			env_value = get_env_value(node->str + 1, tools);
+			if (!env_value && node->right)
+			{
+				// Skip this node and execute the right part
+				execute_command(node->right, tools);
+				return ;
+			}
+		}
+	}
+	check_env_directory(node, tools);
 	execute_single_command(node, tools);
 }

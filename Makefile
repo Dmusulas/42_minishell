@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/10/23 11:11:37 by pmolzer          ###   ########.fr        #
+#    Updated: 2024/11/04 15:14:51 by pmolzer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -65,7 +65,6 @@ MINISHELL_SRCS	= main.c \
 				  builtins/unset.c\
 				  utils/debug.c\
 				  utils/arrays.c\
-				  exec/err.c\
 				  exec/executor.c\
 				  exec/io.c\
 				  exec/path_finder.c\
