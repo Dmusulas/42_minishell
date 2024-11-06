@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 16:56:04 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:16:54 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 		{
 			if (access(cmd_path, F_OK) == -1)
 			{
-				ft_putstr_fd(node->str, 2);
 				ft_error(ERR_NO_SUCH_FILE, tools);
 				exit(127);
 			}
@@ -114,7 +113,6 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 	free(path_var);
 	if (!cmd_path || !*cmd_path)
 	{
-		ft_putstr_fd(node->str, 2);
 		ft_error(ERR_CMD_NOT_FOUND, tools);
 		exit(127);
 	}
