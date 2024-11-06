@@ -6,12 +6,13 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:28 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 11:56:15 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 15:28:16 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "libft.h"
+#include "error_messages.h"
 
 /*
  * This function calculates the length of the initial segment of string `s`
@@ -102,7 +103,7 @@ int	ft_two_tk(char c1, char c2, t_tools *tools)
  * This function checks how many double and single quotes are in command.
  * @returns 0 if there are unclosed quotes or 1 if there are not
  */
-int	check_quotes(char *s)
+int	check_quotes(char *s, t_tools *tools)
 {
 	int	i;
 	int	double_q;
@@ -120,7 +121,9 @@ int	check_quotes(char *s)
 		i++;
 	}
 	if ((double_q > 0 && double_q % 2 != 0) || (q > 0 && q % 2 != 0))
+	{
+		ft_error(ERR_QUO, tools);
 		return (0);
-	else
-		return (1); // add here functionality to prompt user to close quotes, adding a new lines
+	}
+	return (1);
 }

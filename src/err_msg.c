@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:32 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/04 15:30:00 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 15:30:45 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,12 @@ int	ft_error(t_error_type err_type, t_tools *tools)
 		ft_putstr_fd(ERR_OLDPWD_NOT_SET_MSG, STDERR_FILENO);
 	else if (err_type == ERR_INVALID_IDENTIFIER)
 		ft_putstr_fd(ERR_INVALID_IDENTIFIER_MSG, STDERR_FILENO);
+	else if (err_type == ERR_LEX)
+		ft_putstr_fd(ERR_LEX_MSG, STDERR_FILENO);
+	else if (err_type == ERR_QUO)
+		ft_putstr_fd(ERR_QUO_MSG, STDERR_FILENO);
+	else if (err_type == ERR_PAR)
+		ft_putstr_fd(ERR_PAR_MSG, STDERR_FILENO);
 	else if (err_type == ERR_MALLOC_FAIL)
 		ft_putstr_fd(ERR_MALLOC_FAIL_MSG, STDERR_FILENO);
 	else if (err_type == ERR_IS_A_DIRECTORY)
@@ -68,6 +74,5 @@ int	ft_error(t_error_type err_type, t_tools *tools)
 	else
 		error_extension(err_type);
 	ft_putstr_fd("\n", STDERR_FILENO);
-	// reset_tools(tools);
 	return (EXIT_FAILURE);
 }

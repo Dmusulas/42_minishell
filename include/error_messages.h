@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 14:14:12 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/11/04 15:25:59 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 15:21:34 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,9 @@ typedef enum e_error_type
 	ERR_EXEC,
 	ERR_FILE,
 	ERR_IS_A_DIRECTORY,
+	ERR_LEX,
+	ERR_QUO,
+	ERR_PAR,
 }	t_error_type;
 
 # define ERR_SYNTAX_MSG "syntax error near unexpected token"
@@ -65,6 +68,9 @@ typedef enum e_error_type
 # define ERR_FORK_MSG "Fork creation error"
 # define ERR_EXEC_MSG "Child execution error"
 # define ERR_FILE_MSG "Cannot open file"
+# define ERR_LEX_MSG "Lexical error"
+# define ERR_QUO_MSG "Quotation error"
+# define ERR_PAR_MSG "Parsing error"
 
 int		ft_error(t_error_type err_type, t_tools *tools);
 
