@@ -6,13 +6,13 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:28 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 11:56:15 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:37:18 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lexer_parser.h"
 #include "libft.h"
-
+#include "error_messages.h"
 /*
  * This function calculates the length of the initial segment of string `s`
  * that contains no characters from string `reject`. It checks each character
@@ -99,28 +99,30 @@ int	ft_two_tk(char c1, char c2, t_tools *tools)
 }
 
 /*
- * This function checks how many double and single quotes are in command.
- * @returns 0 if there are unclosed quotes or 1 if there are not
+ * This function checks for unclosed quotes in a given string.
+ * It iterates through the string, toggling a quote type when it encounters
+ * a quote character. If it finds an unmatched quote at the end, it reports
+ * an error and returns 0; otherwise, it returns 1 indicating all quotes are closed.
  */
-int	check_quotes(char *s)
+int	check_quotes(char *s, t_tools *tools)
 {
 	int	i;
-	int	double_q;
-	int	q;
+	char	quote_type;
 
-	double_q = 0;
-	q = 0;
 	i = 0;
+	quote_type = 0;
 	while (s[i])
 	{
-		if (s[i] == '"')
-			double_q += 1;
-		if (s[i] == '\'')
-			q += 1;
+		if (!quote_type && (s[i] == '"' || s[i] == '\''))
+			quote_type = s[i];
+		else if (s[i] == quote_type)
+			quote_type = 0;
 		i++;
 	}
-	if ((double_q > 0 && double_q % 2 != 0) || (q > 0 && q % 2 != 0))
+	if (quote_type)
+	{
+		ft_error(ERR_QUO, tools);
 		return (0);
-	else
-		return (1); // add here functionality to prompt user to close quotes, adding a new lines
+	}
+	return (1);
 }

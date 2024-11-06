@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:12:32 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 22:46:34 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:39:09 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,10 +68,12 @@ int	cmp_envp(void *a, void *b)
 }
 
 /**
- * Find an environment variable in the linked list and update it if found.
- * If not found, add a new node with the new variable and value.
- * After adding, the list is sorted alphabetically.
- *
+ * Updates an existing environment variable in the linked list if it is found.
+ * If the variable does not exist, a new node is created and added to the list.
+ * The function first locates the '=' character to determine the variable name,
+ * then checks for an existing variable with the same name. If found, it updates
+ * the variable's value; if not, it adds the new variable to the end of the list.
+ * 
  * @param lst Pointer to the head of the environment list.
  * @param new_envp New environment variable string (e.g., "EX=y").
  * @return 1 if the value was updated, 0 if a new node was added, or -1 if
@@ -80,28 +82,45 @@ int	cmp_envp(void *a, void *b)
 int	update_or_add_envp(t_list **lst, const char *new_envp)
 {
 	t_list	*cur;
-	t_list	*prev;
-	t_list	*new_node;
+	char	*equal_sign;
+	size_t	var_len;
+	char	*new_content;
 
+	// Find the '=' in the new environment variable
+	equal_sign = ft_strchr(new_envp, '=');
+	if (!equal_sign)
+		return (EXIT_FAILURE);
+	
+	// Calculate length of variable name (before '=')
+	var_len = equal_sign - new_envp;
+	
+	// Create a copy of the new environment variable
+	new_content = ft_strdup(new_envp);
+	if (!new_content)
+		return (-1);
+
+	// Look for existing variable
 	cur = *lst;
-	prev = NULL;
 	while (cur)
 	{
-		if (!cmp_envp(cur->content, (void *)new_envp))
+		if (ft_strncmp(cur->content, new_envp, var_len) == 0 
+			&& ((char *)cur->content)[var_len] == '=')
 		{
-			cur->content = (void *)new_envp;
-			return (EXIT_FAILURE);
+			// Found matching variable, update it
+			free(cur->content);
+			cur->content = new_content;
+			return (EXIT_SUCCESS);
 		}
-		prev = cur;
 		cur = cur->next;
 	}
-	new_node = ft_lstnew((void *)ft_strdup(new_envp));
-	if (!new_node)
+
+	// Variable not found, add new node
+	cur = ft_lstnew(new_content);
+	if (!cur)
+	{
+		free(new_content);
 		return (-1);
-	if (prev)
-		prev->next = new_node;
-	else
-		*lst = new_node;
-	ft_lstsort(lst, cmp_envp);
+	}
+	ft_lstadd_back(lst, cur);
 	return (EXIT_SUCCESS);
 }

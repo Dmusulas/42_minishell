@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:37 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/22 15:38:39 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 15:29:04 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,11 @@ void	handle_input(t_tools *tools)
 {
 	t_lexer	*orig_lexer_lst;
 
-	if (!check_quotes(tools->args))
-		ft_error(ERR_QUO, tools);
+	if (!check_quotes(tools->args, tools))
+	{
+		tools->last_exit_status = 1;
+		return ;
+	}
 	if (!tokenize_input(tools))
 		ft_error(ERR_LEX, tools);
 	if (tools->lexer_lst != NULL)
@@ -56,9 +59,6 @@ void	handle_input(t_tools *tools)
 		if (!parse_input(tools))
 			ft_error(ERR_PAR, tools);
 		if (tools->tree && tools->debug_mode)
-		{
 			print_tokens(orig_lexer_lst);
-			//print_ast(tools->tree, 0);
-		}
 	}
 }

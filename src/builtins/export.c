@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 11:23:13 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 16:43:54 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,30 +16,21 @@ int	export_validation(char *arg, t_tools *tools)
 {
 	int		i;
 
-	if (tools->debug_mode)
-		printf("[DEBUG] Validating: %s\n", arg);
 	if (!ft_isalpha(arg[0]) && arg[0] != '_')
 	{
-		if (tools->debug_mode)
-			printf("[DEBUG] Invalid first character\n");
 		ft_error(ERR_INVALID_IDENTIFIER, tools);
 		return (0);
 	}
 	i = 1;
-	// Only validate the variable name part (before '=')
 	while (arg[i] && arg[i] != '=')
 	{
 		if (!ft_isalnum(arg[i]) && arg[i] != '_')
 		{
-			if (tools->debug_mode)
-				printf("[DEBUG] Invalid character: %c at position %d\n", arg[i], i);
 			ft_error(ERR_INVALID_IDENTIFIER, tools);
 			return (0);
 		}
 		i++;
 	}
-	if (tools->debug_mode)
-		printf("[DEBUG] Validation passed\n");
 	return (1);
 }
 
@@ -59,18 +50,10 @@ int	ft_export(t_ast *cmd_node, t_tools *tools)
 	while (current)
 	{
 		arg = current->str;
-		if (tools->debug_mode)
-			printf("[DEBUG] Processing argument: %s\n", arg);
 		if (!export_validation(arg, tools))
-		{
-			if (tools->debug_mode)
-				printf("[DEBUG] Validation failed\n");
 			success = 1;
-		}
 		else if (ft_strchr(arg, '='))
 		{
-			if (tools->debug_mode)
-				printf("[DEBUG] Updating or adding to envp\n");
 			if (update_or_add_envp(&tools->envp, arg) != 0)
 				success = 1;
 			return (success);

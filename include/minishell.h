@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 11:11:44 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/06 15:29:45 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,6 @@
 # include "libft.h"
 # include "lexer_parser.h"
 # include "error_messages.h"
-
-# define ERR_LEX 1
-# define ERR_QUO 2
-# define ERR_PAR 3
 
 /* MINI LOOP */
 void	set_initial_exit_status(t_tools *tools);
@@ -89,7 +85,7 @@ int		ft_export(t_ast *cmd_node, t_tools *tools);
 int		ft_echo(t_ast *cmd_node, t_tools *tools);
 int		ft_unset(t_ast *cmd_node, t_tools *tools);
 int		ft_cd(char *path, t_tools *tools);
-int 	ft_exit(t_ast *cmd_node, t_tools *tools);
+int		ft_exit(t_ast *cmd_node, t_tools *tools);
 int		ft_env(t_tools *tools);
 int		ft_pwd(t_tools *tools);
 int		ft_is_not_integer(char *str);
