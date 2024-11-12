@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 21:29:34 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:18:00 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,10 @@ void	init_tools(t_tools *tools)
 	tools->args = NULL;
 	tools->lexer_lst = NULL;
 	tools->p_redir = NULL;
-	tools->redir_num = 0;
-	tools->pipes = 0;
 	tools->heredoc = false;
 	tools->in_fd = 0;
 	tools->out_fd = 0;
+	tools->last_pid = 0;
 	tools->tree = NULL;
 	tools->in_single_quotes = false;
 	init_signals();
@@ -41,7 +40,7 @@ void	set_initial_exit_status(t_tools *tools)
 
 int	reset_tools(t_tools *tools)
 {
-	if (tools != NULL)
+	if (tools)
 		clean_tools(tools);
 	init_tools(tools);
 	mini_loop(tools);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/06 15:28:32 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 20:13:12 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,10 +71,9 @@ typedef struct s_tools
 	t_list	*envp;
 	t_lexer	*lexer_lst;
 	t_lexer	*p_redir;
-	int		redir_num;
-	int		pipes;
 	int		in_fd;
 	int		out_fd;
+	int		last_pid;
 	bool	heredoc;
 	bool	debug_mode;
 	bool	in_single_quotes;
@@ -102,14 +101,17 @@ void	process_tokens(t_tools *tools);
 void	handle_input(t_tools *tools);
 
 /* PARSE_UTILS */
-bool	token_check(t_tokens tk);
+bool	is_redirection(t_tokens tk);
 int		is_builtin(const char *cmd);
 t_ast	*ast_new(t_tools *tools);
+t_ast	*ast_add_child(t_ast *parent, bool is_right, t_tools *tools);
 int		parse_input(t_tools *tools);
+char	*trim_expd_arg(const char *s, t_tools *tools);
 
 /* PARSER */
 // char	*trim_expd_arg(const char *s);
 t_ast	*parse_cmd(t_tools *tools);
+void	parse_arg(t_ast *cmd_node, t_tools *tools);
 t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools);
 t_ast	*handle_redir(t_ast *prev_node, t_tools *tools);
 char	*get_env_value(const char *var_name, t_tools *tools);

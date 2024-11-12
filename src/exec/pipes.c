@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/14 20:31:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/05 14:35:23 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 20:12:32 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,17 +62,17 @@ void	handle_pipe_child(int *fd, int *fd_in, t_ast *node, t_tools *tools)
 	exit(tools->last_exit_status);
 }
 
-/**
- * Checks if the last command in the pipe sequence is 'grep'.
- * This is needed because grep doesn't exit with 0 if no match is found,
- * even though it is a successful command.
- */
-static int	is_last_command_grep(t_ast *node)
-{
-	if (!node || !node->str)
-		return (0);
-	return (ft_strcmp(node->str, "grep") == 0);
-}
+// /**
+//  * Checks if the last command in the pipe sequence is 'grep'.
+//  * This is needed because grep doesn't exit with 0 if no match is found,
+//  * even though it is a successful command.
+//  */
+// static int	is_last_command_grep(t_ast *node)
+// {
+// 	if (!node || !node->str)
+// 		return (0);
+// 	return (ft_strcmp(node->str, "grep") == 0);
+// }
 
 /**
  * Waits for all child processes to finish and updates the last exit status
@@ -82,19 +82,20 @@ static int	is_last_command_grep(t_ast *node)
  * @param last_cmd The last command in the pipeline.
  * @param tools    Pointer to a t_tools struct.
  */
-static void	wait_for_children(t_ast *last_cmd, t_tools *tools)
+static void	wait_for_children(t_tools *tools)
 {
 	int	status;
 	int	exit_code;
+	int	last_pid;
+	int	waiting_pid;
 
-	while (wait(&status) > 0)
+	last_pid = tools->last_pid;
+	while ((waiting_pid = wait(&status)) > 0)
 	{
 		if (WIFEXITED(status))
 		{
 			exit_code = WEXITSTATUS(status);
-			if (is_last_command_grep(last_cmd) && exit_code == 2)
-				tools->last_exit_status = 1;
-			else
+			if (waiting_pid == last_pid)
 				tools->last_exit_status = exit_code;
 		}
 	}
@@ -107,7 +108,8 @@ static void	wait_for_children(t_ast *last_cmd, t_tools *tools)
  * The last exit status is set based on the command's execution result.
  *
  * @param node The AST node representing the command to execute.
- * @param fd_in The file descriptor for input redirection. If -1, no redirection is needed.
+ * @param fd_in The file descriptor for input redirection. If -1,
+	no redirection is needed.
  * @param tools Struct containing necessary tools and state for execution.
  */
 static void	execute_last_command(t_ast *node, int fd_in, t_tools *tools)
@@ -127,6 +129,7 @@ static void	execute_last_command(t_ast *node, int fd_in, t_tools *tools)
 		execute_command(node, tools);
 		exit(tools->last_exit_status);
 	}
+	tools->last_pid = pid;
 }
 
 /**
@@ -160,15 +163,17 @@ static int	create_pipe_and_fork(int fd[2], t_tools *tools)
 	return (pid);
 }
 
-
 /**
  * Handles the execution of a series of piped commands represented by an AST.
  * For each pipe node, it creates a new pipe and forks a child process to handle
- * the command execution. In the child process, it sets up the necessary input and 
- * output file descriptors and executes the command. In the parent process, it 
- * manages the file descriptors for piping, advances to the next command, and waits 
- * for all child processes to complete. The last command in the series is executed 
- * separately, ensuring proper stdin redirection. The function updates the exit 
+ * the command execution. In the child process,
+	it sets up the necessary input and
+ * output file descriptors and executes the command. In the parent process, it
+ * manages the file descriptors for piping, advances to the next command,
+	and waits
+
+	* for all child processes to complete. The last command in the series is executed
+ * separately, ensuring proper stdin redirection. The function updates the exit
  * status in the tools structure based on the execution results.
  *
  * @param node The AST node representing the start of the pipe sequence.
@@ -199,5 +204,5 @@ void	handle_pipes(t_ast *node, t_tools *tools)
 	execute_last_command(current_node, fd_in, tools);
 	if (fd_in != -1)
 		close(fd_in);
-	wait_for_children(current_node, tools);
+	wait_for_children(tools);
 }

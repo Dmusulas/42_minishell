@@ -49,7 +49,7 @@ void	here_doc(char *limiter, t_ast *node, t_tools *tools)
  * It redirects stdin to the specified input file and restores
  * it after execution.
  */
-void	set_infile(t_ast *node, t_tools *tools)
+int	set_infile(t_ast *node, t_tools *tools)
 {
 	int	fd;
 
@@ -59,7 +59,7 @@ void	set_infile(t_ast *node, t_tools *tools)
 	{
 		tools->last_exit_status = 1;
 		ft_error(ERR_NO_SUCH_FILE, tools);
-		exit(1);
+		return (1);
 	}
 	fd = open(node->file, O_RDONLY);
 	if (fd < 0)
@@ -67,6 +67,7 @@ void	set_infile(t_ast *node, t_tools *tools)
 	if (dup2(fd, STDIN_FILENO) == -1)
 		ft_error(ERR_DUP2_FAIL, tools);
 	close(fd);
+	return (0);
 }
 
 /**
@@ -74,7 +75,7 @@ void	set_infile(t_ast *node, t_tools *tools)
  * output file and supports append mode if needed.
  * Restores stdout after execution.
  */
-void	set_outfile(t_ast *node, bool append_mode, t_tools *tools)
+int	set_outfile(t_ast *node, bool append_mode, t_tools *tools)
 {
 	int	fd;
 	int	new_fd;
@@ -87,10 +88,11 @@ void	set_outfile(t_ast *node, bool append_mode, t_tools *tools)
 	{
 		tools->last_exit_status = 1;
 		ft_error(ERR_NO_SUCH_FILE, tools);
-		exit(1);
+		return (1);
 	}
 	new_fd = dup2(fd, STDOUT_FILENO);
 	if (new_fd == -1)
 		ft_error(ERR_DUP2_FAIL, tools);
 	close(fd);
+	return (0);
 }

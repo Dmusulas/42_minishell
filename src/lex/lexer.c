@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/23 12:55:01 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:44:05 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	handle_q_arg(char *s, int start, t_tools *tools)
 	{
 		return (ft_error(ERR_SYNTAX, tools));
 	}
-	// Include the quotes in the substring
 	arg = ft_substr(s, start, i - start + 1);
 	if (arg == NULL)
 		return (ft_error(ERR_MALLOC_FAIL, tools));

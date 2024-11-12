@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:46 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/08 21:55:16 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 19:40:34 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,37 +24,39 @@
 int	parse_input(t_tools *tools)
 {
 	t_ast	*cmd_node;
-	t_ast	*prev_node;
-	t_lexer	*curr_lexer;
+	t_ast	*parent_node;
 
 	cmd_node = NULL;
-	prev_node = NULL;
-	curr_lexer = tools->lexer_lst;
-	while (curr_lexer)
+	parent_node = NULL;
+	while (tools->lexer_lst)
 	{
-		if (curr_lexer->token == T_CMD || curr_lexer->token == T_ARG)
+		if (tools->lexer_lst->token == T_CMD)
 		{
 			cmd_node = parse_cmd(tools);
 			if (!cmd_node)
 				return (0);
-			if (!prev_node)
-				prev_node = cmd_node;
+			if (!parent_node)
+				parent_node = cmd_node;
 		}
-		else if (curr_lexer->token == T_PIPE)
+		else if (tools->lexer_lst->token == T_PIPE)
 		{
-			prev_node = handle_pipe(prev_node, tools);
-			if (!prev_node)
+			parent_node = handle_pipe(parent_node, tools);
+			if (!parent_node)
 				return (0);
 		}
-		else if (token_check(curr_lexer->token))
+		else if (is_redirection(tools->lexer_lst->token))
 		{
-			prev_node = handle_redir(prev_node, tools);
-			if (!prev_node)
+			parent_node = handle_redir(parent_node, tools);
+			if (!parent_node)
 				return (0);
 		}
-		curr_lexer = tools->lexer_lst;
+		else if (tools->lexer_lst->token == T_ARG && cmd_node)
+		{
+			parse_arg(cmd_node, tools);
+		}
+		else
+			tools->lexer_lst = tools->lexer_lst->next;
 	}
-	tools->tree = prev_node;
-	tools->tree = swap_redirection_nodes(tools->tree);
+	tools->tree = parent_node;
 	return (1);
 }

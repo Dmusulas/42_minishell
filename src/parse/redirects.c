@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   redirects.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:47:32 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:17:07 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 20:23:32 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,15 @@
  * @return The redirection node or NULL on failure.
  */
 static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str,
-		t_tools tools)
+		t_tools *tools)
 {
 	t_ast	*redir_node;
 
-	redir_node = ast_new(&tools);
+	redir_node = ast_add_child(cmd_node, false, tools);
 	if (!redir_node)
 		return (free_ast(cmd_node), NULL);
 	redir_node->token = token->token;
-	redir_node->left = cmd_node;
-	redir_node->file = ft_strdup(file_str);
+	redir_node->file = trim_expd_arg(file_str, tools);
 	if (!redir_node->file)
 		return (free_ast(redir_node), NULL);
 	return (redir_node);
@@ -48,12 +47,15 @@ t_ast	*handle_redir(t_ast *prev_node, t_tools *tools)
 {
 	t_ast	*redir_node;
 
-	redir_node = make_redir(prev_node, tools->lexer_lst,
-			tools->lexer_lst->next->str, *tools);
-	if (!redir_node)
-		return (NULL);
-	tools->lexer_lst = tools->lexer_lst->next->next;
-	return (redir_node);
+	while (tools->lexer_lst && is_redirection(tools->lexer_lst->token))
+	{
+		redir_node = make_redir(prev_node, tools->lexer_lst,
+				tools->lexer_lst->next->str, tools);
+		if (!redir_node)
+			return (NULL);
+		tools->lexer_lst = tools->lexer_lst->next->next;
+	}
+	return (prev_node);
 }
 
 /**

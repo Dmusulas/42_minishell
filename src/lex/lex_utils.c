@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   lex_utils.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:28 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/06 16:37:18 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 18:44:49 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "error_messages.h"
 #include "lexer_parser.h"
 #include "libft.h"
-#include "error_messages.h"
+
 /*
  * This function calculates the length of the initial segment of string `s`
  * that contains no characters from string `reject`. It checks each character
@@ -75,7 +76,9 @@ void	add_tk(t_lexer **lexer_list, t_lexer *new_token)
 int	ft_one_tk(char c, t_tools *tools)
 {
 	if (c == '|')
+	{
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("|"), T_PIPE));
+	}
 	else if (c == '<')
 		add_tk(&(tools->lexer_lst), make_tk(ft_strdup("<"), T_REDIR_IN));
 	else if (c == '>')
@@ -102,11 +105,12 @@ int	ft_two_tk(char c1, char c2, t_tools *tools)
  * This function checks for unclosed quotes in a given string.
  * It iterates through the string, toggling a quote type when it encounters
  * a quote character. If it finds an unmatched quote at the end, it reports
- * an error and returns 0; otherwise, it returns 1 indicating all quotes are closed.
+ * an error and returns 0; otherwise,
+	it returns 1 indicating all quotes are closed.
  */
 int	check_quotes(char *s, t_tools *tools)
 {
-	int	i;
+	int		i;
 	char	quote_type;
 
 	i = 0;
