@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipes.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/17 18:48:19 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:15:11 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 19:13:58 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@
 t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools)
 {
 	t_ast	*pipe_node;
+	t_ast	*right_cmd;
 
 	pipe_node = ast_new(tools);
 	if (!pipe_node)
@@ -30,9 +31,17 @@ t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools)
 	pipe_node->token = T_PIPE;
 	pipe_node->left = prev_node;
 	tools->lexer_lst = tools->lexer_lst->next;
-	pipe_node->right = parse_cmd(tools);
-	pipe_node->str = ft_strdup("|");
-	if (!pipe_node->right)
+	right_cmd = parse_cmd(tools);
+	if (!right_cmd)
 		return (free_ast(pipe_node), NULL);
+	while (tools->lexer_lst && is_redirection(tools->lexer_lst->token))
+	{
+		right_cmd = handle_redir(right_cmd, tools);
+		if (!right_cmd)
+			return (free_ast(pipe_node), NULL);
+	}
+	
+	pipe_node->right = right_cmd;
+	pipe_node->str = ft_strdup("|");
 	return (pipe_node);
 }

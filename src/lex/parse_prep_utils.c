@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_prep_utils.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:37 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/06 15:29:04 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/08 17:18:11 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,11 @@ void	process_tokens(t_tools *tools)
 	curr = tools->lexer_lst;
 	while (curr)
 	{
-		if (token_check(curr->token))
+		if (is_redirection(curr->token))
 		{
-			// tools->p_redir = curr;
-			// not sure if redir ptr should be assigned here
-			tools->redir_num++;
 			if (curr->token == T_HEREDOC)
 				tools->heredoc = true;
 		}
-		else if (curr->token == T_PIPE)
-			tools->pipes++;
 		curr = curr->next;
 	}
 }
@@ -59,6 +54,9 @@ void	handle_input(t_tools *tools)
 		if (!parse_input(tools))
 			ft_error(ERR_PAR, tools);
 		if (tools->tree && tools->debug_mode)
+		{
 			print_tokens(orig_lexer_lst);
+			print_ast(tools->tree, 0);
+		}
 	}
 }

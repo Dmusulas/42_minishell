@@ -3,42 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/06 16:16:54 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 19:18:52 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
-
-/**
- * Redirects input or output based on the AST node type.
- * For input redirection (`<` or `<<`), it sets the input file.
- * For output redirection (`>` or `>>`), it sets the output file.
- * After handling redirection,
-	it executes the command from the left child of the node.
- *
- * @param node The AST node representing a redirection operation.
- * @param tools Struct containing necessary tools for execution.
- */
-static void	handle_io_redirection(t_ast *node, t_tools *tools)
-{
-	int	saved_stdin;
-	int	saved_stdout;
-
-	save_stdin_stdout(&saved_stdin, &saved_stdout);
-	if (node->token == T_REDIR_IN || node->token == T_HEREDOC)
-		set_infile(node, tools);
-	if (node->token == T_REDIR_OUT)
-		set_outfile(node, false, tools);
-	if (node->token == T_APPEND)
-		set_outfile(node, true, tools);
-	execute_command(node->left, tools);
-	restore_stdin_stdout(saved_stdin, saved_stdout);
-}
 
 /**
  * Handles the execution of a command represented by the given AST node.
@@ -55,6 +29,39 @@ static void	execute_single_command(t_ast *node, t_tools *tools)
 	else
 		fork_and_execute_command(node, tools);
 }
+
+/**
+ * Redirects input or output based on the AST node type.
+ * For input redirection (`<` or `<<`), it sets the input file.
+ * For output redirection (`>` or `>>`), it sets the output file.
+ * After handling redirection,
+	it executes the command from the left child of the node.
+ *
+ * @param node The AST node representing a redirection operation.
+ * @param tools Struct containing necessary tools for execution.
+ */
+// static void	handle_io_redirection(t_ast *node, t_tools *tools)
+// {
+// 	int		saved_stdin;
+// 	int		saved_stdout;
+// 	t_ast	*curr;
+//
+// 	save_stdin_stdout(&saved_stdin, &saved_stdout);
+// 	curr = node;
+// 	while (curr && is_redirection(curr->token))
+// 	{
+// 		if (curr->token == T_REDIR_IN || curr->token == T_HEREDOC)
+// 			set_infile(curr, tools);
+// 		else if (curr->token == T_REDIR_OUT)
+// 			set_outfile(curr, false, tools);
+// 		else if (curr->token == T_APPEND)
+// 			set_outfile(curr, true, tools);
+// 		curr = curr->left;
+// 	}
+// 	if (curr)
+// 		execute_single_command(curr, tools);
+// 	restore_stdin_stdout(saved_stdin, saved_stdout);
+// }
 
 /**
  * Executes a command at the given path.
@@ -120,12 +127,13 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 }
 
 /**
- * Checks if the command is an environment variable that resolves to a directory.
+
+	* Checks if the command is an environment variable that resolves to a directory.
  * If it is, prints an error message and sets the appropriate exit status.
  *
  * @param node The AST node representing the command.
  * @param tools Struct containing necessary tools for execution.
-*/
+ */
 void	check_env_directory(t_ast *node, t_tools *tools)
 {
 	char	*env_value;
@@ -156,10 +164,41 @@ void	check_env_directory(t_ast *node, t_tools *tools)
 	}
 }
 
+static void	execute_node_with_redirects(t_ast *node, t_tools *tools)
+{
+	int		saved_stdin;
+	int		saved_stdout;
+	int		ret;
+	t_ast	*curr;
+	t_ast	*cmd_node;
+
+	save_stdin_stdout(&saved_stdin, &saved_stdout);
+	curr = node;
+	ret = 0;
+	while (curr && curr->left && is_redirection(curr->left->token))
+	{
+		if (curr->left->token == T_REDIR_IN || curr->left->token == T_HEREDOC)
+			ret = set_infile(curr->left, tools);
+		else if (curr->left->token == T_REDIR_OUT)
+			ret = set_outfile(curr->left, false, tools);
+		else if (curr->left->token == T_APPEND)
+			ret = set_outfile(curr->left, true, tools);
+		if (ret)
+			return ;
+		curr = curr->left;
+	}
+	cmd_node = node;
+	while (cmd_node && is_redirection(cmd_node->token))
+		cmd_node = cmd_node->left;
+	if (cmd_node)
+		execute_single_command(cmd_node, tools);
+	restore_stdin_stdout(saved_stdin, saved_stdout);
+}
+
 /**
  * Executes the command or operation represented by the given AST node.
  * Depending on the token, it either handles pipes, redirects input/output,
- * or executes a single command. It restores standard input/output afterward.
+ * or executes a single command.
  *
  * @param node The AST node representing a command, pipe, or redirection.
  * @param tools Struct containing necessary tools for execution.
@@ -175,26 +214,18 @@ void	execute_command(t_ast *node, t_tools *tools)
 		handle_pipes(node, tools);
 		return ;
 	}
-	if (token_check(node->token))
-	{
-		handle_io_redirection(node, tools);
-		return ;
-	}
-	// Skip empty environment variables at the start of a command
 	if (node->str && node->str[0] == '$')
 	{
-		// Skip for $ and $? special cases
 		if (ft_strcmp(node->str, "$") != 0 && ft_strcmp(node->str, "$?") != 0)
 		{
 			env_value = get_env_value(node->str + 1, tools);
 			if (!env_value && node->right)
 			{
-				// Skip this node and execute the right part
 				execute_command(node->right, tools);
 				return ;
 			}
 		}
 	}
 	check_env_directory(node, tools);
-	execute_single_command(node, tools);
+	execute_node_with_redirects(node, tools);
 }

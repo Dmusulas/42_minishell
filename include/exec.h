@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:18:43 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/12 19:48:32 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	save_stdin_stdout(int *saved_stdin, int *saved_stdout);
 char	**parse_cmd_args(char *cmd_path, t_ast *node);
 
 /* IO */
-void	set_outfile(t_ast *node, bool append_mode, t_tools *tools);
-void	set_infile(t_ast *node, t_tools *tools);
+int		set_outfile(t_ast *node, bool append_mode, t_tools *tools);
+int		set_infile(t_ast *node, t_tools *tools);
 
 /* PIPES */
 void	handle_pipe_parent(int *fd, int *fd_in);

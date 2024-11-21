@@ -24,7 +24,7 @@ int	main(int argc, char *argv[], char *envp[])
 	(void)argc;
 	(void)argv;
 	tools.envp_org = envp;
-	tools.debug_mode = false;
+	tools.debug_mode = true;
 	rl_catch_signals = 0;
 	if (!duplicate_env(&tools))
 		return (ft_error(ERR_MALLOC, &tools));
