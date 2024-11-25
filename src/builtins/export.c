@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:40:50 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/06 16:43:54 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:03:15 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,7 @@ int	ft_export(t_ast *cmd_node, t_tools *tools)
 		{
 			if (update_or_add_envp(&tools->envp, arg) != 0)
 				success = 1;
+			ft_lstsort(&tools->envp, cmp_envp);
 			return (success);
 		}
 		current = current->right;
