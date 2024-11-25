@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 17:12:32 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/25 16:17:04 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/25 16:43:54 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,6 @@ int	update_or_add_envp(t_list **lst, const char *new_envp)
 		free(new_content);
 		return (-1);
 	}
-	ft_lstadd_back(lst, new_node);
+	ft_lstadd_front(lst, new_node);
 	return (EXIT_SUCCESS);
 }
