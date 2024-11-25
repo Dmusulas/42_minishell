@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/25 14:44:10 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/25 14:53:47 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,7 @@ static void	execute_node_with_redirects(t_ast *node, t_tools *tools)
  */
 void	execute_command(t_ast *node, t_tools *tools)
 {
-	set_noninteractive_signals();
+	set_inactive_signals();
 	char	*env_value;
 
 	if (!node)
@@ -239,5 +239,5 @@ void	execute_command(t_ast *node, t_tools *tools)
 	execute_node_with_redirects(node, tools);
 
 	// After command execution
-	set_interactive_signals();
+	set_active_signals();
 }

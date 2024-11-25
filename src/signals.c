@@ -6,12 +6,11 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:22 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/25 14:51:07 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/25 14:55:21 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
 
 void	sigint_handler_active(int signal)
 {
@@ -37,26 +36,24 @@ void	sigquit_handler_inactive(int signal)
 
 void	set_active_signals(void)
 {
-	struct sigaction sa;
-	
+	struct sigaction	sa;
+
 	sa.sa_handler = sigint_handler_active;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
-	
 	sa.sa_handler = SIG_IGN;
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
 void	set_inactive_signals(void)
 {
-	struct sigaction sa;
-	
+	struct sigaction	sa;
+
 	sa.sa_handler = sigint_handler_inactive;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
-	
 	sa.sa_handler = sigquit_handler_inactive;
 	sigaction(SIGQUIT, &sa, NULL);
 }
