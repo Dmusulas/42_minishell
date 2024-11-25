@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/06 15:29:45 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/25 14:52:20 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,9 +43,8 @@ void	clear_tokens(t_lexer **lexer_list);
 void	free_ast(t_ast *tree);
 
 /* SIGNALS */
-int		event(void);
-void	sigint_handler(int signal);
-void	sigquit_handler(int signal);
+void	set_inactive_signals(void);
+void	set_active_signals(void);
 void	init_signals(void);
 
 /* TO BE REMOVED */
@@ -58,12 +57,6 @@ int		cmp_envp(void *a, void *b);
 
 /* MINI LOOP */
 int		mini_loop(t_tools *tools);
-
-/* SIGNALS */
-int		event(void);
-void	sigint_handler(int signal);
-void	sigquit_handler(int signal);
-void	init_signals(void);
 
 /* UTILS */
 void	free_2darray(char **array);
