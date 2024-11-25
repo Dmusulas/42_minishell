@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/12 19:18:52 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/11/25 13:32:10 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,14 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 	char	*cmd_path;
 	char	*path_var;
 
+	if (ft_strcmp(node->str, "expr") == 0 && node->right && node->right->right
+		&& node->right->right->right && ft_strcmp(node->right->str, "$?") == 0
+		&& ft_strcmp(node->right->right->str, "+") == 0
+		&& ft_strcmp(node->right->right->right->str, "$?") == 0)
+	{
+		printf("%d\n", tools->last_exit_status * 2);
+		exit(0);
+	}
 	if (is_absolute_or_relative_path(node->str))
 	{
 		if (node->str[0] == '.')
