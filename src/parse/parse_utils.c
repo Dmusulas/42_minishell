@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/08 17:19:45 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/11/26 12:55:32 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,8 @@ t_ast	*ast_add_child(t_ast *parent, bool is_right, t_tools *tools)
 	new_nd = ast_new(tools);
 	if (!new_nd)
 		return (NULL);
+	if (parent == NULL)
+        return (new_nd);
 	if (is_right)
 		parent->right = new_nd;
 	else
