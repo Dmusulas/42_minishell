@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   clean_up.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:56 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/12 14:13:10 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/26 12:39:07 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ void	clean_tools(t_tools *tools)
 		tools->args = NULL;
 	}
 	if (tools->tree != NULL)
-		free_ast(tools->tree);
+    {
+        free_ast(tools->tree);
+        tools->tree = NULL;  // Explicitly set to NULL after freeing ensures no segfault
+    }
 	if (tools->lexer_lst != NULL)
 		clear_tokens(&tools->lexer_lst);
 	tools->p_redir = NULL;
