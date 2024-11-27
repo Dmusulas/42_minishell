@@ -67,7 +67,7 @@ void	clean_tools(t_tools *tools)
 	if (tools->tree != NULL)
 	{
 		free_ast(tools->tree);
-		tools->tree = NULL; // Explicitly set to NULL after freeing ensures no segfault
+		tools->tree = NULL;
 	}
 	if (tools->lexer_lst != NULL)
 		clear_tokens(&tools->lexer_lst);

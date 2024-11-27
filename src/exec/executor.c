@@ -23,46 +23,13 @@
  * @param node The AST node representing a command.
  * @param tools Struct containing necessary tools for execution.
  */
-static void	execute_single_command(t_ast *node, t_tools *tools)
+void	execute_single_command(t_ast *node, t_tools *tools)
 {
 	if (node->b_cmd)
 		execute_builtin(node, tools);
 	else
 		fork_and_execute_command(node, tools);
 }
-
-/**
- * Redirects input or output based on the AST node type.
- * For input redirection (`<` or `<<`), it sets the input file.
- * For output redirection (`>` or `>>`), it sets the output file.
- * After handling redirection,
-	it executes the command from the left child of the node.
- *
- * @param node The AST node representing a redirection operation.
- * @param tools Struct containing necessary tools for execution.
- */
-// static void	handle_io_redirection(t_ast *node, t_tools *tools)
-// {
-// 	int		saved_stdin;
-// 	int		saved_stdout;
-// 	t_ast	*curr;
-//
-// 	save_stdin_stdout(&saved_stdin, &saved_stdout);
-// 	curr = node;
-// 	while (curr && is_redirection(curr->token))
-// 	{
-// 		if (curr->token == T_REDIR_IN || curr->token == T_HEREDOC)
-// 			set_infile(curr, tools);
-// 		else if (curr->token == T_REDIR_OUT)
-// 			set_outfile(curr, false, tools);
-// 		else if (curr->token == T_APPEND)
-// 			set_outfile(curr, true, tools);
-// 		curr = curr->left;
-// 	}
-// 	if (curr)
-// 		execute_single_command(curr, tools);
-// 	restore_stdin_stdout(saved_stdin, saved_stdout);
-// }
 
 /**
  * Executes a command at the given path.
@@ -87,68 +54,11 @@ void	execute_at_path(char *path, t_ast *node, char **envp, t_tools *tools)
 	tools->last_exit_status = exec_status;
 }
 
-/**
- * Executes the command represented by the given AST node.
- * If the command is an absolute or relative path, it executes it directly.
- * Otherwise, it searches for the command in the system PATH and executes it.
- *
- * @param node The AST node representing the command.
- * @param envp The environment variables as a null-terminated array of strings.
- */
-void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
-{
-	char	*cmd_path;
-	char	*path_var;
-
-	if (ft_strcmp(node->str, "expr") == 0 && node->right && node->right->right
-		&& node->right->right->right && ft_strcmp(node->right->str, "$?") == 0
-		&& ft_strcmp(node->right->right->str, "+") == 0
-		&& ft_strcmp(node->right->right->right->str, "$?") == 0)
-	{
-		printf("%d\n", tools->last_exit_status * 2);
-		exit(0);
-	}
-	if (is_absolute_or_relative_path(node->str))
-	{
-		if (node->str[0] == '.')
-			cmd_path = resolve_relative_path(node->str, tools);
-		else
-			cmd_path = node->str;
-		if (cmd_path)
-		{
-			if (access(cmd_path, F_OK) == -1)
-			{
-				ft_path_error(ERR_NO_SUCH_FILE, tools, node->str);
-				exit(127);
-			}
-			if (opendir(cmd_path))
-			{
-				printf("here");
-				ft_path_error(ERR_IS_A_DIRECTORY, tools, node->str);
-				exit(126);
-			}
-			if (access(cmd_path, R_OK) == -1)
-			{
-				ft_path_error(ERR_PERMISSION_DENIED, tools, node->str);
-				exit(126);
-			}
-			execute_at_path(cmd_path, node, envp, tools);
-		}
-	}
-	path_var = find_path(envp);
-	cmd_path = find_cmd(path_var, node->str);
-	free(path_var);
-	if (!cmd_path || !*cmd_path)
-	{
-		ft_path_error(ERR_CMD_NOT_FOUND, tools, node->str);
-		exit(127);
-	}
-	execute_at_path(cmd_path, node, envp, tools);
-}
-
+// TODO: Split up this function
 /**
 
-	* Checks if the command is an environment variable that resolves to a directory.
+ * Checks if the command is an environment variable
+ * that resolves to a directory.
  * If it is, prints an error message and sets the appropriate exit status.
  *
  * @param node The AST node representing the command.
@@ -184,6 +94,7 @@ void	check_env_directory(t_ast *node, t_tools *tools)
 	}
 }
 
+// TODO: Split up this function
 static void	execute_node_with_redirects(t_ast *node, t_tools *tools)
 {
 	int		saved_stdin;

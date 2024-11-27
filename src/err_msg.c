@@ -12,16 +12,11 @@
 
 #include "error_messages.h"
 #include "libft.h"
-#include "minishell.h"
 
 void	error_extension(t_error_type err_type)
 {
 	if (err_type == ERR_PIPE_FAIL)
 		ft_putstr_fd(ERR_PIPE_FAIL_MSG, STDERR_FILENO);
-	else if (err_type == ERR_FORK_FAIL)
-		ft_putstr_fd(ERR_FORK_FAIL_MSG, STDERR_FILENO);
-	else if (err_type == ERR_DUP2_FAIL)
-		ft_putstr_fd(ERR_DUP2_FAIL_MSG, STDERR_FILENO);
 	else if (err_type == ERR_OUTFILE)
 		ft_putstr_fd(ERR_OUTFILE_MSG, STDERR_FILENO);
 	else if (err_type == ERR_INFILE)
@@ -54,6 +49,10 @@ int	ft_error(t_error_type err_type, t_tools *tools)
 		ft_putstr_fd(ERR_SYNTAX_MSG, STDERR_FILENO);
 	else if (err_type == ERR_TOO_MANY_ARGS)
 		ft_putstr_fd(ERR_TOO_MANY_ARGS_MSG, STDERR_FILENO);
+	else if (err_type == ERR_FORK_FAIL)
+		ft_putstr_fd(ERR_FORK_FAIL_MSG, STDERR_FILENO);
+	else if (err_type == ERR_DUP2_FAIL)
+		ft_putstr_fd(ERR_DUP2_FAIL_MSG, STDERR_FILENO);
 	else if (err_type == ERR_NUMERIC_ARG_REQUIRED)
 		ft_putstr_fd(ERR_NUMERIC_ARG_REQUIRED_MSG, STDERR_FILENO);
 	else if (err_type == ERR_HOME_NOT_SET)

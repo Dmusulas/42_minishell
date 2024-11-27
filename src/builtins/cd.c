@@ -15,7 +15,7 @@
 /**
  * Updates the PWD and OLDPWD environment variables after a directory change.
  */
-void	cd_update_env_paths(t_tools *tools)
+int	cd_update_env_paths(t_tools *tools)
 {
 	char	*pwd;
 	char	*oldpwd_env;
@@ -41,8 +41,16 @@ void	cd_update_env_paths(t_tools *tools)
 	{
 		update_or_add_envp(&tools->envp, ft_strjoin("PWD=", pwd));
 	}
+	return (0);
 }
 
+/**
+ * Changes the current directory, handling HOME, OLDPWD, and error conditions.
+ *
+ * @param path: The target directory path to change to.
+ * @param tools: The tools struct containing environment variables.
+ * @return: 0 on success, or an error code on failure.
+ */
 int	ft_cd(char *path, t_tools *tools)
 {
 	char	*home;
@@ -66,9 +74,8 @@ int	ft_cd(char *path, t_tools *tools)
 	{
 		if (errno == ENOENT)
 			return (ft_path_error(ERR_NO_SUCH_FILE, tools, path));
-		else if (errno == EACCES)
+		if (errno == EACCES)
 			return (ft_path_error(ERR_PERMISSION_DENIED, tools, path));
 	}
-	cd_update_env_paths(tools);
-	return (0);
+	return (cd_update_env_paths(tools));
 }
