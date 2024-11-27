@@ -56,7 +56,7 @@ t_ast	*ast_add_child(t_ast *parent, bool is_right, t_tools *tools)
 	if (!new_nd)
 		return (NULL);
 	if (parent == NULL)
-        return (new_nd);
+		return (new_nd);
 	if (is_right)
 		parent->right = new_nd;
 	else

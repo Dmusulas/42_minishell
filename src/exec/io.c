@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "error_messages.h"
 #include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -27,7 +28,6 @@ void	here_doc(char *limiter, t_ast *node, t_tools *tools)
 	char	*line;
 	int		tmp_file_fd;
 
-	printf("executing here_doc\n");
 	tmp_file_fd = open(TEMP_FILE, O_RDWR | O_CREAT | O_TRUNC, 0600);
 	if (tmp_file_fd == -1)
 		ft_error(ERR_PIPE_FAIL, tools);
@@ -55,10 +55,16 @@ int	set_infile(t_ast *node, t_tools *tools)
 
 	if (node->token == T_HEREDOC)
 		here_doc(node->file, node, tools);
-	if (access(node->file, R_OK) == -1)
+	if (access(node->file, F_OK) == -1)
 	{
 		tools->last_exit_status = 1;
 		ft_error(ERR_NO_SUCH_FILE, tools);
+		return (1);
+	}
+	if (access(node->file, R_OK) == -1)
+	{
+		tools->last_exit_status = 1;
+		ft_error(ERR_PERMISSION_DENIED, tools);
 		return (1);
 	}
 	fd = open(node->file, O_RDONLY);
@@ -87,7 +93,7 @@ int	set_outfile(t_ast *node, bool append_mode, t_tools *tools)
 	if (fd < 0)
 	{
 		tools->last_exit_status = 1;
-		ft_error(ERR_NO_SUCH_FILE, tools);
+		ft_error(ERR_PERMISSION_DENIED, tools);
 		return (1);
 	}
 	new_fd = dup2(fd, STDOUT_FILENO);

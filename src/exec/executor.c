@@ -192,7 +192,10 @@ static void	execute_node_with_redirects(t_ast *node, t_tools *tools)
 		else if (curr->left->token == T_APPEND)
 			ret = set_outfile(curr->left, true, tools);
 		if (ret)
+		{
+			restore_stdin_stdout(saved_stdin, saved_stdout);
 			return ;
+		}
 		curr = curr->left;
 	}
 	cmd_node = node;
@@ -213,9 +216,9 @@ static void	execute_node_with_redirects(t_ast *node, t_tools *tools)
  */
 void	execute_command(t_ast *node, t_tools *tools)
 {
-	set_inactive_signals();
 	char	*env_value;
 
+	set_inactive_signals();
 	if (!node)
 		return ;
 	if (node->token == T_PIPE)
@@ -237,7 +240,5 @@ void	execute_command(t_ast *node, t_tools *tools)
 	}
 	check_env_directory(node, tools);
 	execute_node_with_redirects(node, tools);
-
-	// After command execution
 	set_active_signals();
 }
