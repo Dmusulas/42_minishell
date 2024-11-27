@@ -118,17 +118,17 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 		{
 			if (access(cmd_path, F_OK) == -1)
 			{
-				ft_error(ERR_NO_SUCH_FILE, tools);
+				ft_path_error(ERR_NO_SUCH_FILE, tools, node->str);
 				exit(127);
 			}
 			if (access(cmd_path, R_OK) == -1)
 			{
-				ft_error(ERR_PERMISSION_DENIED, tools);
+				ft_path_error(ERR_PERMISSION_DENIED, tools, node->str);
 				exit(126);
 			}
 			if (opendir(cmd_path))
 			{
-				ft_error(ERR_IS_A_DIRECTORY, tools);
+				ft_path_error(ERR_IS_A_DIRECTORY, tools, node->str);
 				exit(126);
 			}
 			execute_at_path(cmd_path, node, envp, tools);
@@ -139,7 +139,7 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 	free(path_var);
 	if (!cmd_path || !*cmd_path)
 	{
-		ft_error(ERR_CMD_NOT_FOUND, tools);
+		ft_path_error(ERR_CMD_NOT_FOUND, tools, node->str);
 		exit(127);
 	}
 	execute_at_path(cmd_path, node, envp, tools);

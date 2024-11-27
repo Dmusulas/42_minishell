@@ -14,7 +14,7 @@
 
 int	ft_is_not_integer(char *str)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	if (str[0] == '-' || str[0] == '+')
@@ -41,8 +41,8 @@ void	remove_env_var(t_list **envp, const char *var_name)
 	while (current)
 	{
 		env_var = (char *)current->content;
-		if (ft_strncmp(env_var, var_name,
-				var_len) == 0 && env_var[var_len] == '=')
+		if (ft_strncmp(env_var, var_name, var_len) == 0
+			&& env_var[var_len] == '=')
 		{
 			if (prev)
 				prev->next = current->next;
@@ -60,7 +60,7 @@ void	remove_env_var(t_list **envp, const char *var_name)
 int	change_to_absolute_path(char *path, t_tools *tools)
 {
 	if (chdir(path) == -1)
-		return (ft_error(ERR_NO_SUCH_FILE, tools));
+		return (ft_path_error(ERR_NO_SUCH_FILE, tools, path));
 	return (0);
 }
 
@@ -71,7 +71,7 @@ int	change_to_relative_path(char *path, t_tools *tools)
 
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
-		return (ft_error(ERR_NO_SUCH_FILE, tools));
+		return (ft_path_error(ERR_NO_SUCH_FILE, tools, path));
 	full_path = ft_strjoin(cwd, "/");
 	full_path = ft_strjoin(full_path, path);
 	free(cwd);
@@ -79,7 +79,7 @@ int	change_to_relative_path(char *path, t_tools *tools)
 		printf("[DEBUG]: Changing to relative path: %s\n", full_path);
 	if (chdir(full_path) == -1)
 	{
-		ft_error(ERR_NO_SUCH_FILE, tools);
+		ft_path_error(ERR_NO_SUCH_FILE, tools, path);
 		free(full_path);
 		return (1);
 	}

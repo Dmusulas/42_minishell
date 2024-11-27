@@ -58,13 +58,13 @@ int	set_infile(t_ast *node, t_tools *tools)
 	if (access(node->file, F_OK) == -1)
 	{
 		tools->last_exit_status = 1;
-		ft_error(ERR_NO_SUCH_FILE, tools);
+		ft_path_error(ERR_NO_SUCH_FILE, tools, node->file);
 		return (1);
 	}
 	if (access(node->file, R_OK) == -1)
 	{
 		tools->last_exit_status = 1;
-		ft_error(ERR_PERMISSION_DENIED, tools);
+		ft_path_error(ERR_PERMISSION_DENIED, tools, node->file);
 		return (1);
 	}
 	fd = open(node->file, O_RDONLY);

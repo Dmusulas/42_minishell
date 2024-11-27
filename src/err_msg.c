@@ -10,8 +10,9 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
 #include "error_messages.h"
+#include "libft.h"
+#include "minishell.h"
 
 void	error_extension(t_error_type err_type)
 {
@@ -74,5 +75,32 @@ int	ft_error(t_error_type err_type, t_tools *tools)
 	else
 		error_extension(err_type);
 	ft_putstr_fd("\n", STDERR_FILENO);
+	return (EXIT_FAILURE);
+}
+
+int	ft_path_error(t_error_type err_type, t_tools *tools, char *path)
+{
+	char	*temp;
+	char	*path_err;
+
+	temp = NULL;
+	(void)tools;
+	path_err = ft_strjoin(path, ": ");
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	if (err_type == ERR_NO_SUCH_FILE)
+		temp = ft_strjoin(path_err, ERR_NO_SUCH_FILE_MSG);
+	else if (err_type == ERR_PERMISSION_DENIED)
+		temp = ft_strjoin(path_err, ERR_PERMISSION_DENIED_MSG);
+	else if (err_type == ERR_IS_A_DIRECTORY)
+		temp = ft_strjoin(path_err, ERR_IS_A_DIRECTORY_MSG);
+	else if (err_type == ERR_CMD_NOT_FOUND)
+		temp = ft_strjoin(path_err, ERR_CMD_NOT_FOUND_MSG);
+	if (!temp)
+		return (ft_error(ERR_MALLOC_FAIL, tools));
+	ft_putstr_fd(temp, STDERR_FILENO);
+	ft_putstr_fd("\n", STDERR_FILENO);
+	if (path_err)
+		free(path_err);
+	free(temp);
 	return (EXIT_FAILURE);
 }
