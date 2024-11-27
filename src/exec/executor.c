@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "error_messages.h"
 #include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -119,6 +120,16 @@ void	execute_external_command(t_ast *node, char **envp, t_tools *tools)
 			{
 				ft_error(ERR_NO_SUCH_FILE, tools);
 				exit(127);
+			}
+			if (access(cmd_path, R_OK) == -1)
+			{
+				ft_error(ERR_PERMISSION_DENIED, tools);
+				exit(126);
+			}
+			if (opendir(cmd_path))
+			{
+				ft_error(ERR_IS_A_DIRECTORY, tools);
+				exit(126);
 			}
 			execute_at_path(cmd_path, node, envp, tools);
 		}

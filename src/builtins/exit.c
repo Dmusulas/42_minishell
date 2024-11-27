@@ -25,7 +25,7 @@ static long long	get_exit_code(char *arg, t_tools *tools)
 	if (ft_is_not_integer(arg))
 	{
 		ft_error(ERR_NUMERIC_ARG_REQUIRED, tools);
-		exit(2);
+		exit(255);
 	}
 	return (ft_atoi(arg));
 }
