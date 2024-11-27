@@ -130,7 +130,7 @@ char	*resolve_relative_path(char *rel_path, t_tools *tools)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		ft_error(ERR_EXECVE_FAIL, tools); // Changed error handling to use ft_error
+		ft_error(ERR_EXECVE_FAIL, tools);
 		return (NULL);
 	}
 	full_path = join_paths(cwd, rel_path);

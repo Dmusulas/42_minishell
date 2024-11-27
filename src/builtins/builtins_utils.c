@@ -61,6 +61,7 @@ int	change_to_absolute_path(char *path, t_tools *tools)
 {
 	if (chdir(path) == -1)
 		return (ft_path_error(ERR_NO_SUCH_FILE, tools, path));
+	cd_update_env_paths(tools);
 	return (0);
 }
 
@@ -84,5 +85,6 @@ int	change_to_relative_path(char *path, t_tools *tools)
 		return (1);
 	}
 	free(full_path);
+	cd_update_env_paths(tools);
 	return (0);
 }

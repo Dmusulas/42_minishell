@@ -69,7 +69,7 @@ int	set_infile(t_ast *node, t_tools *tools)
 	}
 	fd = open(node->file, O_RDONLY);
 	if (fd < 0)
-		ft_error(ERR_NO_SUCH_FILE, tools);
+		ft_path_error(ERR_NO_SUCH_FILE, tools, node->file);
 	if (dup2(fd, STDIN_FILENO) == -1)
 		ft_error(ERR_DUP2_FAIL, tools);
 	close(fd);
@@ -93,7 +93,7 @@ int	set_outfile(t_ast *node, bool append_mode, t_tools *tools)
 	if (fd < 0)
 	{
 		tools->last_exit_status = 1;
-		ft_error(ERR_PERMISSION_DENIED, tools);
+		ft_path_error(ERR_PERMISSION_DENIED, tools, node->file);
 		return (1);
 	}
 	new_fd = dup2(fd, STDOUT_FILENO);
