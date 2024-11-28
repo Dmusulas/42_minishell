@@ -12,8 +12,14 @@
 
 #include "minishell.h"
 
-// Handles signals in interactive mode, specifically SIGINT, by printing a newline,
-// clearing the current line, and redisplaying the prompt.
+/**
+ * Handles signals in interactive mode, specifically SIGINT.
+ * - Prints a newline
+ * - Clears the current line
+ * - Redisplays the prompt.
+ *
+ * @param signal The signal received.
+ */
 static void	handle_active_signal(int signal)
 {
 	if (signal == SIGINT)
@@ -25,12 +31,19 @@ static void	handle_active_signal(int signal)
 	}
 }
 
-// Handles signals in non-interactive mode, responding to SIGINT by printing a newline
-// and to SIGQUIT by printing a "Quit" message along with the signal number.
+/**
+ * Handles signals in non-interactive mode.
+ * - Prints a newline for SIGINT.
+ * - Prints a "Quit" message for SIGQUIT along with the signal number.
+ *
+ * @param signal The signal received.
+ */
 static void	handle_inactive_signal(int signal)
 {
 	if (signal == SIGINT)
+	{
 		write(STDOUT_FILENO, "\n", 1);
+	}
 	else if (signal == SIGQUIT)
 	{
 		ft_putstr_fd("Quit: ", STDERR_FILENO);
@@ -39,8 +52,12 @@ static void	handle_inactive_signal(int signal)
 	}
 }
 
-// Sets up signal handling by defining the handler for SIGINT and SIGQUIT signals
-// using the provided handler function.
+/**
+ * Sets up signal handling by defining the handler for SIGINT and
+ * SIGQUIT signals using the provided handler function.
+ *
+ * @param handler The function to handle the signal.
+ */
 static void	setup_signals(void (*handler)(int))
 {
 	struct sigaction	sa;
@@ -52,20 +69,20 @@ static void	setup_signals(void (*handler)(int))
 	sigaction(SIGQUIT, &sa, NULL);
 }
 
-// Configures the signal handling for active mode by setting the active signal handler.
+/**
+ * Configures signal handling for interactive mode by setting the
+ * active signal handler.
+ */
 void	set_active_signals(void)
 {
 	setup_signals(handle_active_signal);
 }
 
-// Configures the signal handling for inactive mode by setting the inactive signal handler.
+/**
+ * Configures signal handling for non-interactive mode by setting
+ * the inactive signal handler.
+ */
 void	set_inactive_signals(void)
 {
 	setup_signals(handle_inactive_signal);
-}
-
-// Initializes the signal handling by setting the active signal handler.
-void	init_signals(void)
-{
-	set_active_signals();
 }

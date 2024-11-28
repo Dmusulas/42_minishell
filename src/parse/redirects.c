@@ -10,6 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "error_messages.h"
 #include "lexer_parser.h"
 #include "minishell.h"
 
@@ -46,41 +47,25 @@ static t_ast	*make_redir(t_ast *cmd_node, t_lexer *token, char *file_str,
 t_ast	*handle_redir(t_ast *prev_node, t_tools *tools)
 {
 	t_ast	*redir_node;
+	t_ast	*last_redir;
 
+	last_redir = NULL;
 	while (tools->lexer_lst && is_redirection(tools->lexer_lst->token))
 	{
-		redir_node = make_redir(prev_node, tools->lexer_lst,
-				tools->lexer_lst->next->str, tools);
+		if (last_redir)
+		{
+			redir_node = make_redir(last_redir, tools->lexer_lst,
+					tools->lexer_lst->next->str, tools);
+		}
+		else
+		{
+			redir_node = make_redir(prev_node, tools->lexer_lst,
+					tools->lexer_lst->next->str, tools);
+		}
 		if (!redir_node)
 			return (NULL);
+		last_redir = redir_node;
 		tools->lexer_lst = tools->lexer_lst->next->next;
 	}
 	return (prev_node);
-}
-
-/**
- * Swaps redirection nodes if an output redirection (>, >>) is
- * incorrectly placed before an input redirection (<<, <) in the AST.
- *
- * @param node The root of the AST or subtree to rearrange.
- * @return The new root node after rearranging.
- */
-t_ast	*swap_redirection_nodes(t_ast *node)
-{
-	t_ast	*temp;
-
-	if (!node)
-		return (NULL);
-	node->left = swap_redirection_nodes(node->left);
-	node->right = swap_redirection_nodes(node->right);
-	if ((node->token == T_REDIR_OUT || node->token == T_APPEND) && (node->left
-			&& (node->left->token == T_REDIR_IN
-				|| node->left->token == T_HEREDOC)))
-	{
-		temp = node->left;
-		node->left = temp->left;
-		temp->left = node;
-		return (temp);
-	}
-	return (node);
 }

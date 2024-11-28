@@ -6,7 +6,7 @@
 /*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/12 20:13:12 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:52:33 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,6 @@ void	parse_arg(t_ast *cmd_node, t_tools *tools);
 t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools);
 t_ast	*handle_redir(t_ast *prev_node, t_tools *tools);
 char	*get_env_value(const char *var_name, t_tools *tools);
-t_ast	*swap_redirection_nodes(t_ast *node);
 
 /* EXPAND */
 char	*expand_var(const char *s, t_tools *tools);

@@ -63,8 +63,7 @@ static char	*join_paths(char *path, char *cmd)
  *
  * @param paths The colon-separated PATH string from the environment.
  * @param cmd The command to find.
- * @return The full path to the executable command, or a NULL pointer
- * if the command is not found.
+ * @return The full path to the executable command, or NULL if not found.
  */
 char	*find_cmd(char *paths, char *cmd)
 {
@@ -79,12 +78,7 @@ char	*find_cmd(char *paths, char *cmd)
 	while (paths_split[i])
 	{
 		full_cmd = join_paths(paths_split[i], cmd);
-		if (!full_cmd)
-		{
-			free_2darray(paths_split);
-			return (NULL);
-		}
-		if (!access(full_cmd, X_OK))
+		if (full_cmd && !access(full_cmd, X_OK))
 		{
 			free_2darray(paths_split);
 			return (full_cmd);
@@ -130,7 +124,7 @@ char	*resolve_relative_path(char *rel_path, t_tools *tools)
 	cwd = getcwd(NULL, 0);
 	if (!cwd)
 	{
-		ft_error(ERR_EXECVE_FAIL, tools); // Changed error handling to use ft_error
+		ft_error(ERR_EXECVE_FAIL, tools);
 		return (NULL);
 	}
 	full_path = join_paths(cwd, rel_path);

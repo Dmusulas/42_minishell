@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/11/04 15:14:51 by pmolzer          ###   ########.fr        #
+#    Updated: 2024/11/27 22:49:04 by dmusulas         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ INCLUDES		= minishell.h \
 
 MINISHELL_SRCS	= main.c \
 				  signals.c \
+				  signals_2.c \
 				  mini_loop.c \
 				  clean_up.c \
 				  err_msg.c \
@@ -47,6 +48,7 @@ MINISHELL_SRCS	= main.c \
 				  env/clean.c\
 				  lex/lexer.c \
 				  lex/lex_utils.c \
+				  lex/lex_utils_2.c \
 				  lex/parse_prep_utils.c \
 				  parse/expand.c \
 				  parse/parse_utils.c \
@@ -66,6 +68,7 @@ MINISHELL_SRCS	= main.c \
 				  utils/debug.c\
 				  utils/arrays.c\
 				  exec/executor.c\
+				  exec/external_commands.c\
 				  exec/io.c\
 				  exec/path_finder.c\
 				  exec/pipes.c\

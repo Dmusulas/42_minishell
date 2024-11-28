@@ -51,8 +51,7 @@ void	handle_input(t_tools *tools)
 	{
 		process_tokens(tools);
 		orig_lexer_lst = tools->lexer_lst;
-		if (!parse_input(tools))
-			ft_error(ERR_PAR, tools);
+		parse_input(tools);
 		if (tools->tree && tools->debug_mode)
 		{
 			print_tokens(orig_lexer_lst);

@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/12 19:48:32 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/11/27 22:48:53 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ void	execute_command(t_ast *node, t_tools *tools);
 void	fork_and_execute_command(t_ast *node, t_tools *tools);
 void	execute_at_path(char *path, t_ast *node, char **envp, t_tools *tools);
 void	execute_external_command(t_ast *node, char **envp, t_tools *tools);
+void	execute_single_command(t_ast *node, t_tools *tools);
 
 /* PATH THINGS */
 char	*find_cmd(char *paths, char *cmd);

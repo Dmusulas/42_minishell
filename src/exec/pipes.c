@@ -10,7 +10,6 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "error_messages.h"
 #include "exec.h"
 #include "lexer_parser.h"
 
@@ -62,18 +61,6 @@ void	handle_pipe_child(int *fd, int *fd_in, t_ast *node, t_tools *tools)
 	exit(tools->last_exit_status);
 }
 
-// /**
-//  * Checks if the last command in the pipe sequence is 'grep'.
-//  * This is needed because grep doesn't exit with 0 if no match is found,
-//  * even though it is a successful command.
-//  */
-// static int	is_last_command_grep(t_ast *node)
-// {
-// 	if (!node || !node->str)
-// 		return (0);
-// 	return (ft_strcmp(node->str, "grep") == 0);
-// }
-
 /**
  * Waits for all child processes to finish and updates the last exit status
  * of the tools struct. If the last command was grep and it exited with a
@@ -90,7 +77,8 @@ static void	wait_for_children(t_tools *tools)
 	int	waiting_pid;
 
 	last_pid = tools->last_pid;
-	while ((waiting_pid = wait(&status)) > 0)
+	waiting_pid = wait(&status);
+	while (waiting_pid > 0)
 	{
 		if (WIFEXITED(status))
 		{
@@ -98,6 +86,7 @@ static void	wait_for_children(t_tools *tools)
 			if (waiting_pid == last_pid)
 				tools->last_exit_status = exit_code;
 		}
+		waiting_pid = wait(&status);
 	}
 }
 
@@ -171,8 +160,8 @@ static int	create_pipe_and_fork(int fd[2], t_tools *tools)
  * output file descriptors and executes the command. In the parent process, it
  * manages the file descriptors for piping, advances to the next command,
 	and waits
-
-	* for all child processes to complete. The last command in the series is executed
+	* for all child processes to complete.
+	* The last command in the series is executed
  * separately, ensuring proper stdin redirection. The function updates the exit
  * status in the tools structure based on the execution results.
  *

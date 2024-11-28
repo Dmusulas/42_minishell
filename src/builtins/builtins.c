@@ -20,9 +20,7 @@ int	execute_cd(t_ast *cmd_node, t_tools *tools)
 
 	status_result = 0;
 	arg_node = cmd_node->right;
-	if (arg_node && arg_node->right)
-		status_result = ft_error(ERR_TOO_MANY_ARGS, tools);
-	else if (arg_node)
+	if (arg_node)
 		status_result = ft_cd(arg_node->str, tools);
 	else
 		status_result = ft_cd(NULL, tools);
@@ -31,7 +29,7 @@ int	execute_cd(t_ast *cmd_node, t_tools *tools)
 
 void	execute_builtin(t_ast *cmd_node, t_tools *tools)
 {
-	int		status_result;
+	int	status_result;
 
 	status_result = 0;
 	if (ft_strcmp(cmd_node->str, "echo") == 0)
