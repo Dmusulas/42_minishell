@@ -26,8 +26,10 @@ int	ft_pwd(t_tools *tools)
 	}
 	else
 	{
-		return (ft_error(ERR_NO_SUCH_FILE, tools));
+		if (errno == ENOENT)
+			return (ft_path_error(ERR_NO_SUCH_FILE, tools, NULL));
+		else if (errno == EACCES)
+			return (ft_path_error(ERR_PERMISSION_DENIED, tools, NULL));
 	}
-	if (tools->debug_mode)
-		printf("[DEBUG]: ft_pwd() executed\n");
+	return (ft_path_error(ERR_NO_SUCH_FILE, tools, NULL));
 }

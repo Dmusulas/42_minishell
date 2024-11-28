@@ -61,7 +61,16 @@ t_ast	*parse_cmd(t_tools *tools)
 	if (is_builtin(cmd_node->str))
 		cmd_node->b_cmd = true;
 	tools->lexer_lst = tools->lexer_lst->next;
-	if (tools->lexer_lst && tools->lexer_lst->token == T_ARG)
-		parse_arg(cmd_node, tools);
+	while (tools->lexer_lst)
+	{
+		if (tools->lexer_lst->token == T_ARG)
+			parse_arg(cmd_node, tools);
+		else if (is_redirection(tools->lexer_lst->token))
+			cmd_node = handle_redir(cmd_node, tools);
+		else
+			break ;
+		if (!cmd_node)
+			return (NULL);
+	}
 	return (cmd_node);
 }

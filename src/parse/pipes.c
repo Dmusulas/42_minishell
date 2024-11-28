@@ -34,13 +34,6 @@ t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools)
 	right_cmd = parse_cmd(tools);
 	if (!right_cmd)
 		return (free_ast(pipe_node), NULL);
-	while (tools->lexer_lst && is_redirection(tools->lexer_lst->token))
-	{
-		right_cmd = handle_redir(right_cmd, tools);
-		if (!right_cmd)
-			return (free_ast(pipe_node), NULL);
-	}
-	
 	pipe_node->right = right_cmd;
 	pipe_node->str = ft_strdup("|");
 	return (pipe_node);

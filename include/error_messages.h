@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 14:14:12 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/11/06 15:21:34 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/27 20:53:18 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,6 @@ typedef enum e_error_type
 # define ERR_PAR_MSG "Parsing error"
 
 int		ft_error(t_error_type err_type, t_tools *tools);
+int		ft_path_error(t_error_type err_type, t_tools *tools, char *path);
 
 #endif

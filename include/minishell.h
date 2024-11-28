@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/25 14:52:20 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/27 22:28:06 by dmusulas         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,5 +82,8 @@ int		ft_exit(t_ast *cmd_node, t_tools *tools);
 int		ft_env(t_tools *tools);
 int		ft_pwd(t_tools *tools);
 int		ft_is_not_integer(char *str);
+
+/* BUILTINS UTILS */
+int		cd_update_env_paths(t_tools *tools);
 
 #endif

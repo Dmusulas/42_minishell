@@ -14,9 +14,9 @@
 
 int	export_validation(char *arg, t_tools *tools)
 {
-	int		i;
+	int	i;
 
-	if (!ft_isalpha(arg[0]) && arg[0] != '_')
+	if (!ft_isalpha(arg[0]) && arg[0] != '_' && arg[0] != '-')
 	{
 		ft_error(ERR_INVALID_IDENTIFIER, tools);
 		return (0);
@@ -24,7 +24,7 @@ int	export_validation(char *arg, t_tools *tools)
 	i = 1;
 	while (arg[i] && arg[i] != '=')
 	{
-		if (!ft_isalnum(arg[i]) && arg[i] != '_')
+		if (!ft_isalnum(arg[i]) && arg[i] != '_' && arg[0] != '-')
 		{
 			ft_error(ERR_INVALID_IDENTIFIER, tools);
 			return (0);
@@ -36,7 +36,7 @@ int	export_validation(char *arg, t_tools *tools)
 
 static int	process_export_arg(char *arg, t_tools *tools)
 {
-	int		success;
+	int	success;
 
 	success = 0;
 	if (!export_validation(arg, tools))

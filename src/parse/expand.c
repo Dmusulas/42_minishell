@@ -51,7 +51,7 @@ static char	*append_char(char *str, char c)
 		len = ft_strlen(str);
 	else
 		len = 0;
-	temp_str = malloc(len + 2); // Allocate memory for the new string
+	temp_str = malloc(len + 2);
 	if (!temp_str)
 	{
 		free(str);
@@ -59,12 +59,12 @@ static char	*append_char(char *str, char c)
 	}
 	if (str)
 	{
-		ft_strlcpy(temp_str, str, len + 1); // Copy the original string
+		ft_strlcpy(temp_str, str, len + 1);
 		free(str);
 	}
-	if (len + 1 < len + 2)    // Check if we can safely append the character
-		temp_str[len] = c;    // Append the new character
-	temp_str[len + 1] = '\0'; // Null-terminate the new string
+	if (len + 1 < len + 2)
+		temp_str[len] = c;
+	temp_str[len + 1] = '\0';
 	return (temp_str);
 }
 
@@ -89,6 +89,7 @@ static char	*expand_single_var(const char *s, size_t *i, t_tools *tools)
 		return (ft_strdup(""));
 }
 
+// TODO: Remove debug mode prints here so it is under 25 lines
 char	*expand_var(const char *s, t_tools *tools)
 {
 	char	*result;
@@ -103,7 +104,7 @@ char	*expand_var(const char *s, t_tools *tools)
 	while (s[i])
 	{
 		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i + 1]) || s[i
-				+ 1] == '_'))
+				+ 1] == '_')) // TODO: must be fixed also for norminette tabs
 		{
 			temp = expand_single_var(s, &i, tools);
 			if (tools->debug_mode)

@@ -36,7 +36,7 @@ static void	print_argument(t_ast *current, t_tools *tools)
 					ft_putchar_fd(str[i++], STDOUT_FILENO);
 			}
 		}
-		else 
+		else
 		{
 			while (str[i])
 				ft_putchar_fd(str[i++], STDOUT_FILENO);
