@@ -3,15 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   lexer.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/12 18:44:05 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/11/29 16:23:55 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+
+static char *ft_strjoin_free(char *s1, char *s2)
+{
+    char *result;
+    
+    result = ft_strjoin(s1, s2);
+    free(s1);
+    return (result);
+}
 /**
  * Checks if the given character is a token delimiter ('|', '<', or '>').
  *
@@ -40,24 +49,32 @@ int	handle_q_arg(char *s, int start, t_tools *tools)
 	int		i;
 	char	quote;
 	char	*arg;
+	char    *temp;
+	int     total_len;
 
 	i = start;
-	quote = s[i];
-	i++;
-	while (s[i] && s[i] != quote)
+	total_len = 0;
+	arg = ft_strdup("");
+	while (s[i] && (s[i] == '"' || s[i] == '\''))
 	{
-		if (quote == '"' && s[i] == '$')
+		quote = s[i];
+		i++;
+		while (s[i] && s[i] != quote)
 			i++;
-		else
-			i++;
+		if (s[i] != quote)
+			return (ft_error(ERR_SYNTAX, tools));
+		temp = ft_substr(s, start + total_len, i - (start + total_len) + 1);
+		if (!temp)
+			return (ft_error(ERR_MALLOC_FAIL, tools));
+		arg = ft_strjoin_free(arg, temp);
+		free(temp);
+		i++;
+		total_len = i - start;
+		if (s[i] != '"' && s[i] != '\'')
+			break;
 	}
-	if (s[i] != quote)
-		return (ft_error(ERR_SYNTAX, tools));
-	arg = ft_substr(s, start, i - start + 1);
-	if (!arg)
-		return (ft_error(ERR_MALLOC_FAIL, tools));
 	add_tk(&(tools->lexer_lst), make_tk(arg, T_ARG));
-	return (i - start + 1);
+	return (total_len);
 }
 
 /**
