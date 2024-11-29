@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/11/27 22:49:04 by dmusulas         ###   ########.fr        #
+#    Updated: 2024/11/29 18:35:59 by pmolzer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -49,6 +49,8 @@ MINISHELL_SRCS	= main.c \
 				  lex/lexer.c \
 				  lex/lex_utils.c \
 				  lex/lex_utils_2.c \
+				  lex/lex_utils_3.c \
+				  lex/lex_utils_4.c \
 				  lex/parse_prep_utils.c \
 				  parse/expand.c \
 				  parse/parse_utils.c \
