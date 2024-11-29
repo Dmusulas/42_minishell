@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/29 18:09:48 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/29 18:27:59 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,43 +164,74 @@ static void	handle_special_token(t_tools *tools, int *i,
 	*is_cmd = (tools->args[*i - 1] == '|');
 }
 
-static int	process_lexer_tokens(char *input_str, int *i, char *quote_type)
+/* static int	process_lexer_tokens(char *input_str, int *i, char *quote_type)
 {
 	if ((input_str[*i] == '"' || input_str[*i] == '\'') && *quote_type == '\0')
 		*quote_type = input_str[*i];
 	else if (input_str[*i] == *quote_type)
 		*quote_type = '\0';
 	return (1);
+} */
+
+static int	check_quote_status(char *args, int *i, char *quote_type)
+{
+	if (*quote_type == '\0')
+	{
+		if (args[*i] == '"' || args[*i] == '\'')
+		{
+			*quote_type = args[*i];
+			(*i)++;
+			return (1);
+		}
+	}
+	else
+	{
+		if (args[*i] == *quote_type)
+		{
+			*quote_type = '\0';
+			(*i)++;
+			return (1);
+		}
+	}
+	return (0);
+}
+
+static int	handle_token_processing_core(t_tools *tools, int *i,
+	char *quote_type, bool *is_cmd)
+{
+	int		start;
+
+	start = 0;
+	while (tools->args[*i])
+	{
+		if (check_quote_status(tools->args, i, quote_type))
+			continue ;
+		if (tools->args[*i] == ' ' && *quote_type == '\0')
+		{
+			handle_space_token(tools, i, &start, is_cmd);
+			continue ;
+		}
+		if (*quote_type == '\0' && check_tk(tools->args[*i]))
+		{
+			handle_special_token(tools, i, &start, is_cmd);
+			continue ;
+		}
+		(*i)++;
+	}
+	handle_final_token(tools, start, *i, *is_cmd);
+	if (*quote_type == '\0')
+		return (1);
+	return (0);
 }
 
 static int	handle_token_processing(t_tools *tools, bool *is_cmd)
 {
 	int		i;
-	int		start;
 	char	quote_type;
 
 	i = 0;
-	start = 0;
 	quote_type = '\0';
-	while (tools->args[i])
-	{
-		process_lexer_tokens(tools->args, &i, &quote_type);
-		if (tools->args[i] == ' ' && quote_type == '\0')
-		{
-			handle_space_token(tools, &i, &start, is_cmd);
-			continue ;
-		}
-		if (quote_type == '\0' && check_tk(tools->args[i]))
-		{
-			handle_special_token(tools, &i, &start, is_cmd);
-			continue ;
-		}
-		i++;
-	}
-	handle_final_token(tools, start, i, *is_cmd);
-	if (quote_type == '\0')
-		return (1);
-	return (0);
+	return (handle_token_processing_core(tools, &i, &quote_type, is_cmd));
 }
 
 int	tokenize_input(t_tools *tools)
