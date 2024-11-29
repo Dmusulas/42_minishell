@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:05 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/29 16:27:47 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/29 17:33:54 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,74 +104,85 @@ int	handle_arg(char *s, int start, t_tools *tools)
 }
 
 /**
- * Skips spaces in the string starting from the given index.
- *
- * @param s The input string.
- * @param i The current index.
- * @return The index after skipping spaces.
+ * Tokenizes the input string into commands and arguments, updating the lexer list.
  */
-static int	skip_space(char *s, int i)
+int tokenize_input(t_tools *tools)
 {
-	while (s[i] == ' ')
-		i++;
-	return (i);
-}
+    int     i;
+    int     start;
+    bool    is_cmd;
+    char    quote_type;
 
-/**
- * Tokenizes the input string into commands and arguments,
-	updating the lexer list.
- *
- * This function processes tokens in the following order:
- * 1. Two-character tokens (e.g., '>>', '<<')
- * 2. Single-character tokens (e.g., '|', '<', '>')
- * 3. General arguments, including quoted arguments.
- *
-	* It maintains a flag `is_cmd` to determine whether the
-	* current token is a new command
- * or an argument to the previous command.
- *
-	* @param tools Pointer to the tools structure containing
-	* the input string and lexer list.
- * @return 1 on success.
- */
-int	tokenize_input(t_tools *tools)
-{
-	int		i;
-	int		offset;
-	bool	is_cmd;
+    i = 0;
+    start = 0;
+    is_cmd = true;
+    quote_type = '\0';
+    tools->lexer_lst = NULL;
 
-	i = 0;
-	is_cmd = true;
-	tools->lexer_lst = NULL;
-	while (tools->args[i])
-	{
-		i = skip_space(tools->args, i);
-		if (tools->args[i] == '\0')
-			break ;
-		offset = ft_two_tk(tools->args[i], tools->args[i + 1], tools);
-		if (offset > 0)
-		{
-			i += offset;
-			is_cmd = false;
-			continue ;
-		}
-		if (check_tk(tools->args[i]))
-		{
-			i += ft_one_tk(tools->args[i], tools);
-			is_cmd = (tools->args[i - 1] == '|');
-			continue ;
-		}
-		if (is_cmd)
-		{
-			add_tk(&(tools->lexer_lst), make_tk(ft_substr(tools->args, i,
-						ft_strcspn(&tools->args[i], " ")), T_CMD));
-			i += ft_strcspn(&tools->args[i], " ");
-			is_cmd = false;
-		}
-		else
-		{
-			i += handle_arg(tools->args, i, tools);
-		}
-	}
-	return (1);
+    while (tools->args[i])
+    {
+        // Handle quotes
+        if ((tools->args[i] == '"' || tools->args[i] == '\'') && quote_type == '\0')
+            quote_type = tools->args[i];
+        else if (tools->args[i] == quote_type)
+            quote_type = '\0';
+        
+        // Skip spaces only when not in quotes
+        if (tools->args[i] == ' ' && quote_type == '\0')
+        {
+            if (i > start)
+            {
+                // Save the accumulated token
+                char *token = ft_substr(tools->args, start, i - start);
+                add_tk(&(tools->lexer_lst), make_tk(token, is_cmd ? T_CMD : T_ARG));
+                is_cmd = false;
+            }
+            start = i + 1;
+            i++;
+            continue;
+        }
+
+        // Handle special tokens only when not in quotes
+        if (quote_type == '\0' && check_tk(tools->args[i]))
+        {
+            // Save any accumulated token before the special character
+            if (i > start)
+            {
+                char *token = ft_substr(tools->args, start, i - start);
+                add_tk(&(tools->lexer_lst), make_tk(token, is_cmd ? T_CMD : T_ARG));
+            }
+
+            // Handle two-character tokens
+            int offset = ft_two_tk(tools->args[i], tools->args[i + 1], tools);
+            if (offset > 0)
+            {
+                i += offset;
+                start = i;
+                is_cmd = false;
+                continue;
+            }
+
+            // Handle single-character tokens
+            ft_one_tk(tools->args[i], tools);
+            i++;
+            start = i;
+            is_cmd = (tools->args[i - 1] == '|');
+            continue;
+        }
+
+        i++;
+    }
+
+    // Save the last token if any
+    if (i > start)
+    {
+        char *token = ft_substr(tools->args, start, i - start);
+        add_tk(&(tools->lexer_lst), make_tk(token, is_cmd ? T_CMD : T_ARG));
+    }
+
+    // Check for unclosed quotes
+    if (quote_type != '\0')
+        return (ft_error(ERR_SYNTAX, tools));
+
+    return (1);
 }
