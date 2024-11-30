@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   lexer_parser.h                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/27 15:52:33 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/11/29 18:34:43 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,19 @@ int		ft_one_tk(char c, t_tools *tools);
 int		ft_two_tk(char c1, char c2, t_tools *tools);
 int		check_quotes(char *s, t_tools *tools);
 size_t	ft_strcspn(const char *s, const char *reject);
+
+/* LEX_UTILS_3 */
+char	*ft_strjoin_free(char *s1, char *s2);
+int		check_tk(char tk);
+void	handle_final_token(t_tools *tools, int start, int i, bool is_cmd);
+int		check_quote_status(char *args, int *i, char *quote_type);
+
+/* LEX_UTILS_4 */
+void	handle_space_token(t_tools *tools, int *i, int *start, bool *is_cmd);
+void	handle_special_token(t_tools *tools, int *i, int *start, bool *is_cmd);
+int		handle_token_processing_core(t_tools *tools, int *i,
+			char *quote_type, bool *is_cmd);
+int		handle_token_processing(t_tools *tools, bool *is_cmd);
 
 /* LEXER */
 int		handle_q_arg(char *s, int start, t_tools *tools);

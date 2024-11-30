@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mini_loop.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/26 12:34:36 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/29 18:49:22 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,8 +42,6 @@ int	reset_tools(t_tools *tools)
 {
 	if (tools)
 		clean_tools(tools);
-	else
-		return (0);
 	init_tools(tools);
 	mini_loop(tools);
 	return (0);
