@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:46 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/12 19:40:34 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:28:55 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,45 @@
 #include "libft.h"
 #include "minishell.h"
 
-/**
- * Parses the input from lexer tokens and constructs an AST.
- * Handles commands, pipes, and redirections in one loop.
- *
- * @param tools The tools structure containing lexer and other resources.
- * @return The root node of the constructed AST or NULL on failure.
- */
+static t_ast	*handle_command_token(t_ast *parent_node, t_ast *cmd_node,
+					t_tools *tools)
+{
+	cmd_node = parse_cmd(tools);
+	if (!cmd_node)
+		return (NULL);
+	if (!parent_node)
+		parent_node = cmd_node;
+	return (parent_node);
+}
+
+static t_ast	*process_token(t_ast *parent_node, t_ast *cmd_node,
+					t_tools *tools)
+{
+	if (tools->lexer_lst->token == T_CMD)
+	{
+		parent_node = handle_command_token(parent_node, cmd_node, tools);
+		if (!parent_node)
+			return (NULL);
+	}
+	else if (tools->lexer_lst->token == T_PIPE)
+	{
+		parent_node = handle_pipe(parent_node, tools);
+		if (!parent_node)
+			return (NULL);
+	}
+	else if (is_redirection(tools->lexer_lst->token))
+	{
+		parent_node = handle_redir(parent_node, tools);
+		if (!parent_node)
+			return (NULL);
+	}
+	else if (tools->lexer_lst->token == T_ARG && cmd_node)
+		parse_arg(cmd_node, tools);
+	else
+		tools->lexer_lst = tools->lexer_lst->next;
+	return (parent_node);
+}
+
 int	parse_input(t_tools *tools)
 {
 	t_ast	*cmd_node;
@@ -30,32 +62,9 @@ int	parse_input(t_tools *tools)
 	parent_node = NULL;
 	while (tools->lexer_lst)
 	{
-		if (tools->lexer_lst->token == T_CMD)
-		{
-			cmd_node = parse_cmd(tools);
-			if (!cmd_node)
-				return (0);
-			if (!parent_node)
-				parent_node = cmd_node;
-		}
-		else if (tools->lexer_lst->token == T_PIPE)
-		{
-			parent_node = handle_pipe(parent_node, tools);
-			if (!parent_node)
-				return (0);
-		}
-		else if (is_redirection(tools->lexer_lst->token))
-		{
-			parent_node = handle_redir(parent_node, tools);
-			if (!parent_node)
-				return (0);
-		}
-		else if (tools->lexer_lst->token == T_ARG && cmd_node)
-		{
-			parse_arg(cmd_node, tools);
-		}
-		else
-			tools->lexer_lst = tools->lexer_lst->next;
+		parent_node = process_token(parent_node, cmd_node, tools);
+		if (!parent_node && tools->lexer_lst->token != T_ARG)
+			return (0);
 	}
 	tools->tree = parent_node;
 	return (1);
