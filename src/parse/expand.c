@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:24:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/10/21 15:20:57 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/11/29 18:43:04 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,17 +99,11 @@ char	*expand_var(const char *s, t_tools *tools)
 
 	result = ft_strdup("");
 	i = 0;
-	if (tools->debug_mode)
-		printf("[DEBUG] expand_var: Expanding string: %s\n", s);
 	while (s[i])
 	{
 		if (s[i] == '$' && s[i + 1] && (ft_isalpha(s[i + 1]) || s[i
-				+ 1] == '_')) // TODO: must be fixed also for norminette tabs
-		{
+					+ 1] == '_'))
 			temp = expand_single_var(s, &i, tools);
-			if (tools->debug_mode)
-				printf("[DEBUG] expand_var: Expanded variable to: %s\n", temp);
-		}
 		else
 			temp = append_char(ft_strdup(""), s[i]);
 		new_result = ft_strjoin(result, temp);
@@ -120,7 +114,5 @@ char	*expand_var(const char *s, t_tools *tools)
 			return (NULL);
 		i++;
 	}
-	if (tools->debug_mode)
-		printf("[DEBUG] expand_var: Final expanded string: %s\n", result);
 	return (result);
 }

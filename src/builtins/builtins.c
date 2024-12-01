@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/03 22:26:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/11/29 16:07:35 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 15:31:06 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,14 +20,11 @@ int	execute_cd(t_ast *cmd_node, t_tools *tools)
 
 	status_result = 0;
 	arg_node = cmd_node->right;
-	
-	// Check if there are too many arguments
 	if (arg_node && arg_node->right)
 	{
 		ft_error(ERR_TOO_MANY_ARGS, tools);
 		return (1);
 	}
-	
 	if (arg_node)
 		status_result = ft_cd(arg_node->str, tools);
 	else
