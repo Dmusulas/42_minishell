@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/12/01 16:16:05 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:31:52 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,9 @@ t_ast	*ast_new(t_tools *tools);
 t_ast	*ast_add_child(t_ast *parent, bool is_right, t_tools *tools);
 int		parse_input(t_tools *tools);
 char	*trim_expd_arg(const char *s, t_tools *tools);
+char	*handle_quoted_string(const char *s, t_tools *tools);
+char	*remove_quotes(const char *temp);
+char	*process_unquoted_string(const char *s, t_tools *tools);
 
 /* PARSER */
 t_ast	*parse_cmd(t_tools *tools);

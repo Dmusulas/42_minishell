@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: pmolzer <pmolzer@student.42.fr>            +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/26 12:55:32 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:31:16 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,64 +64,11 @@ t_ast	*ast_add_child(t_ast *parent, bool is_right, t_tools *tools)
 	return (new_nd);
 }
 
-/**
- * Processes an argument string: removes quotes and expands variables.
- *
- * @param s The argument string.
- * @param tools The tools structure containing environment variables.
- * @return The processed string or NULL on failure.
- */
 char	*trim_expd_arg(const char *s, t_tools *tools)
 {
-	char	*result;
-	char	*temp;
-	int		i;
-	int		j;
-	char	quote_type;
-
 	if (!s)
 		return (NULL);
 	if ((s[0] == '\'' || s[0] == '"') && s[0] == s[ft_strlen(s) - 1])
-	{
-		if (s[0] == '\'')
-		{
-			tools->in_single_quotes = true;
-			return (ft_substr(s, 1, ft_strlen(s) - 2));
-		}
-		if (s[0] == '"')
-		{
-			temp = ft_substr(s, 1, ft_strlen(s) - 2);
-			result = expand_var(temp, tools);
-			free(temp);
-			return (result);
-		}
-	}
-	temp = ft_strdup(s);
-	if (!temp)
-		return (NULL);
-	result = ft_calloc(ft_strlen(s) + 1, sizeof(char));
-	if (!result)
-		return (free(temp), NULL);
-	i = 0;
-	j = 0;
-	quote_type = '\0';
-	while (temp[i])
-	{
-		if ((temp[i] == '\'' || temp[i] == '"') && quote_type == '\0')
-			quote_type = temp[i];
-		else if (temp[i] == quote_type)
-			quote_type = '\0';
-		else
-			result[j++] = temp[i];
-		i++;
-	}
-	free(temp);
-	if (result[0] == '\0')
-	{
-		free(result);
-		return (expand_var(s, tools));
-	}
-	temp = expand_var(result, tools);
-	free(result);
-	return (temp);
+		return (handle_quoted_string(s, tools));
+	return (process_unquoted_string(s, tools));
 }
