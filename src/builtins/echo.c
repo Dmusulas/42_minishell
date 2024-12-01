@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 22:33:09 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/11/29 18:39:29 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:03:01 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,5 @@ int	ft_echo(t_ast *cmd_node, t_tools *tools)
 	}
 	if (n_line)
 		ft_putchar_fd('\n', STDOUT_FILENO);
-	if (tools->debug_mode)
-		printf("[DEBUG]: ft_echo() executed\n");
 	return (0);
 }

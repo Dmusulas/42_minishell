@@ -6,22 +6,13 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 18:29:03 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/11/29 18:36:19 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:01:35 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "error_messages.h"
 #include "lexer_parser.h"
 #include "minishell.h"
-
-char	*ft_strjoin_free(char *s1, char *s2)
-{
-	char	*result;
-
-	result = ft_strjoin(s1, s2);
-	free(s1);
-	return (result);
-}
 
 int	check_tk(char tk)
 {

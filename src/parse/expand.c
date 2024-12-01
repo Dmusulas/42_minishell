@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:24:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/29 18:43:04 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:02:26 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,16 @@ char	*get_env_value(const char *var_name, t_tools *tools)
 
 	env_var = tools->envp;
 	var_len = ft_strlen(var_name);
-	if (tools->debug_mode == true)
-		printf("[DEBUG] get_env_value: Searching for env var: %s\n", var_name);
 	while (env_var)
 	{
 		env_str = (char *)env_var->content;
-		if (tools->debug_mode == true)
-			printf("[DEBUG] get_env_value: Checking env var: %s\n", env_str);
 		if (ft_strncmp(env_str, var_name, var_len) == 0
 			&& env_str[var_len] == '=')
 		{
-			if (tools->debug_mode == true)
-				printf("[DEBUG] get_env_value: Found env var: %s\n", env_str);
 			return (env_str + var_len + 1);
 		}
 		env_var = env_var->next;
 	}
-	if (tools->debug_mode == true)
-		printf("[DEBUG] get_env_value: Env var not found: %s\n", var_name);
 	return (NULL);
 }
 
@@ -89,7 +81,6 @@ static char	*expand_single_var(const char *s, size_t *i, t_tools *tools)
 		return (ft_strdup(""));
 }
 
-// TODO: Remove debug mode prints here so it is under 25 lines
 char	*expand_var(const char *s, t_tools *tools)
 {
 	char	*result;

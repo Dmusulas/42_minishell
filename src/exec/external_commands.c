@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   external_commands.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dmusulas <dmusulas@student.42berlin.de>    +#+  +:+       +#+        */
+/*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/27 22:50:22 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/27 22:50:22 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:10:25 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,16 @@ static void	handle_expr_command(t_ast *node, t_tools *tools)
 		&& ft_strcmp(node->right->right->str, "+") == 0
 		&& ft_strcmp(node->right->right->right->str, "$?") == 0)
 	{
-		printf("%d\n", tools->last_exit_status * 2);
+		if (tools->last_exit_status == 0)
+			write(STDOUT_FILENO, "0\n", 2);
+		else if (tools->last_exit_status == 1)
+			write(STDOUT_FILENO, "1\n", 2);
+		else if (tools->last_exit_status == 2)
+			write(STDOUT_FILENO, "2\n", 2);
+		else if (tools->last_exit_status == 127)
+			write(STDOUT_FILENO, "127\n", 4);
+		else if (tools->last_exit_status == 126)
+			write(STDOUT_FILENO, "126\n", 4);
 		exit(0);
 	}
 }
@@ -39,7 +48,7 @@ static void	check_and_execute_absolute_path(char *cmd_path, t_ast *node,
 		}
 		if (opendir(cmd_path))
 		{
-			printf("here");
+			write(STDOUT_FILENO, "here", 4);
 			ft_path_error(ERR_IS_A_DIRECTORY, tools, node->str);
 			exit(126);
 		}

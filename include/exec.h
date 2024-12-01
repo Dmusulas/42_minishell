@@ -6,11 +6,9 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/27 22:48:53 by dmusulas         ###   ########.fr       */
+/*   Updated: 2024/12/01 16:06:02 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-// TODO: Rewrite errors messages
 
 #ifndef EXEC_H
 # define EXEC_H

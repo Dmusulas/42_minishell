@@ -6,13 +6,10 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/29 18:49:22 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:05:41 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// valgrind --leak-check=full --show-leak-kinds=all ./minishell
-
-// #include "exec.h"
 #include "exec.h"
 #include "lexer_parser.h"
 #include "minishell.h"
@@ -32,7 +29,6 @@ void	init_tools(t_tools *tools)
 	init_signals();
 }
 
-// This function should be called only once at the start of the program
 void	set_initial_exit_status(t_tools *tools)
 {
 	tools->last_exit_status = 0;
@@ -57,8 +53,6 @@ int	reset_tools(t_tools *tools)
 int	mini_loop(t_tools *tools)
 {
 	tools->args = readline("minishell$ ");
-	if (tools->debug_mode)
-		printf("[DEBUG]: received arguments %s\n", tools->args);
 	if (tools->args == NULL)
 	{
 		ft_putendl_fd("minishell$ exit", STDOUT_FILENO);
@@ -69,11 +63,6 @@ int	mini_loop(t_tools *tools)
 	add_history(tools->args);
 	handle_input(tools);
 	execute_command(tools->tree, tools);
-	if (tools->debug_mode)
-		printf("[DEBUG] Last exit status preserved: %d\n",
-			tools->last_exit_status);
-	if (tools->debug_mode)
-		printf("[DEBUG]: Restored stding stoud\n");
 	reset_tools(tools);
 	return (1);
 }

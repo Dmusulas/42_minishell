@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/11/29 18:35:59 by pmolzer          ###   ########.fr        #
+#    Updated: 2024/12/01 16:02:02 by pmolzer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,6 @@ MINISHELL_SRCS	= main.c \
 				  builtins/exit.c\
 				  builtins/pwd.c\
 				  builtins/unset.c\
-				  utils/debug.c\
 				  utils/arrays.c\
 				  exec/executor.c\
 				  exec/external_commands.c\

@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/29 18:34:43 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:01:27 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ typedef struct s_tools
 	int		out_fd;
 	int		last_pid;
 	bool	heredoc;
-	bool	debug_mode;
 	bool	in_single_quotes;
 	t_ast	*tree;
 	int		last_exit_status;
@@ -90,7 +89,6 @@ int		check_quotes(char *s, t_tools *tools);
 size_t	ft_strcspn(const char *s, const char *reject);
 
 /* LEX_UTILS_3 */
-char	*ft_strjoin_free(char *s1, char *s2);
 int		check_tk(char tk);
 void	handle_final_token(t_tools *tools, int start, int i, bool is_cmd);
 int		check_quote_status(char *args, int *i, char *quote_type);
@@ -103,8 +101,6 @@ int		handle_token_processing_core(t_tools *tools, int *i,
 int		handle_token_processing(t_tools *tools, bool *is_cmd);
 
 /* LEXER */
-int		handle_q_arg(char *s, int start, t_tools *tools);
-int		handle_arg(char *s, int start, t_tools *tools);
 int		tokenize_input(t_tools *tools);
 
 /* PARSE_PREP */

@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/23 11:02:53 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/11/29 17:31:51 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:05:10 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static long long	get_exit_code(char *arg, t_tools *tools)
 	if (ft_is_not_integer(arg))
 	{
 		ft_error(ERR_NUMERIC_ARG_REQUIRED, tools);
-		exit(2); // should be this 2 or 255? Tester with "exit hello" requires 2
+		exit(2);
 	}
 	return (ft_atoi(arg));
 }
@@ -36,9 +36,7 @@ int	ft_exit(t_ast *cmd_node, t_tools *tools)
 	char		*arg;
 
 	exit_code = 0;
-	if (tools->debug_mode)
-		printf("[DEBUG]: ft_exit() executed\n");
-	printf("exit\n");
+	write(STDOUT_FILENO, "exit\n", 5);
 	if (cmd_node->right)
 	{
 		arg = cmd_node->right->str;

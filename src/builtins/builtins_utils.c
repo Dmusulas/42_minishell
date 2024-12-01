@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/12 14:07:03 by pmolzer           #+#    #+#             */
-/*   Updated: 2024/10/22 17:12:13 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:03:03 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ int	change_to_relative_path(char *path, t_tools *tools)
 	full_path = ft_strjoin(cwd, "/");
 	full_path = ft_strjoin(full_path, path);
 	free(cwd);
-	if (tools->debug_mode)
-		printf("[DEBUG]: Changing to relative path: %s\n", full_path);
 	if (chdir(full_path) == -1)
 	{
 		ft_path_error(ERR_NO_SUCH_FILE, tools, path);

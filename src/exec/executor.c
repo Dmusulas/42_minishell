@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:35:54 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/11/25 14:53:47 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:05:14 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ void	execute_at_path(char *path, t_ast *node, char **envp, t_tools *tools)
 	tools->last_exit_status = exec_status;
 }
 
-// TODO: Split up this function
-/**
+/*
 
  * Checks if the command is an environment variable
  * that resolves to a directory.
@@ -94,7 +93,6 @@ void	check_env_directory(t_ast *node, t_tools *tools)
 	}
 }
 
-// TODO: Split up this function
 static void	execute_node_with_redirects(t_ast *node, t_tools *tools)
 {
 	int		saved_stdin;
