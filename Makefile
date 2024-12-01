@@ -6,7 +6,7 @@
 #    By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/10/02 16:00:41 by dmusulas          #+#    #+#              #
-#    Updated: 2024/12/01 16:15:52 by pmolzer          ###   ########.fr        #
+#    Updated: 2024/12/01 16:26:52 by pmolzer          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -74,7 +74,9 @@ MINISHELL_SRCS	= main.c \
 				  exec/path_finder.c\
 				  exec/pipes.c\
 				  exec/pipes_utils.c\
-				  exec/exec_utils.c
+				  exec/exec_utils.c\
+				  exec/exec_utils_2.c\
+				  exec/exec_utils_3.c
 
 MINISHELL_OBJS	= $(MINISHELL_SRCS:%.c=obj/%.o)
 OBJ_DIRS		= $(sort $(dir $(MINISHELL_OBJS)))

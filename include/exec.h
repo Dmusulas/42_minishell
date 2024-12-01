@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/08/15 17:31:16 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/12/01 16:06:02 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:26:44 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ typedef struct s_exec
 }	t_exec;
 
 /* UTILS */
-int		msg_error(char *err);
 void	restore_stdin_stdout(int saved_stdin, int saved_stdout);
 void	save_stdin_stdout(int *saved_stdin, int *saved_stdout);
 char	**parse_cmd_args(char *cmd_path, t_ast *node);
@@ -56,6 +55,10 @@ void	fork_and_execute_command(t_ast *node, t_tools *tools);
 void	execute_at_path(char *path, t_ast *node, char **envp, t_tools *tools);
 void	execute_external_command(t_ast *node, char **envp, t_tools *tools);
 void	execute_single_command(t_ast *node, t_tools *tools);
+void	execute_node_with_redirects(t_ast *node, t_tools *tools);
+bool	is_special_env_var(const char *str);
+void	handle_directory_error(char *env_value, t_tools *tools);
+void	handle_empty_env(t_ast *node, t_tools *tools);
 
 /* PATH THINGS */
 char	*find_cmd(char *paths, char *cmd);
