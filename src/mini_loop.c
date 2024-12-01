@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 22:22:53 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/12/01 16:05:41 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:16:38 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,13 +43,6 @@ int	reset_tools(t_tools *tools)
 	return (0);
 }
 
-/*
-	handle_input
-		quotes/match check, sends error msg if not correct + restart
-		tokenize_input (+ check if NULL, error msg + restart)
-		labels T_ARG / T_CMD
-		process token -> assigns values vars related to redir tokens
-*/
 int	mini_loop(t_tools *tools)
 {
 	tools->args = readline("minishell$ ");

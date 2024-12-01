@@ -6,17 +6,12 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:00:49 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/12/01 16:03:16 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:16:45 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-rl_catch_signals:
-	if not disabled Readline internal sig handling messes up our sig handler
-	BUT leaves memory blocks still accessible....
-*/
 int	main(int argc, char *argv[], char *envp[])
 {
 	t_tools	tools;

@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/01 20:38:38 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/12/01 16:03:21 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:16:23 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@
 # include <errno.h>
 # include <sys/ioctl.h>
 # include <stdbool.h>
-// # include "exec.h"
 # include "libft.h"
 # include "lexer_parser.h"
 # include "error_messages.h"

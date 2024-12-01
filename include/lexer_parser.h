@@ -6,7 +6,7 @@
 /*   By: pmolzer <pmolzer@student.42berlin.de>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/02 16:01:14 by dmusulas          #+#    #+#             */
-/*   Updated: 2024/12/01 16:01:27 by pmolzer          ###   ########.fr       */
+/*   Updated: 2024/12/01 16:16:05 by pmolzer          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,8 +104,6 @@ int		handle_token_processing(t_tools *tools, bool *is_cmd);
 int		tokenize_input(t_tools *tools);
 
 /* PARSE_PREP */
-// void	add_tk_cmd_check(char *str, t_tools *tools);
-// void	label_cmds(t_tools *tools);
 void	process_tokens(t_tools *tools);
 void	handle_input(t_tools *tools);
 
@@ -118,7 +116,6 @@ int		parse_input(t_tools *tools);
 char	*trim_expd_arg(const char *s, t_tools *tools);
 
 /* PARSER */
-// char	*trim_expd_arg(const char *s);
 t_ast	*parse_cmd(t_tools *tools);
 void	parse_arg(t_ast *cmd_node, t_tools *tools);
 t_ast	*handle_pipe(t_ast *prev_node, t_tools *tools);
